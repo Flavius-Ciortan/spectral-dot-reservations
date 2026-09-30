@@ -16,6 +16,10 @@ check(main.includes('Plugin Name:       ' + name) && readme.startsWith('=== ' + 
 check(main.includes('Text Domain:       ' + slug), 'Canonical text domain.');
 const version = main.match(/\* Version:\s*(\S+)/)?.[1];
 check(version && main.includes("define( 'SDPR_VERSION', '" + version + "' );") && readme.includes('Stable tag: ' + version + '\n'), 'Version fields agree.');
+for (const field of ['Requires at least', 'Requires PHP', 'WC requires at least', 'WC tested up to']) {
+  const value = main.match(new RegExp('\\* ' + field + ':\\s*(\\S+)'))?.[1];
+  check(value && readme.includes(field + ': ' + value + '\n'), field + ' agrees in header and readme.');
+}
 check(fs.existsSync(path.join(root, 'languages', slug + '.pot')), 'Canonical translation template.');
 function walk(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
