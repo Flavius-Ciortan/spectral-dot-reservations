@@ -515,8 +515,9 @@ class SDPR_Admin {
 
 		$reservations = $this->get_product_reservations( $post->ID );
 
-		echo '<div class="options_group">';
+		echo '<div class="options_group sdpr-product-reservations">';
 		echo '<h4 style="padding-left: 12px;">' . esc_html__( 'Active Reservations', 'spectral-dot-reservations' ) . '</h4>';
+		echo '<div class="sdpr-product-reservation-feedback" aria-live="polite"></div>';
 
 		if ( empty( $reservations ) ) {
 			echo '<p>' . esc_html__( 'No active reservations for this product.', 'spectral-dot-reservations' ) . '</p>';
@@ -649,6 +650,8 @@ class SDPR_Admin {
 							'cancelling'    => __( 'Cancelling...', 'spectral-dot-reservations' ),
 							'cancelled'     => __( 'Reservation cancelled successfully.', 'spectral-dot-reservations' ),
 							'cancel'        => __( 'Cancel', 'spectral-dot-reservations' ),
+							'dismiss'       => __( 'Dismiss this notice.', 'spectral-dot-reservations' ),
+							'noActive'      => __( 'No active reservations for this product.', 'spectral-dot-reservations' ),
 							'failed'        => __( 'Reservation could not be cancelled.', 'spectral-dot-reservations' ),
 							'requestFailed' => __( 'Request failed. Please try again.', 'spectral-dot-reservations' ),
 						),

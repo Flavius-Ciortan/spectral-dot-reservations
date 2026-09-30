@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-30T12:23:32+03:00\n"
+"POT-Creation-Date: 2026-09-30T18:13:05+03:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: spectral-dot-reservations\n"
@@ -31,6 +31,7 @@ msgid "Spectral Dot"
 msgstr ""
 
 #: includes/admin/class-sdpr-admin-reservations.php:43
+#: includes/admin/class-sdpr-admin.php:653
 msgid "Dismiss this notice."
 msgstr ""
 
@@ -106,19 +107,19 @@ msgstr ""
 
 #: includes/admin/class-sdpr-admin-reservations.php:60
 #: includes/admin/class-sdpr-admin-reservations.php:554
-#: includes/admin/class-sdpr-admin.php:603
-#: includes/admin/class-sdpr-admin.php:651
+#: includes/admin/class-sdpr-admin.php:604
+#: includes/admin/class-sdpr-admin.php:652
 #: templates/myaccount/my-reservations.php:193
 msgid "Cancel"
 msgstr ""
 
 #: includes/admin/class-sdpr-admin-reservations.php:61
-#: includes/admin/class-sdpr-admin.php:649
+#: includes/admin/class-sdpr-admin.php:650
 msgid "Cancelling..."
 msgstr ""
 
 #: includes/admin/class-sdpr-admin-reservations.php:62
-#: includes/admin/class-sdpr-admin.php:650
+#: includes/admin/class-sdpr-admin.php:651
 msgid "Reservation cancelled successfully."
 msgstr ""
 
@@ -129,7 +130,7 @@ msgid "Cancelled"
 msgstr ""
 
 #: includes/admin/class-sdpr-admin-reservations.php:64
-#: includes/admin/class-sdpr-admin.php:652
+#: includes/admin/class-sdpr-admin.php:655
 msgid "Reservation could not be cancelled."
 msgstr ""
 
@@ -138,7 +139,7 @@ msgid "Missing reservation ID."
 msgstr ""
 
 #: includes/admin/class-sdpr-admin-reservations.php:66
-#: includes/admin/class-sdpr-admin.php:653
+#: includes/admin/class-sdpr-admin.php:656
 #: includes/frontend/class-sdpr-frontend.php:176
 msgid "Request failed. Please try again."
 msgstr ""
@@ -225,7 +226,7 @@ msgstr ""
 
 #: includes/admin/class-sdpr-admin-reservations.php:123
 #: includes/admin/class-sdpr-admin-reservations.php:147
-#: includes/admin/class-sdpr-admin.php:526
+#: includes/admin/class-sdpr-admin.php:527
 #: includes/admin/class-sdpr-analytics.php:169
 msgid "Customer"
 msgstr ""
@@ -276,7 +277,7 @@ msgid "Reserved"
 msgstr ""
 
 #: includes/admin/class-sdpr-admin-reservations.php:150
-#: includes/admin/class-sdpr-admin.php:527
+#: includes/admin/class-sdpr-admin.php:528
 #: includes/admin/class-sdpr-analytics.php:169
 #: includes/class-sdpr-privacy-service.php:69
 #: templates/myaccount/my-reservations.php:32
@@ -488,16 +489,17 @@ msgstr ""
 msgid "Active Reservations"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:522
+#: includes/admin/class-sdpr-admin.php:523
+#: includes/admin/class-sdpr-admin.php:654
 msgid "No active reservations for this product."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:528
+#: includes/admin/class-sdpr-admin.php:529
 msgid "Action"
 msgstr ""
 
 #. translators: %s: customer name.
-#: includes/admin/class-sdpr-admin.php:648
+#: includes/admin/class-sdpr-admin.php:649
 #, php-format
 msgid "Cancel the reservation for %s?"
 msgstr ""
