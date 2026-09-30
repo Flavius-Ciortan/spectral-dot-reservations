@@ -18,10 +18,10 @@ if [[ ! "$product_id" =~ ^[0-9]+$ ]]; then
 	exit 1
 fi
 
-HTP_STRESS_ROLE=holder wp eval-file "$root/tests/concurrency-worker.php" --path="$wp_path" >"$temporary/holder.log" 2>&1 &
+SDPR_STRESS_ROLE=holder wp eval-file "$root/tests/concurrency-worker.php" --path="$wp_path" >"$temporary/holder.log" 2>&1 &
 holder_pid=$!
 
-lock_key="htp_lock_product_${product_id}"
+lock_key="sdpr_lock_product_${product_id}"
 for _ in $(seq 1 100); do
 	if wp option get "$lock_key" --path="$wp_path" >/dev/null 2>&1; then
 		break
@@ -33,6 +33,6 @@ if ! wp option get "$lock_key" --path="$wp_path" >/dev/null 2>&1; then
 	exit 1
 fi
 
-HTP_STRESS_ROLE=contender wp eval-file "$root/tests/concurrency-worker.php" --path="$wp_path" >"$temporary/contender.log" 2>&1
+SDPR_STRESS_ROLE=contender wp eval-file "$root/tests/concurrency-worker.php" --path="$wp_path" >"$temporary/contender.log" 2>&1
 wait "$holder_pid"
 wp eval-file "$root/tests/concurrency-verify.php" --path="$wp_path"

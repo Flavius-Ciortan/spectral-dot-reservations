@@ -36,11 +36,11 @@ jobs:
             wordpress: '6.5.5'
             woocommerce: '8.0.3'
           - php: '8.0'
-            wordpress: 'latest'
-            woocommerce: 'latest'
+            wordpress: '7.1.2'
+            woocommerce: '11.1.2'
           - php: '8.3'
-            wordpress: 'latest'
-            woocommerce: 'latest'
+            wordpress: '7.1.2'
+            woocommerce: '11.1.2'
           - php: '8.4'
             wordpress: 'latest'
             woocommerce: 'latest'
@@ -71,18 +71,22 @@ jobs:
         run: |
           wp core download --path=/tmp/wordpress --version="$WP_VERSION"
           wp config create --path=/tmp/wordpress --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1:3306
-          wp core install --path=/tmp/wordpress --url=http://localhost --title=HTP --admin_user=admin --admin_password=admin --admin_email=admin@example.test
+          wp core install --path=/tmp/wordpress --url=http://localhost --title=SDPR --admin_user=admin --admin_password=admin --admin_email=admin@example.test
           if [ "$WC_VERSION" = latest ]; then
             wp plugin install woocommerce --path=/tmp/wordpress --activate
           else
             wp plugin install woocommerce --path=/tmp/wordpress --version="$WC_VERSION" --activate
           fi
-          ln -s "$GITHUB_WORKSPACE" /tmp/wordpress/wp-content/plugins/hold-this-product
-          wp plugin activate hold-this-product --path=/tmp/wordpress
+          ln -s "$GITHUB_WORKSPACE" /tmp/wordpress/wp-content/plugins/spectral-dot-reservations
+          wp plugin activate spectral-dot-reservations --path=/tmp/wordpress
       - name: Run integration assertions
-        run: wp eval "define('HTP_INTEGRATION_TEST', true); require WP_PLUGIN_DIR . '/hold-this-product/tests/integration-smoke.php';" --path=/tmp/wordpress
+        run: wp eval "define('SDPR_INTEGRATION_TEST', true); require WP_PLUGIN_DIR . '/spectral-dot-reservations/tests/integration-smoke.php';" --path=/tmp/wordpress
       - name: Run concurrent last-unit stress test
         run: bash tests/concurrency-stress.sh /tmp/wordpress
+      - name: Verify brand and notice isolation
+        run: SDPR_REBRAND_TEST=1 wp eval-file tests/rebranding-smoke.php --path=/tmp/wordpress
+      - name: Check product identity
+        run: node bin/check-identity.cjs
       - name: Run HPOS compatibility matrix
         if: matrix.php == '8.4'
         run: bash tests/hpos-matrix.sh /tmp/wordpress
@@ -98,12 +102,12 @@ jobs:
       - name: Verify package contents
         run: |
           unzip -Z1 dist/*.zip > /tmp/package-files.txt
-          grep -q '^hold-this-product/HoldThisProduct.php$' /tmp/package-files.txt
+          grep -q '^spectral-dot-reservations/spectral-dot-reservations.php$' /tmp/package-files.txt
           ! grep -Eq '(^|/)(tests|IMPLEMENTATION|vendor|\.git|\.github|\.vscode)(/|$)' /tmp/package-files.txt
           (cd dist && sha256sum --check *.sha256)
       - uses: actions/upload-artifact@v4
         with:
-          name: hold-this-product-release
+          name: spectral-dot-reservations-release
           path: dist/*
 
   plugin-check:
@@ -131,19 +135,19 @@ jobs:
           coverage: none
       - uses: actions/download-artifact@v4
         with:
-          name: hold-this-product-release
+          name: spectral-dot-reservations-release
           path: dist
       - run: |
           wp core download --path=/tmp/wordpress
           wp config create --path=/tmp/wordpress --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1:3306
-          wp core install --path=/tmp/wordpress --url=http://localhost --title=HTP --admin_user=admin --admin_password=admin --admin_email=admin@example.test
+          wp core install --path=/tmp/wordpress --url=http://localhost --title=SDPR --admin_user=admin --admin_password=admin --admin_email=admin@example.test
           wp plugin install woocommerce --path=/tmp/wordpress --activate
           wp plugin install plugin-check --path=/tmp/wordpress --activate
           wp plugin install dist/*.zip --path=/tmp/wordpress --activate
-          wp plugin check hold-this-product --path=/tmp/wordpress --format=table
+          wp plugin check spectral-dot-reservations --path=/tmp/wordpress --format=table
       - name: Verify release lifecycle
         env:
-          HTP_ALLOW_DESTRUCTIVE_RELEASE_TEST: '1'
+          SDPR_ALLOW_DESTRUCTIVE_RELEASE_TEST: '1'
         run: bash tests/release-lifecycle.sh /tmp/wordpress
       - name: Verify artifact HPOS matrix
         run: bash tests/hpos-matrix.sh /tmp/wordpress

@@ -1,6 +1,6 @@
 # WordPress.org Directory Assets
 
-This repository folder contains the finalized WordPress.org directory artwork and its editable vector masters. It is excluded from the release ZIP. After the plugin is approved, copy the PNG files from this folder to the top-level `/assets` directory of the assigned WordPress.org SVN repository, not to `/trunk/assets`. Do not upload the `source/` directory.
+This repository folder contains WordPress.org directory artwork and its editable vector masters. It is excluded from the release ZIP. After the plugin is approved, copy the PNG files from this folder to the top-level `/assets` directory of the assigned WordPress.org SVN repository, not to `/trunk/assets`. Do not upload the `source/` directory.
 
 ## Supported Assets
 
@@ -17,16 +17,16 @@ Directory artwork is optional for initial code submission. Use these exact names
 ### Screenshots
 
 The screenshot captions in `readme.txt` match these sequential files:
-- `screenshot-1.jpg` - Plugin settings page
-- `screenshot-2.jpg` - Product page with Reserve button
-- `screenshot-3.jpg` - Reservation modal
-- `screenshot-4.jpg` - My Account reservations page
-- `screenshot-5.jpg` - Admin reservations dashboard
-- `screenshot-6.jpg` - Basic reservation analytics
+- `screenshot-1.png` - Plugin settings page
+- `screenshot-2.png` - Product page with Reserve button
+- `screenshot-3.png` - Reservation modal
+- `screenshot-4.png` - My Account reservations page
+- `screenshot-5.png` - Admin reservations dashboard
+- `screenshot-6.png` - Basic reservation analytics
 
 ## Design Guidelines
 
-The PNG assets use the established blue, navy, and amber palette. Icons contain no small text and remain identifiable at 128 pixels. Banners keep essential content in the central safe area. Screenshots were captured from the exact Free release behavior with only local demonstration records.
+The PNG assets use the established blue, navy, and amber palette. Icons contain no small text and remain identifiable at 128 pixels. Banners keep essential content in the central safe area. Screenshots show the rebranded Free plugin on a local test site using demonstration records. Recheck screenshots against the final release candidate before publication.
 
 Editable masters are stored in `source/icon.svg` and `source/banner.svg`. Re-render both required dimensions after changing a master and visually inspect the standard and high-resolution outputs before publication.
 

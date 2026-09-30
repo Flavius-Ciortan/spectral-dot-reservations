@@ -5,7 +5,7 @@
   "steps": [
     { "step": "installPlugin", "pluginData": { "resource": "wordpress.org/plugins", "slug": "woocommerce" }, "options": { "activate": true } },
     { "step": "installPlugin", "pluginData": { "resource": "wordpress.org/plugins", "slug": "plugin-check" }, "options": { "activate": true } },
-    { "step": "activatePlugin", "pluginPath": "/wordpress/wp-content/plugins/hold-this-product/HoldThisProduct.php" },
-    { "step": "runPHP", "code": "<?php define( 'HTP_INTEGRATION_TEST', true ); require '/wordpress/wp-content/plugins/hold-this-product/tests/integration-smoke.php';" }
+    { "step": "activatePlugin", "pluginPath": "/wordpress/wp-content/plugins/spectral-dot-reservations/spectral-dot-reservations.php" },
+    { "step": "runPHP", "code": "<?php define( 'SDPR_INTEGRATION_TEST', true ); require '/wordpress/wp-content/plugins/spectral-dot-reservations/tests/integration-smoke.php';" }
   ]
 }

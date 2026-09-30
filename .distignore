@@ -10,8 +10,6 @@
 /composer.lock
 /phpcs.xml.dist
 /phpunit.xml.dist
-/assets/images/banner.png
-/assets/images/logo-white.png
 /CHANGELOG.md
 /CONTRIBUTING.md
 /PUBLISH_CHECKLIST.md

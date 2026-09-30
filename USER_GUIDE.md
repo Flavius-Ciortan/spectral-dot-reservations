@@ -1,6 +1,6 @@
-# Hold This Product User Guide
+# Spectral Dot Reservations User Guide
 
-This guide applies to Hold This Product Free 1.0.0.
+This guide applies to Spectral Dot Reservations Free 1.0.0.
 
 ## Requirements
 
@@ -15,9 +15,9 @@ The Free edition reserves one unit per reservation. Variable, grouped, external,
 ## Installation
 
 1. Install and activate WooCommerce.
-2. Install Hold This Product from WordPress.org, or upload the release ZIP under **Plugins > Add New > Upload Plugin**.
-3. Activate **Hold This Product**.
-4. Open **Hold This Product > Settings**.
+2. Install Spectral Dot Reservations from WordPress.org, or upload the release ZIP under **Plugins > Add New > Upload Plugin**.
+3. Activate **Spectral Dot Reservations**.
+4. Open **Spectral Dot Reservations > Settings**.
 5. Enable reservations and save the settings.
 
 ## Settings
@@ -57,7 +57,7 @@ The modal includes a semantic dialog, keyboard focus containment, Escape-to-clos
 
 1. The customer submits a request and sees a pending-approval confirmation.
 2. The request becomes **Pending approval**. Stock is unchanged.
-3. A merchant approves or denies the request under **Hold This Product > Reservations**.
+3. A merchant approves or denies the request under **Spectral Dot Reservations > Reservations**.
 4. Approval starts the active duration and decreases stock by one.
 5. Denial closes the request without changing stock.
 6. An unanswered request becomes **Expired** when its pending deadline passes.
@@ -76,7 +76,7 @@ Administrators and WooCommerce Shop Managers can use the plugin.
 
 ### Reservations Page
 
-Open **Hold This Product > Reservations** to:
+Open **Spectral Dot Reservations > Reservations** to:
 
 - Filter by pending, active, expired, cancelled, purchased, denied, or order-cancelled status.
 - Search by email, product name, product ID, display name, email, or login.
@@ -93,7 +93,7 @@ Edit a product and open its **Inventory** tab to view active reservations for th
 
 ### Analytics
 
-Open **Hold This Product > Analytics** to view current totals, status counts, conversion percentage, and recent reservations. This is operational summary data, not historical trend reporting.
+Open **Spectral Dot Reservations > Analytics** to view current totals, status counts, conversion percentage, and recent reservations. This is operational summary data, not historical trend reporting.
 
 ### Site Health
 
@@ -108,7 +108,7 @@ The plugin recreates a missing expiration event during normal health checks. Res
 
 When notifications are enabled, the plugin sends built-in messages for creation, pending approval, approval, denial, and expiration. It uses `wp_mail()` through WordPress/WooCommerce mail handling.
 
-An SMTP plugin is not a Hold This Product requirement. Each merchant should decide based on hosting mail reliability, delivery logs, and authentication needs. If messages are generated but not delivered, inspect WooCommerce/WordPress mail delivery and the host's outbound-mail policy.
+An SMTP plugin is not a Spectral Dot Reservations requirement. Each merchant should decide based on hosting mail reliability, delivery logs, and authentication needs. If messages are generated but not delivered, inspect WooCommerce/WordPress mail delivery and the host's outbound-mail policy.
 
 ## Status Reference
 
@@ -132,7 +132,7 @@ Check for an existing pending/active reservation for the same product and check 
 
 ### Reservations are not expiring
 
-Open **Tools > Site Health** and inspect the Hold This Product expiration test. WordPress cron still requires traffic or a server-side cron runner to execute due events reliably.
+Open **Tools > Site Health** and inspect the Spectral Dot Reservations expiration test. WordPress cron still requires traffic or a server-side cron runner to execute due events reliably.
 
 ### Stock appears incorrect
 
@@ -144,9 +144,9 @@ Enable notifications, confirm the customer address, and test the site's general 
 
 ## Data and Privacy
 
-Reservations can store the customer user ID, first and last name, email address, product ID, quantity, status, creation and expiry times, inventory state, denial details, cancellation metadata, and a related order ID. The data remains in the site's WordPress database. Hold This Product does not send it, telemetry, or usage analytics to the plugin authors.
+Reservations can store the customer user ID, first and last name, email address, product ID, quantity, status, creation and expiry times, inventory state, denial details, cancellation metadata, and a related order ID. The data remains in the site's WordPress database. Spectral Dot Reservations does not send it, telemetry, or usage analytics to the plugin authors.
 
-When email notifications are enabled, WordPress passes reservation message content and the customer email address to the mail delivery system configured by the site owner. That system may be operated by the web host, an SMTP plugin, or another third party. Hold This Product does not select a provider.
+When email notifications are enabled, WordPress passes reservation message content and the customer email address to the mail delivery system configured by the site owner. That system may be operated by the web host, an SMTP plugin, or another third party. Spectral Dot Reservations does not select a provider.
 
 WordPress personal-data exports include reservation identity and operational details. For closed reservations, erasure removes the customer link, name, surname, email address, and free-text denial reason. The operational reservation, status, product, inventory, and order linkage remain to preserve stock and order correctness. Open reservations remain identifiable until their inventory obligation ends; the customer can submit another erasure request after the reservation closes.
 

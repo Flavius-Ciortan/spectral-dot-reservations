@@ -1,4 +1,4 @@
-=== Hold This Product ===
+=== Spectral Dot - Product Reservations for WooCommerce ===
 Tags: woocommerce, reservation, product hold, stock management, inventory
 Requires at least: 6.5
 Tested up to: 7.1
@@ -13,7 +13,7 @@ Let logged-in customers reserve WooCommerce products for a limited time while ke
 
 == Description ==
 
-Hold This Product adds a complete reservation workflow for WooCommerce stores that sell stock-managed simple products.
+Spectral Dot Reservations adds a complete reservation workflow for WooCommerce stores that sell stock-managed simple products.
 
 = Customer features =
 
@@ -41,7 +41,7 @@ The Free edition supports logged-in customers, simple products with WooCommerce 
 
 = Privacy and external services =
 
-Reservation records are stored only in this website's WordPress database. Hold This Product does not send reservation data, telemetry, or usage analytics to the plugin authors or any service selected by the plugin.
+Reservation records are stored only in this website's WordPress database. Spectral Dot Reservations does not send reservation data, telemetry, or usage analytics to the plugin authors or any service selected by the plugin.
 
 If email notifications are enabled, reservation details are passed to the mail delivery system configured by the site owner. That system may be the web host, an SMTP plugin, or another third-party provider and is governed by the site owner's provider terms.
 
@@ -50,9 +50,9 @@ Reservation records remain in the database until the plugin is uninstalled. For 
 == Installation ==
 
 1. Install and activate WooCommerce.
-2. Install Hold This Product from WordPress.org, or upload the release ZIP through **Plugins > Add New > Upload Plugin**.
+2. Install Spectral Dot Reservations from WordPress.org, or upload the release ZIP through **Plugins > Add New > Upload Plugin**.
 3. Activate the plugin.
-4. Open **Hold This Product > Settings** and enable reservations.
+4. Open **Spectral Dot Reservations > Settings** and enable reservations.
 5. Configure durations, limits, notifications, and approval behavior.
 6. Ensure reservable products are published simple products with stock management enabled and positive stock.
 
@@ -84,7 +84,7 @@ Yes. The plugin declares and tests compatibility with WooCommerce Cart/Checkout 
 
 = Do I need an SMTP plugin? =
 
-Not necessarily. Hold This Product uses the standard WordPress mail pipeline. Each merchant should decide whether their host delivers mail reliably or whether an SMTP service/plugin is appropriate.
+Not necessarily. Spectral Dot Reservations uses the standard WordPress mail pipeline. Each merchant should decide whether their host delivers mail reliably or whether an SMTP service/plugin is appropriate.
 
 = Can Shop Managers operate reservations? =
 

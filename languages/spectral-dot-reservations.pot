@@ -1,0 +1,1058 @@
+# Copyright (C) 2026 Spectral Dot
+# This file is distributed under the GPL v3 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Spectral Dot - Product Reservations for WooCommerce 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/spectral-dot-reservations\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-09-30T12:23:32+03:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: spectral-dot-reservations\n"
+
+#. Plugin Name of the plugin
+#: spectral-dot-reservations.php
+msgid "Spectral Dot - Product Reservations for WooCommerce"
+msgstr ""
+
+#. Description of the plugin
+#: spectral-dot-reservations.php
+msgid "Allows WooCommerce customers to reserve products for a limited time before purchase."
+msgstr ""
+
+#. Author of the plugin
+#: spectral-dot-reservations.php
+#: includes/admin/class-sdpr-admin.php:389
+msgid "Spectral Dot"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:43
+msgid "Dismiss this notice."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:44
+msgid "this product"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:45
+#: includes/admin/class-sdpr-admin-reservations.php:561
+msgid "Delete"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:46
+msgid "Deleting..."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:47
+msgid "Reservation deleted successfully."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:48
+msgid "Reservation could not be deleted."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:49
+#: includes/admin/class-sdpr-admin-reservations.php:540
+msgid "Approve"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:50
+msgid "Approving..."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:51
+msgid "Reservation approved successfully."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:52
+msgid "Reservation could not be approved."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:53
+#: includes/class-sdpr-reservation-status.php:37
+msgid "Active"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:54
+#: includes/admin/class-sdpr-admin-reservations.php:547
+msgid "Deny"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:55
+msgid "Denying..."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:56
+msgid "Reservation denied successfully."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:57
+#: includes/class-sdpr-reservation-status.php:41
+#: templates/myaccount/my-reservations.php:110
+msgid "Denied"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:58
+msgid "Reservation could not be denied."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:59
+msgid "Please provide a reason for denying this reservation (optional):"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:60
+#: includes/admin/class-sdpr-admin-reservations.php:554
+#: includes/admin/class-sdpr-admin.php:603
+#: includes/admin/class-sdpr-admin.php:651
+#: templates/myaccount/my-reservations.php:193
+msgid "Cancel"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:61
+#: includes/admin/class-sdpr-admin.php:649
+msgid "Cancelling..."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:62
+#: includes/admin/class-sdpr-admin.php:650
+msgid "Reservation cancelled successfully."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:63
+#: includes/class-sdpr-reservation-status.php:39
+#: templates/myaccount/my-reservations.php:113
+msgid "Cancelled"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:64
+#: includes/admin/class-sdpr-admin.php:652
+msgid "Reservation could not be cancelled."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:65
+msgid "Missing reservation ID."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:66
+#: includes/admin/class-sdpr-admin.php:653
+#: includes/frontend/class-sdpr-frontend.php:176
+msgid "Request failed. Please try again."
+msgstr ""
+
+#. translators: 1: customer, 2: product.
+#: includes/admin/class-sdpr-admin-reservations.php:68
+#, php-format
+msgid "Permanently delete the reservation for %1$s on %2$s? This action cannot be undone."
+msgstr ""
+
+#. translators: 1: customer, 2: product.
+#: includes/admin/class-sdpr-admin-reservations.php:70
+#, php-format
+msgid "Approve the reservation for %1$s on %2$s?"
+msgstr ""
+
+#. translators: 1: customer, 2: product.
+#: includes/admin/class-sdpr-admin-reservations.php:72
+#, php-format
+msgid "Cancel the reservation for %1$s on %2$s?"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:93
+msgid "Manage Reservations"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:97
+msgid "Pending Approval:"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:98
+msgid "Active:"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:99
+msgid "Expired:"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:100
+msgid "Cancelled:"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:101
+msgid "Fulfilled:"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:102
+msgid "Denied:"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:103
+msgid "Order Cancelled:"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:104
+msgid "Total:"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:110
+msgid "Filter reservations by status"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:112
+msgid "All Statuses"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:118
+msgid "Search reservations by"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:120
+#: includes/class-sdpr-privacy-service.php:65
+msgid "Email"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:121
+msgid "Product Name"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:122
+#: includes/class-sdpr-privacy-service.php:49
+msgid "Product ID"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:123
+#: includes/admin/class-sdpr-admin-reservations.php:147
+#: includes/admin/class-sdpr-admin.php:526
+#: includes/admin/class-sdpr-analytics.php:169
+msgid "Customer"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:126
+msgid "Search reservations"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:127
+msgid "Search reservations..."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:129
+msgid "Filter"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:130
+msgid "Clear"
+msgstr ""
+
+#. translators: %d: number of reservations.
+#: includes/admin/class-sdpr-admin-reservations.php:134
+#, php-format
+msgid "%d reservations"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:140
+msgid "No reservations found matching your criteria."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:146
+#: includes/admin/class-sdpr-analytics.php:169
+#: templates/myaccount/my-reservations.php:26
+#: templates/myaccount/my-reservations.php:159
+msgid "Product"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:148
+#: includes/admin/class-sdpr-analytics.php:169
+#: includes/class-sdpr-privacy-service.php:57
+#: templates/myaccount/my-reservations.php:29
+#: templates/myaccount/my-reservations.php:165
+msgid "Status"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:149
+msgid "Reserved"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:150
+#: includes/admin/class-sdpr-admin.php:527
+#: includes/admin/class-sdpr-analytics.php:169
+#: includes/class-sdpr-privacy-service.php:69
+#: templates/myaccount/my-reservations.php:32
+#: templates/myaccount/my-reservations.php:171
+msgid "Expires"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:151
+#: templates/myaccount/my-reservations.php:35
+#: templates/myaccount/my-reservations.php:180
+msgid "Time Left"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:152
+#: templates/myaccount/my-reservations.php:38
+#: templates/myaccount/my-reservations.php:185
+msgid "Actions"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:475
+#: includes/admin/class-sdpr-admin-reservations.php:476
+msgid "No email"
+msgstr ""
+
+#. translators: %d: reserved product quantity.
+#: includes/admin/class-sdpr-admin-reservations.php:524
+#, php-format
+msgid "Quantity %d"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:40
+#: includes/admin/class-sdpr-admin.php:385
+msgid "Spectral Dot Reservations Settings"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:41
+#: includes/class-sdpr-expiration-service.php:106
+#: spectral-dot-reservations.php:305
+msgid "Spectral Dot Reservations"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:52
+#: includes/admin/class-sdpr-admin.php:53
+msgid "Settings"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:62
+#: includes/admin/class-sdpr-admin.php:63
+#: includes/class-sdpr-reservations.php:119
+#: includes/class-sdpr-reservations.php:287
+msgid "Reservations"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:91
+msgid "Enable Reservation"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:92
+msgid "Max Reservations Per User"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:93
+msgid "Reservation Duration (hours)"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:94
+msgid "Approval Request Duration (hours)"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:95
+msgid "Enable Email Notifications"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:96
+msgid "Require Admin Approval for Reservations"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:131
+msgid "Max reservations must be at least 1."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:134
+msgid "Max reservations cannot exceed 100."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:141
+msgid "Reservation duration must be at least 1 hour."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:144
+msgid "Reservation duration cannot exceed 168 hours."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:153
+msgid "Approval request duration must be at least 1 hour."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:156
+msgid "Approval request duration cannot exceed 168 hours."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:185
+msgid "Popup border radius must be between 0 and 50 pixels."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:189
+msgid "Popup font size must be between 10 and 40 pixels."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:197
+msgid "Popup background color was invalid and has been reset to the default."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:201
+msgid "Popup text color was invalid and has been reset to the default."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:205
+msgid "Popup font family was invalid and has been reset to the default."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:264
+msgid "Enable product reservations across your store."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:280
+msgid "Limit how many active reservations a user can have at once."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:298
+msgid "How long reservations last (1-168 hours, default: 24)."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:314
+msgid "How long an approval request remains open. The active reservation duration starts when it is approved."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:333
+msgid "Send email confirmations and status updates to customers."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:352
+msgid "Reservations require admin approval before becoming active."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:386
+msgid "Manage your product reservation system"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:399
+msgid "Settings sections"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:402
+msgid "General Settings"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:406
+#: includes/admin/class-sdpr-admin.php:432
+msgid "Pop-up Customization"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:419
+msgid "Configuration"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:420
+msgid "Configure the basic settings for your reservation system"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:433
+msgid "Customize the appearance of the reservation pop-up modal"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:444
+msgid "Enable Pop-up Customization"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:453
+msgid "Enable custom styling for the reservation pop-up modal."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:461
+msgid "Border Radius (px)"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:465
+msgid "Background Color"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:469
+msgid "Font Family"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:483
+msgid "Font Size (px)"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:487
+msgid "Text Color"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:497
+msgid "Save Settings"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:519
+#: includes/admin/class-sdpr-analytics.php:81
+msgid "Active Reservations"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:522
+msgid "No active reservations for this product."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin.php:528
+msgid "Action"
+msgstr ""
+
+#. translators: %s: customer name.
+#: includes/admin/class-sdpr-admin.php:648
+#, php-format
+msgid "Cancel the reservation for %s?"
+msgstr ""
+
+#: includes/admin/class-sdpr-analytics.php:35
+#: includes/admin/class-sdpr-analytics.php:72
+msgid "Reservation Analytics"
+msgstr ""
+
+#: includes/admin/class-sdpr-analytics.php:36
+msgid "Analytics"
+msgstr ""
+
+#: includes/admin/class-sdpr-analytics.php:76
+msgid "Total Reservations"
+msgstr ""
+
+#: includes/admin/class-sdpr-analytics.php:86
+msgid "Pending Approval"
+msgstr ""
+
+#: includes/admin/class-sdpr-analytics.php:91
+msgid "Expired Reservations"
+msgstr ""
+
+#: includes/admin/class-sdpr-analytics.php:96
+msgid "Cancelled Reservations"
+msgstr ""
+
+#: includes/admin/class-sdpr-analytics.php:101
+msgid "Fulfilled Reservations"
+msgstr ""
+
+#: includes/admin/class-sdpr-analytics.php:106
+msgid "Denied Reservations"
+msgstr ""
+
+#: includes/admin/class-sdpr-analytics.php:111
+msgid "Cancelled Orders"
+msgstr ""
+
+#: includes/admin/class-sdpr-analytics.php:116
+msgid "Conversion Rate"
+msgstr ""
+
+#: includes/admin/class-sdpr-analytics.php:121
+msgid "Recent Reservations"
+msgstr ""
+
+#: includes/admin/class-sdpr-analytics.php:164
+msgid "No reservations found."
+msgstr ""
+
+#: includes/admin/class-sdpr-analytics.php:169
+#: includes/class-sdpr-privacy-service.php:61
+msgid "Created"
+msgstr ""
+
+#: includes/admin/class-sdpr-analytics.php:179
+msgid "Unknown Product"
+msgstr ""
+
+#: includes/admin/class-sdpr-analytics.php:198
+#: includes/class-sdpr-reservation-status.php:48
+msgid "Unknown"
+msgstr ""
+
+#: includes/class-sdpr-cart-order-service.php:123
+msgid "A reservation could not be transferred to the order."
+msgstr ""
+
+#. translators: %s: product name.
+#: includes/class-sdpr-email-manager.php:72
+#, php-format
+msgid "Reservation Confirmed: %s"
+msgstr ""
+
+#. translators: 1: product name, 2: expiration date, 3: product URL, 4: add-to-cart URL.
+#: includes/class-sdpr-email-manager.php:75
+#, php-format
+msgid ""
+"Hello,\n"
+"\n"
+"Your reservation for %1$s has been confirmed.\n"
+"\n"
+"Expires: %2$s\n"
+"\n"
+"View Product: %3$s\n"
+"\n"
+"Add to Cart: %4$s\n"
+"\n"
+"Thank you!"
+msgstr ""
+
+#. translators: 1: product name, 2: product URL.
+#: includes/class-sdpr-email-manager.php:96
+#, php-format
+msgid ""
+"Hello,\n"
+"\n"
+"Your reservation request for %1$s expired before it was approved.\n"
+"\n"
+"View Product: %2$s"
+msgstr ""
+
+#. translators: 1: product name, 2: product URL.
+#: includes/class-sdpr-email-manager.php:98
+#, php-format
+msgid ""
+"Hello,\n"
+"\n"
+"Your reservation for %1$s has expired and the product is now available to other customers.\n"
+"\n"
+"You can still purchase it if available: %2$s\n"
+"\n"
+"Thank you!"
+msgstr ""
+
+#. translators: %s: product name.
+#: includes/class-sdpr-email-manager.php:104
+#, php-format
+msgid "Reservation Expired: %s"
+msgstr ""
+
+#. translators: %s: product name.
+#: includes/class-sdpr-email-manager.php:123
+#, php-format
+msgid "Reservation Pending Approval: %s"
+msgstr ""
+
+#. translators: 1: product name, 2: product URL.
+#: includes/class-sdpr-email-manager.php:125
+#, php-format
+msgid ""
+"Hello,\n"
+"\n"
+"Thank you for your reservation request for %1$s.\n"
+"\n"
+"Your reservation is pending approval. You will receive another email after it is reviewed.\n"
+"\n"
+"View Product: %2$s"
+msgstr ""
+
+#. translators: %s: product name.
+#: includes/class-sdpr-email-manager.php:144
+#, php-format
+msgid "Reservation Approved: %s"
+msgstr ""
+
+#. translators: 1: product name, 2: expiration date, 3: product URL, 4: add-to-cart URL.
+#: includes/class-sdpr-email-manager.php:146
+#, php-format
+msgid ""
+"Hello,\n"
+"\n"
+"Your reservation for %1$s has been approved and is now active.\n"
+"\n"
+"Expires: %2$s\n"
+"\n"
+"View Product: %3$s\n"
+"\n"
+"Add to Cart: %4$s"
+msgstr ""
+
+#. translators: %s: denial reason.
+#: includes/class-sdpr-email-manager.php:161
+#, php-format
+msgid ""
+"Reason: %s\n"
+"\n"
+""
+msgstr ""
+
+#. translators: %s: product name.
+#: includes/class-sdpr-email-manager.php:167
+#, php-format
+msgid "Reservation Not Approved: %s"
+msgstr ""
+
+#. translators: 1: product name, 2: denial reason, 3: product URL.
+#: includes/class-sdpr-email-manager.php:169
+#, php-format
+msgid ""
+"Hello,\n"
+"\n"
+"Your reservation request for %1$s could not be approved.\n"
+"\n"
+"%2$sView Product: %3$s"
+msgstr ""
+
+#: includes/class-sdpr-expiration-service.php:24
+msgid "Every five minutes"
+msgstr ""
+
+#: includes/class-sdpr-expiration-service.php:93
+msgid "Spectral Dot Reservations operations"
+msgstr ""
+
+#: includes/class-sdpr-expiration-service.php:103
+msgid "Reservation expiration and inventory ownership are healthy"
+msgstr ""
+
+#: includes/class-sdpr-expiration-service.php:109
+msgid "The expiration schedule is active and sampled reservation inventory states are consistent."
+msgstr ""
+
+#: includes/class-sdpr-expiration-service.php:114
+msgid "Reservation operations need attention"
+msgstr ""
+
+#: includes/class-sdpr-expiration-service.php:118
+msgid "The reservation expiration schedule is missing."
+msgstr ""
+
+#. translators: %d: number of inconsistent reservations found in the health sample.
+#: includes/class-sdpr-expiration-service.php:122
+#, php-format
+msgid "%d reservation has inconsistent inventory ownership."
+msgid_plural "%d reservations have inconsistent inventory ownership."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-sdpr-inventory-manager.php:201
+msgid "Invalid reservation inventory transition."
+msgstr ""
+
+#: includes/class-sdpr-inventory-manager.php:204
+msgid "The reservation transition was blocked."
+msgstr ""
+
+#: includes/class-sdpr-inventory-manager.php:207
+msgid "Product stock is not available for this reservation transition."
+msgstr ""
+
+#: includes/class-sdpr-inventory-manager.php:215
+msgid "Reservation changed during its inventory transition."
+msgstr ""
+
+#: includes/class-sdpr-inventory-manager.php:222
+msgid "Reservation status could not be updated."
+msgstr ""
+
+#: includes/class-sdpr-inventory-manager.php:228
+msgid "Product stock changed during the reservation transition."
+msgstr ""
+
+#: includes/class-sdpr-inventory-manager.php:233
+msgid "Reservation inventory ownership could not be updated."
+msgstr ""
+
+#: includes/class-sdpr-inventory-manager.php:244
+msgid "Reservation inventory transaction could not be committed."
+msgstr ""
+
+#: includes/class-sdpr-lock-manager.php:33
+msgid "Another reservation is being processed. Please try again."
+msgstr ""
+
+#: includes/class-sdpr-privacy-service.php:11
+#: includes/class-sdpr-privacy-service.php:19
+msgid "Spectral Dot Reservations reservations"
+msgstr ""
+
+#: includes/class-sdpr-privacy-service.php:33
+msgid "Product reservations"
+msgstr ""
+
+#: includes/class-sdpr-privacy-service.php:37
+msgid "User ID"
+msgstr ""
+
+#: includes/class-sdpr-privacy-service.php:41
+msgid "First name"
+msgstr ""
+
+#: includes/class-sdpr-privacy-service.php:45
+msgid "Last name"
+msgstr ""
+
+#: includes/class-sdpr-privacy-service.php:53
+msgid "Quantity"
+msgstr ""
+
+#: includes/class-sdpr-privacy-service.php:73
+msgid "Inventory state"
+msgstr ""
+
+#: includes/class-sdpr-privacy-service.php:77
+msgid "Related order ID"
+msgstr ""
+
+#: includes/class-sdpr-privacy-service.php:81
+msgid "Denial reason"
+msgstr ""
+
+#: includes/class-sdpr-privacy-service.php:114
+msgid "Open reservations were retained until their inventory obligation ends."
+msgstr ""
+
+#: includes/class-sdpr-reservation-lifecycle.php:37
+msgid "A valid customer account is required."
+msgstr ""
+
+#: includes/class-sdpr-reservation-lifecycle.php:46
+msgid "A valid verified email address is required."
+msgstr ""
+
+#: includes/class-sdpr-reservation-lifecycle.php:62
+#: includes/frontend/class-sdpr-frontend.php:72
+msgid "Reservations are not available for this product."
+msgstr ""
+
+#. translators: %d: maximum number of open reservations allowed.
+#: includes/class-sdpr-reservation-lifecycle.php:87
+#, php-format
+msgid "You have reached the maximum of %d open reservations."
+msgstr ""
+
+#: includes/class-sdpr-reservation-lifecycle.php:90
+msgid "You already have a pending or active reservation for this product."
+msgstr ""
+
+#: includes/class-sdpr-reservation-lifecycle.php:93
+msgid "There is not enough stock available for this reservation."
+msgstr ""
+
+#: includes/class-sdpr-reservation-lifecycle.php:98
+msgid "Could not create reservation."
+msgstr ""
+
+#: includes/class-sdpr-reservation-lifecycle.php:181
+#: includes/class-sdpr-reservation-lifecycle.php:314
+msgid "Invalid reservation."
+msgstr ""
+
+#: includes/class-sdpr-reservation-lifecycle.php:193
+msgid "Reservation is not pending approval."
+msgstr ""
+
+#: includes/class-sdpr-reservation-lifecycle.php:196
+msgid "Reservation is missing product data."
+msgstr ""
+
+#: includes/class-sdpr-reservation-lifecycle.php:201
+msgid "Product stock is not managed."
+msgstr ""
+
+#: includes/class-sdpr-reservation-lifecycle.php:204
+msgid "There is not enough stock available to approve this reservation."
+msgstr ""
+
+#: includes/class-sdpr-reservation-lifecycle.php:328
+msgid "This reservation can no longer be extended."
+msgstr ""
+
+#: includes/class-sdpr-reservation-lifecycle.php:332
+msgid "The reservation deadline changed before it could be extended."
+msgstr ""
+
+#: includes/class-sdpr-reservation-status.php:36
+msgid "Pending approval"
+msgstr ""
+
+#: includes/class-sdpr-reservation-status.php:38
+#: templates/myaccount/my-reservations.php:99
+#: templates/myaccount/my-reservations.php:119
+msgid "Expired"
+msgstr ""
+
+#: includes/class-sdpr-reservation-status.php:40
+#: templates/myaccount/my-reservations.php:107
+msgid "Purchased"
+msgstr ""
+
+#: includes/class-sdpr-reservation-status.php:42
+#: templates/myaccount/my-reservations.php:116
+msgid "Order cancelled"
+msgstr ""
+
+#: includes/class-sdpr-reservations.php:160
+msgid "You must be logged in to reserve products."
+msgstr ""
+
+#: includes/class-sdpr-reservations.php:166
+msgid "Invalid product ID."
+msgstr ""
+
+#: includes/class-sdpr-reservations.php:175
+msgid "Reservation request submitted for approval."
+msgstr ""
+
+#: includes/class-sdpr-reservations.php:175
+msgid "Reservation created successfully."
+msgstr ""
+
+#: includes/class-sdpr-reservations.php:260
+#: includes/class-sdpr-reservations.php:265
+#: includes/class-sdpr-reservations.php:274
+msgid "Reserved products"
+msgstr ""
+
+#: includes/class-sdpr-reservations.php:306
+msgid "Please log in to see your reservations."
+msgstr ""
+
+#: includes/class-sdpr-reservations.php:332
+msgid "You have no reservations."
+msgstr ""
+
+#: includes/frontend/class-sdpr-frontend.php:70
+msgid "Please"
+msgstr ""
+
+#: includes/frontend/class-sdpr-frontend.php:70
+msgid "log in"
+msgstr ""
+
+#: includes/frontend/class-sdpr-frontend.php:70
+msgid "or"
+msgstr ""
+
+#: includes/frontend/class-sdpr-frontend.php:70
+msgid "create an account"
+msgstr ""
+
+#: includes/frontend/class-sdpr-frontend.php:70
+msgid "to reserve this product."
+msgstr ""
+
+#: includes/frontend/class-sdpr-frontend.php:169
+msgid "Please log in to reserve products."
+msgstr ""
+
+#: includes/frontend/class-sdpr-frontend.php:170
+msgid "Please choose a product variation before reserving."
+msgstr ""
+
+#: includes/frontend/class-sdpr-frontend.php:171
+msgid "Processing..."
+msgstr ""
+
+#: includes/frontend/class-sdpr-frontend.php:172
+msgid "Reservation successful!"
+msgstr ""
+
+#: includes/frontend/class-sdpr-frontend.php:173
+msgid "Done"
+msgstr ""
+
+#: includes/frontend/class-sdpr-frontend.php:174
+msgid "Reservation could not be completed."
+msgstr ""
+
+#: includes/frontend/class-sdpr-frontend.php:175
+msgid "Error:"
+msgstr ""
+
+#: spectral-dot-reservations.php:100
+msgid "Spectral Dot Reservations requires WooCommerce to be installed and active."
+msgstr ""
+
+#: spectral-dot-reservations.php:302
+msgid "Spectral Dot Reservations stores reservation records on this website. These records can include the customer user ID, first and last name, email address, product ID, quantity, reservation status, creation and expiry times, inventory state, denial details, and a related WooCommerce order ID."
+msgstr ""
+
+#: spectral-dot-reservations.php:303
+msgid "Reservation data is not sent to Spectral Dot Reservations or any other service by the plugin. When email notifications are enabled, reservation details are passed to the mail delivery system configured for this WordPress website, which may be operated by a third party selected by the site owner."
+msgstr ""
+
+#: spectral-dot-reservations.php:304
+msgid "Reservation records remain in the website database until the plugin is uninstalled. For closed reservations, the WordPress personal data eraser anonymizes the customer identity and free-text denial details while retaining the operational reservation, order, and inventory data. Open reservations are retained during erasure until their inventory obligation ends; the customer can submit another erasure request after the reservation closes."
+msgstr ""
+
+#: templates/form-template.php:41
+msgid "Reserve"
+msgstr ""
+
+#: templates/modal-template.php:74
+msgid "Close reservation dialog"
+msgstr ""
+
+#: templates/modal-template.php:83
+msgid "Reserve this product"
+msgstr ""
+
+#. translators: %d: approval request duration in hours.
+#: templates/modal-template.php:89
+#, php-format
+msgid "Your request will remain open for up to %d hour."
+msgid_plural "Your request will remain open for up to %d hours."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: active reservation duration in hours.
+#: templates/modal-template.php:95
+#, php-format
+msgid "If approved, the product will then be held for %d hour."
+msgid_plural "If approved, the product will then be held for %d hours."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: reservation duration in hours.
+#: templates/modal-template.php:101
+#, php-format
+msgid "Are you sure you want to reserve this product for %d hour?"
+msgid_plural "Are you sure you want to reserve this product for %d hours?"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/modal-template.php:108
+msgid "Yes, Reserve"
+msgstr ""
+
+#: templates/myaccount/my-reservations.php:18
+msgid "My Reserved Products"
+msgstr ""
+
+#: templates/myaccount/my-reservations.php:19
+msgid "View your reservation history and manage active reservations."
+msgstr ""
+
+#. translators: %d: number of days remaining.
+#: templates/myaccount/my-reservations.php:75
+#, php-format
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of hours remaining.
+#: templates/myaccount/my-reservations.php:78
+#: templates/myaccount/my-reservations.php:82
+#, php-format
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of minutes remaining.
+#: templates/myaccount/my-reservations.php:85
+#: templates/myaccount/my-reservations.php:89
+#, php-format
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/myaccount/my-reservations.php:188
+msgid "Add to Cart"
+msgstr ""
+
+#: templates/myaccount/my-reservations.php:192
+msgid "Are you sure you want to cancel this reservation?"
+msgstr ""
+
+#: templates/myaccount/my-reservations.php:206
+msgid "Reservation history pagination"
+msgstr ""

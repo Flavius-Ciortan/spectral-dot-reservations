@@ -2,21 +2,22 @@
 set -euo pipefail
 
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-slug="hold-this-product"
-main_file="$root/HoldThisProduct.php"
+slug="spectral-dot-reservations"
+main_file="$root/spectral-dot-reservations.php"
 dist_dir="$root/dist"
 
 cd "$root"
 
-if ! git diff --quiet || ! git diff --cached --quiet; then
+if [[ -n "$(git status --porcelain --untracked-files=normal)" ]]; then
 	echo "Release builds require a clean working tree." >&2
 	exit 1
 fi
 
 header_version="$(sed -n 's/^ \* Version:[[:space:]]*\([^[:space:]]*\).*/\1/p' "$main_file" | head -n 1)"
-constant_version="$(sed -n "s/^define( 'HTP_VERSION', '\([^']*\)' );/\1/p" "$main_file" | head -n 1)"
-if [[ -z "$header_version" || "$header_version" != "$constant_version" ]]; then
-	echo "Plugin header and HTP_VERSION must contain the same version." >&2
+constant_version="$(sed -n "s/^define( 'SDPR_VERSION', '\([^']*\)' );/\1/p" "$main_file" | head -n 1)"
+stable_version="$(sed -n 's/^Stable tag:[[:space:]]*\([^[:space:]]*\).*/\1/p' "$root/readme.txt" | head -n 1)"
+if [[ -z "$header_version" || "$header_version" != "$constant_version" || "$header_version" != "$stable_version" ]]; then
+	echo "Plugin header, SDPR_VERSION and readme stable tag must contain the same version." >&2
 	exit 1
 fi
 

@@ -1,123 +1,45 @@
-# WordPress.org Submission and Release Checklist
+# Spectral Dot Reservations Release Checklist
 
-This checklist applies to Hold This Product Free 1.0.0.
+This checklist describes release gates, not completed test results. Record evidence for the exact candidate commit and ZIP. Source changes invalidate the corresponding candidate evidence.
 
-## Submission Package
+## Identity and Documentation
 
-- Plugin name: Hold This Product
-- Requested directory slug: `hold-this-product`
-- Main plugin file: `HoldThisProduct.php`
-- Public source repository: the standalone Free repository
-- License: GPL-3.0-or-later
-- Minimum WordPress: 6.5
-- Tested WordPress: 7.1
-- Minimum PHP: 7.4
-- Required plugin: WooCommerce
-- Minimum WooCommerce: 8.0
-- Tested WooCommerce: 11.0
-- Release version and stable tag: 1.0.0
+- [ ] Display name is Spectral Dot - Product Reservations for WooCommerce.
+- [ ] Directory, bootstrap and text domain use spectral-dot-reservations.
+- [ ] Author display is Spectral Dot; any contact links are verified and intentional.
+- [ ] Header, SDPR_VERSION and readme stable tag agree on 1.0.0 for the initial public release.
+- [ ] GPL-3.0-or-later license and required third-party attribution are intact.
+- [ ] Public code, metadata, assets and translation catalog use the current identity exclusively.
+- [ ] Readme scope accurately describes logged-in customers, simple stock-managed products and one unit per reservation.
+- [ ] Directory artwork and six screenshots match the current UI and readme captions.
 
-The final slug is assigned by the WordPress.org Plugin Review team. An exact directory page did not exist when checked on 2026-09-03, but this does not reserve or guarantee the requested slug.
+## Verification
 
-## Account Prerequisites
+- [ ] PHP/JavaScript/shell syntax and WordPress coding standards pass.
+- [ ] Integration, scoped/dismissible notice, concurrency and HPOS checks pass.
+- [ ] Supported minimum and current stacks pass; compatibility metadata is evidence-based.
+- [ ] Browser tests cover frontend/admin roles, settings validation, notices, mobile, keyboard operation, and classic/block checkout.
+- [ ] Plugin Check passes or residual non-blocking advisories have a specific reviewed rationale.
+- [ ] Activation, deactivation, reactivation and uninstall pass on a disposable site.
+- [ ] Privacy exporter/eraser, inventory ownership, cron and mail-event counts pass.
+- [ ] CI is passing for the exact release commit, not just an earlier revision.
 
-- [x] Create or verify the WordPress.org account that will submit and maintain the plugin.
-- [x] Keep the `Contributors:` field omitted from this release metadata so no individual accounts are named.
-- [x] Use a monitored email address on the WordPress.org account.
-- [x] Allow and label email from `plugins@wordpress.org` so review messages are not lost.
-- [x] No people are named as contributors, so no additional contributor approval is required for this release.
+## Package
 
-Only WordPress.org account IDs belong in `Contributors:`. Repository usernames and display names are not interchangeable with WordPress.org IDs. WordPress.org can still publicly associate the submitting account with the plugin even when this field is omitted.
+- [ ] Build from a clean committed tree with bin/build-release.sh.
+- [ ] ZIP has one spectral-dot-reservations directory and spectral-dot-reservations.php bootstrap.
+- [ ] No development tools, local plans, private data, credentials or paid plugin files are packaged.
+- [ ] SHA-256 verifies and a second build is byte-for-byte identical.
+- [ ] Install and test the actual ZIP on a clean disposable environment.
+- [ ] Preserve the tested ZIP, checksum, commit, environment versions and evidence together.
 
-## Reviewer Overview
+## Review and Publication
 
-Use this concise description in the submission form:
+- [ ] Confirm ownership of the existing pending submission before uploading a revision.
+- [ ] Obtain final approval for the exact tested candidate and form details.
+- [ ] Upload through the existing submission; do not create a duplicate submission.
+- [ ] Reply briefly in the existing review thread and explicitly request spectral-dot-reservations.
+- [ ] Record successful receipt. Upload is not directory approval.
+- [ ] After approval, publish verified trunk/tag and directory assets using the assigned SVN repository.
 
-> Hold This Product adds timed product reservations for logged-in WooCommerce customers. It supports immediate or merchant-approved reservations, transactional stock holds and releases, customer and merchant cancellation, expiration through WP-Cron, checkout fulfillment without a second stock reduction, My Account management, email notifications, privacy export/erasure, basic analytics, HPOS, and Cart/Checkout Blocks. Free supports one unit per reservation for published simple products using WooCommerce stock management. It has no author-operated service, remote account, telemetry, tracking, or advertisements.
-
-Do not describe Pro-only capabilities in the Free submission.
-
-## Source and Licensing Audit
-
-- [x] Main plugin headers use the canonical Free repository and current requirements.
-- [x] Main header, `readme.txt`, Composer metadata, and `LICENSE` consistently declare GPL-3.0-or-later.
-- [x] The full GNU GPL version 3 license text is included.
-- [x] Bundled source, documentation, and artwork are covered by the project license notice.
-- [x] No production third-party libraries are bundled.
-- [x] No minified JavaScript or CSS requires a separate human-readable source link.
-- [x] No author-operated external service, telemetry, tracking, or advertising is present.
-- [x] Email delivery is delegated only to the mail transport chosen by the site owner.
-- [x] Stored personal data, retention, export, erasure, and uninstall behavior are disclosed.
-
-## Readme and Header Audit
-
-- [x] Plugin name, description, author, URLs, text domain, domain path, and license are complete.
-- [x] `Requires Plugins: woocommerce` is declared in the main plugin header.
-- [x] `Stable tag` matches the plugin version exactly.
-- [x] The short description is below 150 characters.
-- [x] No more than five relevant tags are declared.
-- [x] Installation, FAQ, privacy, external-service, changelog, upgrade, and support content describe implemented Free behavior.
-- [x] Screenshot captions correspond one-for-one with finalized directory assets.
-- [x] No personal or collaborator identity is declared in distributable metadata.
-
-## Quality Gates
-
-Run from a clean repository:
-
-```bash
-composer install
-vendor/bin/phpcs
-find . -type f -name '*.php' -not -path './vendor/*' -print0 | xargs -0 -n1 php -l
-find assets -type f -name '*.js' -print0 | xargs -0 -n1 node --check
-bash bin/build-release.sh
-(cd dist && sha256sum --check hold-this-product-1.0.0.zip.sha256)
-```
-
-- [x] Static syntax and WordPress coding standards pass.
-- [x] Integration, concurrency, HPOS, checkout, activation, deactivation, upgrade, uninstall, and privacy tests pass.
-- [x] Plugin Check runs against the installed exact ZIP, not the development source tree.
-- [x] Remaining Plugin Check findings are reviewed: only advisory custom-post-type `meta_query` performance warnings remain.
-- [x] A repeatable 5,000-record profile keeps all reviewed reservation metadata queries below 500 ms; the slowest measured operation was 60.11 ms in the local release environment.
-- [x] The exact ZIP installs and activates with WooCommerce on a clean site.
-- [x] The ZIP has one `hold-this-product/` root and excludes tests, CI, Git metadata, Composer tooling, local plans, development ZIPs, and contributor-only documents.
-- [x] The release contents contain only product-related attribution in text and image metadata.
-- [x] A second clean build produces the same SHA-256 checksum.
-
-Verified release candidate: `dist/hold-this-product-1.0.0.zip` (verified 2026-09-05).
-
-SHA-256: `99f17c880c5a3e18be2127667151540f537cad612e7c4bd8c5d66fd066b33f2d`
-
-## Initial Submission
-
-- [ ] Sign in at https://wordpress.org/plugins/developers/add/
-- [ ] Upload the checksum-verified `dist/hold-this-product-1.0.0.zip`.
-- [ ] Paste the reviewer overview above and answer review questions accurately.
-- [ ] Do not submit duplicate ZIPs while review is pending.
-- [ ] Respond to review email from the submitting WordPress.org account.
-- [ ] Make any requested changes in the public source repository and submit a newly built exact artifact.
-
-## Directory Assets
-
-Icons, banners, and screenshots are optional for initial submission and are not included in the release ZIP.
-
-- [x] Finalize `icon-128x128.png` and `icon-256x256.png`.
-- [x] Finalize `banner-772x250.png` and `banner-1544x500.png`.
-- [x] Capture screenshots from the exact release behavior.
-- [x] Add screenshot captions to `readme.txt` only when all matching files are ready.
-- [ ] Upload assets to the WordPress.org SVN repository's top-level `/assets` directory after approval.
-
-## After Approval
-
-- [ ] Check out the assigned WordPress.org SVN repository.
-- [ ] Copy the exact release contents, without the outer ZIP directory, into SVN `/trunk`.
-- [ ] Copy approved directory artwork into SVN `/assets`.
-- [ ] Create SVN `/tags/1.0.0` from the exact release contents.
-- [ ] Commit trunk, tag, and assets with the WordPress.org account.
-- [ ] Verify the public directory page, download ZIP, dependency installation, readme formatting, and support forum.
-- [ ] Compare the WordPress.org download package to the approved source contents.
-- [ ] Tag `v1.0.0` in GitHub and publish matching release notes.
-- [ ] Install the published WordPress.org package on a clean site and repeat the smoke test.
-
-## Ongoing Releases
-
-Increment the plugin header version and `HTP_VERSION`, update `Stable tag`, changelog, tested versions, POT file, source tag, SVN trunk, and SVN version tag together. Never move an existing SVN version tag to different code.
+Directory icons/banners/screenshots in .wordpress-org belong in SVN assets after approval and are excluded from the runtime ZIP. Automatic publication is not triggered merely by pushing source changes.

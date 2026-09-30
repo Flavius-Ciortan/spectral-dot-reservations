@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to Hold This Product are documented here. The project follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and semantic versioning.
+All notable changes to Spectral Dot Reservations are documented here. The project follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and semantic versioning.
 
 ## 1.0.0 - 2026-09-04
 
@@ -16,7 +16,7 @@ All notable changes to Hold This Product are documented here. The project follow
 - Live verification fixtures for classic checkout, block checkout, customer flow, Shop Manager access, and Administrator access.
 - Reduced-motion handling for frontend and admin plugin controls.
 - Complete WordPress.org submission metadata, privacy disclosures, and canonical licensing.
-- Complete translation coverage and an up-to-date `hold-this-product` POT catalog.
+- Complete translation coverage and an up-to-date `spectral-dot-reservations` POT catalog.
 - WordPress.org directory icons, banners, and release screenshots with matching readme captions.
 
 ### Changed
