@@ -38,6 +38,11 @@ $sdpr_show_button = $sdpr_globally_on && ( is_user_logged_in() || apply_filters(
 		data-productid="<?php echo esc_attr( $sdpr_pid ); ?>"
 		data-product-type="<?php echo esc_attr( $sdpr_product->get_type() ); ?>"
 	>
-		<?php esc_html_e( 'Reserve', 'spectral-dot-reservations' ); ?>
+		<svg class="sdpr-reserve-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+			<path d="M10 2.75h4M12 2.75v3.5M18.8 6.2l1.25 1.25" />
+			<circle cx="12" cy="14" r="7.5" />
+			<path d="M12 9.75V14l2.5 1.5" />
+		</svg>
+		<span><?php esc_html_e( 'Reserve', 'spectral-dot-reservations' ); ?></span>
 	</button>
 <?php endif; ?>

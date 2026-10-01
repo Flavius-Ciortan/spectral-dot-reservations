@@ -4,6 +4,7 @@ if ( ! defined( 'ABSPATH' ) || '1' !== getenv( 'SDPR_REBRAND_TEST' ) ) {
 	exit( 1 );
 }
 require_once ABSPATH . 'wp-admin/includes/admin.php';
+require_once SDPR_PLUGIN_PATH . 'includes/admin/class-sdpr-admin-view.php';
 if ( ! defined( 'DOING_AJAX' ) ) {
 	define( 'DOING_AJAX', true );
 }
@@ -40,6 +41,27 @@ try {
 	sdpr_rebrand_assert( 'Spectral Dot - Product Reservations for WooCommerce' === $sdpr_header['Name'] && 'spectral-dot-reservations' === $sdpr_header['TextDomain'] && SDPR_VERSION === $sdpr_header['Version'], 'Canonical metadata matches the runtime identity.' );
 	require_once SDPR_PLUGIN_PATH . 'includes/admin/class-sdpr-admin.php';
 	$sdpr_settings_admin = new SDPR_Admin();
+	$sdpr_menu_order = array( 'woocommerce', 'edit.php?post_type=product', 'wc-admin', 'sdpr-settings', 'tools.php' );
+	sdpr_rebrand_assert( array( 'woocommerce', 'edit.php?post_type=product', 'sdpr-settings', 'wc-admin', 'tools.php' ) === $sdpr_settings_admin->place_menu_after_products( $sdpr_menu_order ), 'Reservations remains top-level directly below Products.' );
+	sdpr_rebrand_assert( array( 'woocommerce', 'edit.php?post_type=product', 'sdpr-settings', 'wc-admin', 'tools.php' ) === $sdpr_settings_admin->place_menu_after_products( $sdpr_settings_admin->place_menu_after_products( $sdpr_menu_order ) ), 'Menu placement remains stable when applied twice.' );
+	$sdpr_wc_menu_order = array( 'edit.php?post_type=product', 'separator-woocommerce', 'woocommerce', 'edit.php?post_type=product', 'wc-admin', 'sdpr-settings' );
+	sdpr_rebrand_assert( array( 'edit.php?post_type=product', 'separator-woocommerce', 'woocommerce', 'edit.php?post_type=product', 'sdpr-settings', 'wc-admin' ) === $sdpr_settings_admin->place_menu_after_products( $sdpr_wc_menu_order ), 'Reservations follows the final Products entry when WooCommerce duplicates it in the menu order.' );
+	sdpr_rebrand_assert( array( 'woocommerce', 'sdpr-settings', 'tools.php' ) === $sdpr_settings_admin->place_menu_after_products( array( 'woocommerce', 'sdpr-settings', 'tools.php' ) ), 'Menu order is unchanged when Products is unavailable.' );
+	ob_start();
+	SDPR_Admin_View::render_header( 'Heading <test>', 'Description & details' );
+	$sdpr_header_markup = ob_get_clean();
+	sdpr_rebrand_assert( false !== strpos( $sdpr_header_markup, 'Heading &lt;test&gt;' ) && false !== strpos( $sdpr_header_markup, 'Description &amp; details' ), 'Shared header escapes its heading and description.' );
+	sdpr_rebrand_assert( 1 === substr_count( $sdpr_header_markup, '<h1 ' ) && false !== strpos( $sdpr_header_markup, 'spectral-dot-logo-inline.svg' ) && false !== strpos( $sdpr_header_markup, 'alt="Spectral Dot"' ), 'Shared header has one heading and an accessible bundled SVG logo.' );
+	$sdpr_menu_icon = SDPR_Admin_View::menu_icon();
+	$sdpr_menu_svg = base64_decode( substr( $sdpr_menu_icon, strlen( 'data:image/svg+xml;base64,' ) ), true );
+	sdpr_rebrand_assert( 0 === strpos( $sdpr_menu_icon, 'data:image/svg+xml;base64,' ) && false !== strpos( $sdpr_menu_svg, 'width="20"' ) && false === strpos( $sdpr_menu_svg, '<linearGradient' ), 'Menu icon is a compact, recolorable monochrome SVG data URI.' );
+	sdpr_rebrand_assert( false === strpos( $sdpr_menu_svg, 'fill="none"' ) && false === strpos( $sdpr_menu_svg, 'stroke=' ) && false !== strpos( $sdpr_menu_svg, 'fill-rule="evenodd"' ), 'Menu icon stays hollow when WordPress recolors its fills.' );
+	set_current_screen( 'dashboard' );
+	sdpr_rebrand_assert( 'existing' === SDPR_Admin_View::admin_body_class( 'existing' ), 'Shared admin layout does not affect unrelated screens.' );
+	foreach ( array( 'toplevel_page_sdpr-settings', 'spectral-dot-reservations_page_sdpr-manage-reservations', 'spectral-dot-reservations_page_sdpr-analytics' ) as $sdpr_screen ) {
+		set_current_screen( $sdpr_screen );
+		sdpr_rebrand_assert( 'existing sdpr-admin-page' === SDPR_Admin_View::admin_body_class( 'existing' ), 'Shared layout preserves existing classes on ' . $sdpr_screen . '.' );
+	}
 	$sdpr_original_errors = isset( $GLOBALS['wp_settings_errors'] ) ? $GLOBALS['wp_settings_errors'] : array();
 	$GLOBALS['wp_settings_errors'] = array();
 	add_settings_error( 'general', 'settings_updated', 'Settings saved.', 'success' );

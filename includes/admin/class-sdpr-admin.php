@@ -28,6 +28,9 @@ class SDPR_Admin {
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 		add_action( 'admin_init', array( $this, 'init_settings' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
+		add_filter( 'admin_body_class', array( 'SDPR_Admin_View', 'admin_body_class' ) );
+		add_filter( 'custom_menu_order', '__return_true' );
+		add_filter( 'menu_order', array( $this, 'place_menu_after_products' ), 20 );
 
 		add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_product_reservations_list' ) );
 	}
@@ -37,12 +40,12 @@ class SDPR_Admin {
 	 */
 	public function add_admin_menu() {
 		add_menu_page(
-			__( 'Spectral Dot Reservations Settings', 'spectral-dot-reservations' ),
-			__( 'Spectral Dot Reservations', 'spectral-dot-reservations' ),
+			__( 'Product Reservations Settings', 'spectral-dot-reservations' ),
+			__( 'Reservations', 'spectral-dot-reservations' ),
 			sdpr_get_manage_capability(),
 			'sdpr-settings',
 			array( $this, 'settings_page' ),
-			'dashicons-clock',
+			SDPR_Admin_View::menu_icon(),
 			80
 		);
 
@@ -65,6 +68,30 @@ class SDPR_Admin {
 			'sdpr-manage-reservations',
 			$this->reservations_admin ? array( $this->reservations_admin, 'render_page' ) : '__return_null'
 		);
+	}
+
+	/**
+	 * Keep the top-level Reservations menu directly below WooCommerce Products.
+	 *
+	 * @param array $menu_order Ordered top-level menu slugs.
+	 * @return array
+	 */
+	public function place_menu_after_products( $menu_order ) {
+		if ( ! is_array( $menu_order ) ) {
+			return $menu_order;
+		}
+
+		$product_indexes    = array_keys( $menu_order, 'edit.php?post_type=product', true );
+		$reservations_index = array_search( 'sdpr-settings', $menu_order, true );
+		if ( empty( $product_indexes ) || false === $reservations_index ) {
+			return $menu_order;
+		}
+
+		array_splice( $menu_order, $reservations_index, 1 );
+		$product_indexes = array_keys( $menu_order, 'edit.php?post_type=product', true );
+		array_splice( $menu_order, end( $product_indexes ) + 1, 0, array( 'sdpr-settings' ) );
+
+		return $menu_order;
 	}
 
 	/**
@@ -378,18 +405,12 @@ class SDPR_Admin {
 	public function settings_page() {
 		?>
 		<div class="sdpr-admin-wrapper">
-			<!-- Header with Logo -->
-			<div class="sdpr-admin-header">
-				<div class="sdpr-header-content">
-					<div class="sdpr-title-section">
-						<h1 class="sdpr-main-title"><?php esc_html_e( 'Spectral Dot Reservations Settings', 'spectral-dot-reservations' ); ?></h1>
-						<p class="sdpr-subtitle"><?php esc_html_e( 'Manage your product reservation system', 'spectral-dot-reservations' ); ?></p>
-					</div>
-					<div class="sdpr-logo-section">
-						<span class="sdpr-brand-name"><?php esc_html_e( 'Spectral Dot', 'spectral-dot-reservations' ); ?></span>
-					</div>
-				</div>
-			</div>
+			<?php
+			SDPR_Admin_View::render_header(
+				__( 'Product Reservations Settings', 'spectral-dot-reservations' ),
+				__( 'Set reservation limits, hold durations, approval rules and customer notifications.', 'spectral-dot-reservations' )
+			);
+			?>
 
 			<!-- Main Content -->
 			<div class="sdpr-admin-content">
@@ -398,11 +419,15 @@ class SDPR_Admin {
 				<div class="sdpr-nav-wrapper">
 					<div class="sdpr-nav-tabs" role="tablist" aria-label="<?php esc_attr_e( 'Settings sections', 'spectral-dot-reservations' ); ?>">
 						<button type="button" id="sdpr-tab-general" class="sdpr-nav-tab sdpr-nav-tab-active" data-target="general" role="tab" aria-controls="sdpr-general" aria-selected="true" tabindex="0">
-							<span class="sdpr-tab-icon" aria-hidden="true">⚙️</span>
+							<span class="sdpr-tab-icon dashicons dashicons-admin-generic" aria-hidden="true"></span>
 							<span class="sdpr-tab-text"><?php esc_html_e( 'General Settings', 'spectral-dot-reservations' ); ?></span>
 						</button>
 						<button type="button" id="sdpr-tab-logged-in" class="sdpr-nav-tab" data-target="logged-in" role="tab" aria-controls="sdpr-logged-in" aria-selected="false" tabindex="-1">
-							<span class="sdpr-tab-icon" aria-hidden="true">🎨</span>
+							<?php // Lucide picture-in-picture-2; see assets/LICENSE-lucide.txt. ?>
+							<svg class="sdpr-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+								<path d="M21 9V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10c0 1.1.9 2 2 2h4" />
+								<rect width="10" height="7" x="12" y="13" rx="2" />
+							</svg>
 							<span class="sdpr-tab-text"><?php esc_html_e( 'Pop-up Customization', 'spectral-dot-reservations' ); ?></span>
 						</button>
 					</div>

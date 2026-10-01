@@ -89,8 +89,14 @@ class SDPR_Admin_Reservations {
 		$reservations = $query->posts;
 		$stats        = $this->get_reservations_summary();
 		?>
-		<div class="wrap sdpr-reservations-admin">
-			<h1><?php esc_html_e( 'Manage Reservations', 'spectral-dot-reservations' ); ?></h1>
+		<div class="sdpr-admin-wrapper sdpr-admin-wrapper--wide sdpr-reservations-admin">
+			<?php
+			SDPR_Admin_View::render_header(
+				__( 'Manage Reservations', 'spectral-dot-reservations' ),
+				__( 'Review customer requests, track active holds and manage reservation statuses.', 'spectral-dot-reservations' )
+			);
+			?>
+			<div class="sdpr-admin-content">
 
 			<div class="sdpr-reservations-stats">
 				<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
@@ -178,6 +184,7 @@ class SDPR_Admin_Reservations {
 				}
 				?>
 			<?php endif; ?>
+			</div>
 		</div>
 
 		<?php

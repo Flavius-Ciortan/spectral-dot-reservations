@@ -61,6 +61,7 @@ sdpr_assert( ! wp_next_scheduled( SDPR_Reservations::CRON_HOOK ), 'Expiration sc
 $sdpr_plugin->reservations->schedule_expiration();
 sdpr_assert( (bool) wp_next_scheduled( SDPR_Reservations::CRON_HOOK ), 'Missing expiration schedule is recreated.' );
 
+require_once SDPR_PLUGIN_PATH . 'includes/admin/class-sdpr-admin-view.php';
 require_once SDPR_PLUGIN_PATH . 'includes/admin/class-sdpr-admin-reservations.php';
 require_once SDPR_PLUGIN_PATH . 'includes/admin/class-sdpr-admin.php';
 $sdpr_admin = new SDPR_Admin( $sdpr_plugin->reservations );
@@ -133,7 +134,7 @@ sdpr_assert( '' === $sdpr_in_stock_fallback_markup, 'In-stock products wait for 
 ob_start();
 ( static function () { include SDPR_PLUGIN_PATH . 'templates/form-template.php'; } )();
 $sdpr_reserve_button_markup = ob_get_clean();
-sdpr_assert( 1 === preg_match( '/>\s*Reserve\s*<\/button>/', $sdpr_reserve_button_markup ), 'The product action uses the concise Reserve label.' );
+sdpr_assert( 1 === preg_match( '/<svg[^>]*aria-hidden="true"[^>]*>.*<\/svg>\s*<span>Reserve<\/span>\s*<\/button>/s', $sdpr_reserve_button_markup ), 'The product action pairs a decorative stopwatch with the concise Reserve label.' );
 $sdpr_waitlist_product = new WC_Product_Simple();
 $sdpr_waitlist_product->set_name( 'Waitlist fallback test product' );
 $sdpr_waitlist_product->set_status( 'publish' );
@@ -153,7 +154,7 @@ ob_start();
 $sdpr_plugin->frontend->display_reservation_fallback();
 $sdpr_waitlist_fallback_markup = ob_get_clean();
 remove_filter( 'sdpr_product_is_reservable', $sdpr_waitlist_eligibility, 10 );
-sdpr_assert( 1 === preg_match( '/>\s*Reserve\s*<\/button>/', $sdpr_waitlist_fallback_markup ), 'Extension-enabled sold-out products retain the dedicated fallback action.' );
+sdpr_assert( 1 === preg_match( '/<svg[^>]*aria-hidden="true"[^>]*>.*<\/svg>\s*<span>Reserve<\/span>\s*<\/button>/s', $sdpr_waitlist_fallback_markup ), 'Extension-enabled sold-out products retain the dedicated fallback action.' );
 $GLOBALS['product'] = wc_get_product( $sdpr_immediate_product_id );
 ob_start();
 ( static function () { include SDPR_PLUGIN_PATH . 'templates/modal-template.php'; } )();

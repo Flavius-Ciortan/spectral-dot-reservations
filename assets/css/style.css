@@ -334,6 +334,19 @@ label[for="rez_check"] {
     margin-right: 10px;
 }
 
+.woocommerce div.product #sdpr_reserve_product {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.woocommerce div.product #sdpr_reserve_product .sdpr-reserve-icon {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+}
+
 .woocommerce div.product .wc-block-add-to-cart-form.sdpr-has-reserve-action {
     display: flex;
     flex-direction: row;

@@ -16,14 +16,8 @@
     --sdpr-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-/*
- * WP admin layout note:
- * Core uses `#wpcontent` padding in combination with `.wrap` margins.
- * Only zero out `#wpcontent` padding on our Settings page (to allow a full-bleed header),
- * otherwise Analytics/Reservations can look "stuck" to the admin menu.
- */
-body.toplevel_page_sdpr-settings #wpcontent,
-body.sdpr_page_sdpr-settings #wpcontent {
+/* Shared headers are full-width; content keeps its own comfortable inset. */
+body.sdpr-admin-page #wpcontent {
     padding: 0;
 }
 
@@ -73,6 +67,7 @@ body #wpcontent {
 
 .sdpr-title-section {
     flex: 1;
+    min-width: 0;
 }
 
 .sdpr-main-title {
@@ -98,36 +93,21 @@ body #wpcontent {
     justify-content: center;
 }
 
-.sdpr-brand-name {
-    color: inherit;
-    font-size: 20px;
-    font-weight: 700;
-    white-space: nowrap;
-}
-
 .sdpr-logo {
-    width: 80px;
-    height: 80px;
-    max-width: 100%;
-    max-height: 100%;
+    width: 200px;
+    height: auto;
     display: block;
-}
-
-.sdpr-logo-fallback {
-    background: linear-gradient(135deg, var(--sdpr-primary) 0%, var(--sdpr-primary-dark) 100%);
-    color: var(--sdpr-white);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 18px;
-    letter-spacing: 1px;
 }
 
 .sdpr-admin-content {
     max-width: 1200px;
     margin: 0 auto;
     padding: 1.5rem;
+}
+
+.sdpr-admin-wrapper--wide .sdpr-header-content,
+.sdpr-admin-wrapper--wide .sdpr-admin-content {
+    max-width: none;
 }
 
 /* Navigation Tabs */
@@ -192,21 +172,12 @@ body #wpcontent {
 }
 
 .sdpr-tab-icon {
-    font-size: 1rem;
-}
-
-/* Remove color from user and guests emoji icons */
-.sdpr-nav-tab[data-target="logged-in"] .sdpr-tab-icon,
-.sdpr-nav-tab[data-target="logged-out"] .sdpr-tab-icon {
-    filter: grayscale(1);
-}
-
-/* Keep them colorless even when active or hover */
-.sdpr-nav-tab-active[data-target="logged-in"] .sdpr-tab-icon,
-.sdpr-nav-tab-active[data-target="logged-out"] .sdpr-tab-icon,
-.sdpr-nav-tab[data-target="logged-in"]:hover .sdpr-tab-icon,
-.sdpr-nav-tab[data-target="logged-out"]:hover .sdpr-tab-icon {
-    filter: grayscale(1);
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+    line-height: 1;
+    color: currentColor;
+    flex-shrink: 0;
 }
 
 .sdpr-tab-text {
@@ -1001,14 +972,30 @@ td:nth-child(5) {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .sdpr-admin-header {
+        padding: 1.25rem 1rem;
+    }
+
     .sdpr-header-content {
-        flex-direction: column;
-        text-align: center;
-        gap: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .sdpr-title-section {
+        flex-basis: 100%;
+    }
+
+    .sdpr-main-title {
+        font-size: 1.4rem;
+        line-height: 1.3;
     }
     
     .sdpr-logo-section {
         margin-left: 0;
+        margin-top: 1rem;
+    }
+
+    .sdpr-logo {
+        width: 180px;
     }
     
     .sdpr-nav-tabs {

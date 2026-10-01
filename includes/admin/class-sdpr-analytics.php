@@ -68,8 +68,14 @@ class SDPR_Analytics {
 
 		$stats = $this->get_reservation_stats();
 		?>
-		<div class="wrap">
-			<h1><?php esc_html_e( 'Reservation Analytics', 'spectral-dot-reservations' ); ?></h1>
+		<div class="sdpr-admin-wrapper sdpr-admin-wrapper--wide">
+			<?php
+			SDPR_Admin_View::render_header(
+				__( 'Reservation Analytics', 'spectral-dot-reservations' ),
+				__( 'Monitor reservation activity, outcomes and conversion to purchases.', 'spectral-dot-reservations' )
+			);
+			?>
+			<div class="sdpr-admin-content">
 
 			<div class="sdpr-stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0;">
 				<div class="sdpr-stat-card" style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
@@ -120,6 +126,7 @@ class SDPR_Analytics {
 
 			<h2><?php esc_html_e( 'Recent Reservations', 'spectral-dot-reservations' ); ?></h2>
 			<?php $this->display_recent_reservations(); ?>
+			</div>
 		</div>
 		<?php
 	}

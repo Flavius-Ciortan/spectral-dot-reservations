@@ -5,7 +5,7 @@
 		$('.sdpr-inline-notice').remove();
 		var $notice = $('<div>', { class: 'notice notice-' + type + ' sdpr-inline-notice is-dismissible', role: 'status', 'aria-live': 'polite' })
 			.append($('<p>').text(message))
-			.insertAfter('.sdpr-reservations-admin h1');
+			.prependTo('.sdpr-reservations-admin .sdpr-admin-content');
 		$('<button>', { type: 'button', class: 'notice-dismiss' })
 			.append($('<span>', { class: 'screen-reader-text', text: config.strings.dismiss }))
 			.on('click', function () { $notice.remove(); })

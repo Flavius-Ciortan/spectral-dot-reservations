@@ -147,6 +147,7 @@ class SDPR_Plugin {
 
 		// Admin classes
 		if ( is_admin() ) {
+			require_once SDPR_PLUGIN_PATH . 'includes/admin/class-sdpr-admin-view.php';
 			require_once SDPR_PLUGIN_PATH . 'includes/admin/class-sdpr-admin.php';
 			require_once SDPR_PLUGIN_PATH . 'includes/admin/class-sdpr-admin-reservations.php';
 			require_once SDPR_PLUGIN_PATH . 'includes/admin/class-sdpr-analytics.php';
