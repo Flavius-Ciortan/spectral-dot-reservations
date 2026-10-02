@@ -74,8 +74,6 @@ class SDPR_Plugin {
 		$this->dependency_notices = new SDPR_Dependency_Notices();
 		add_action( 'admin_init', array( $this, 'queue_dependency_notice' ) );
 		add_action( 'before_woocommerce_init', array( $this, 'declare_woocommerce_compatibility' ) );
-		add_action( 'admin_init', array( $this, 'maybe_upgrade' ) );
-		add_action( 'admin_init', array( $this, 'maybe_migrate_inventory_states' ) );
 		add_action( 'admin_init', array( $this, 'add_privacy_policy_content' ) );
 		// WooCommerce has loaded by this point, while WordPress init has not yet run.
 		add_action( 'plugins_loaded', array( $this, 'bootstrap_plugin' ), 20 );
@@ -131,6 +129,7 @@ class SDPR_Plugin {
 		require_once SDPR_PLUGIN_PATH . 'includes/class-sdpr-dependency-notices.php';
 		require_once SDPR_PLUGIN_PATH . 'includes/class-sdpr-reservation-status.php';
 		require_once SDPR_PLUGIN_PATH . 'includes/class-sdpr-reservation-meta.php';
+		require_once SDPR_PLUGIN_PATH . 'includes/class-sdpr-reservation-query.php';
 		require_once SDPR_PLUGIN_PATH . 'includes/interface-sdpr-reservation-repository.php';
 		require_once SDPR_PLUGIN_PATH . 'includes/interface-sdpr-reservation-lifecycle.php';
 		require_once SDPR_PLUGIN_PATH . 'includes/class-sdpr-reservation-repository.php';
@@ -213,6 +212,7 @@ class SDPR_Plugin {
 		require_once SDPR_PLUGIN_PATH . 'includes/class-sdpr-dependency-notices.php';
 		require_once SDPR_PLUGIN_PATH . 'includes/class-sdpr-reservation-status.php';
 		require_once SDPR_PLUGIN_PATH . 'includes/class-sdpr-reservation-meta.php';
+		require_once SDPR_PLUGIN_PATH . 'includes/class-sdpr-reservation-query.php';
 		require_once SDPR_PLUGIN_PATH . 'includes/interface-sdpr-reservation-repository.php';
 		require_once SDPR_PLUGIN_PATH . 'includes/interface-sdpr-reservation-lifecycle.php';
 		require_once SDPR_PLUGIN_PATH . 'includes/class-sdpr-reservation-repository.php';
@@ -249,48 +249,6 @@ class SDPR_Plugin {
 		if ( class_exists( '\\Automattic\\WooCommerce\\Utilities\\FeaturesUtil' ) ) {
 			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
 			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', __FILE__, true );
-		}
-	}
-
-	/** Normalize legacy local-offset timestamps in bounded upgrade batches. */
-	public function maybe_upgrade() {
-		if ( version_compare( (string) get_option( 'sdpr_version', '0' ), SDPR_VERSION, '>=' ) || ! $this->reservations instanceof SDPR_Reservations ) {
-			return;
-		}
-		$ids    = get_posts(
-			array(
-				'post_type'      => 'sdpr_reservation',
-				'post_status'    => 'publish',
-				'fields'         => 'ids',
-				'posts_per_page' => 500,
-				'no_found_rows'  => true,
-				'meta_query'     => array(
-					array(
-						'key'     => SDPR_Reservation_Meta::EXPIRES_AT,
-						'compare' => 'EXISTS',
-					),
-					array(
-						'key'     => SDPR_Reservation_Meta::TIMESTAMP_MODEL,
-						'compare' => 'NOT EXISTS',
-					),
-				),
-			)
-		);
-		$offset = current_datetime()->getOffset();
-		foreach ( $ids as $reservation_id ) {
-			$expires = (int) SDPR_Reservation_Meta::get( $reservation_id, SDPR_Reservation_Meta::EXPIRES_AT );
-			SDPR_Reservation_Meta::update( $reservation_id, SDPR_Reservation_Meta::EXPIRES_AT, max( 0, $expires - $offset ) );
-			SDPR_Reservation_Meta::update( $reservation_id, SDPR_Reservation_Meta::TIMESTAMP_MODEL, 'utc' );
-		}
-		$this->reservations->schedule_expiration();
-		if ( count( $ids ) < 500 ) {
-			update_option( 'sdpr_version', SDPR_VERSION, false );
-		}
-	}
-
-	public function maybe_migrate_inventory_states() {
-		if ( $this->reservations instanceof SDPR_Reservations ) {
-			$this->reservations->migrate_inventory_states();
 		}
 	}
 

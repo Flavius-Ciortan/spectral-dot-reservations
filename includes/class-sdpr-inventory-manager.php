@@ -125,57 +125,28 @@ final class SDPR_Inventory_Manager {
 		return self::STATE_RELEASED;
 	}
 
-	/** Backfill explicit ownership for legacy records without changing stock. */
-	public function backfill_missing_states( $limit = 500 ) {
-		$ids = get_posts(
-			array(
-				'post_type'      => 'sdpr_reservation',
-				'post_status'    => 'publish',
-				'fields'         => 'ids',
-				'posts_per_page' => max( 1, absint( $limit ) ),
-				'no_found_rows'  => true,
-				'meta_query'     => array(
-					array(
-						'key'     => self::META_STATE,
-						'compare' => 'NOT EXISTS',
-					),
-				),
-			)
-		);
-		foreach ( $ids as $reservation_id ) {
-			$status = (string) SDPR_Reservation_Meta::get( $reservation_id, SDPR_Reservation_Meta::STATUS );
-			add_post_meta( $reservation_id, self::META_STATE, $this->get_state( $reservation_id, $status ), true );
-		}
-		return count( $ids );
-	}
-
 	/** Return records whose lifecycle status disagrees with inventory ownership. */
 	public function find_inconsistent_states( $limit = 100 ) {
-		$ids     = get_posts(
+		$ids            = get_posts(
 			array(
 				'post_type'      => 'sdpr_reservation',
 				'post_status'    => 'publish',
 				'fields'         => 'ids',
 				'posts_per_page' => max( 1, absint( $limit ) ),
 				'no_found_rows'  => true,
-				'meta_query'     => array(
-					array(
-						'key'     => SDPR_Reservation_Meta::STATUS,
-						'compare' => 'EXISTS',
-					),
-					array(
-						'key'     => self::META_STATE,
-						'compare' => 'EXISTS',
-					),
+				'orderby'        => array(
+					'date' => 'DESC',
+					'ID'   => 'DESC',
 				),
 			)
 		);
-		$invalid = array();
+		$invalid        = array();
+		$known_statuses = array_merge( SDPR_Reservation_Status::all(), array( SDPR_Reservation_Status::INITIALIZING ) );
 		update_meta_cache( 'post', $ids );
 		foreach ( $ids as $reservation_id ) {
 			$status = (string) SDPR_Reservation_Meta::get( $reservation_id, SDPR_Reservation_Meta::STATUS );
 			$state  = (string) get_post_meta( $reservation_id, self::META_STATE, true );
-			if ( $state !== $this->expected_state( $status ) ) {
+			if ( ! in_array( $status, $known_statuses, true ) || $state !== $this->expected_state( $status ) ) {
 				$invalid[] = (int) $reservation_id;
 			}
 		}

@@ -153,15 +153,8 @@ final class SDPR_Privacy_Service {
 			'orderby'        => 'ID',
 			'order'          => 'ASC',
 			'no_found_rows'  => true,
-			'meta_query'     => array(
-				array(
-					'key'     => SDPR_Reservation_Meta::STATUS,
-					'value'   => SDPR_Reservation_Status::open(),
-					'compare' => 'NOT IN',
-				),
-			),
 		);
-		return get_posts( $this->merge_identity_meta_query( $args, $email_address ) );
+		return $this->find_status_batch( $email_address, $args, true );
 	}
 
 	private function has_retained_reservations( $email_address ) {
@@ -171,24 +164,38 @@ final class SDPR_Privacy_Service {
 			'fields'         => 'ids',
 			'posts_per_page' => 1,
 			'no_found_rows'  => true,
-			'meta_query'     => array(
-				array(
-					'key'     => SDPR_Reservation_Meta::STATUS,
-					'value'   => SDPR_Reservation_Status::open(),
-					'compare' => 'IN',
-				),
-			),
+			'orderby'        => 'none',
 		);
-		return ! empty( get_posts( $this->merge_identity_meta_query( $args, $email_address ) ) );
+		return ! empty( $this->find_status_batch( $email_address, $args, false ) );
 	}
 
-	private function merge_identity_meta_query( $args, $email_address ) {
-		$identity = $this->identity_args( $email_address );
+	/** Semijoins avoid duplicate rows and sorting a multiplied metadata join. */
+	private function find_status_batch( $email_address, $args, $closed ) {
+		global $wpdb;
+		$identity  = $this->identity_args( $email_address );
+		$predicate = $wpdb->prepare(
+			"EXISTS (SELECT 1 FROM {$wpdb->postmeta} sdpr_status WHERE sdpr_status.post_id = {$wpdb->posts}.ID AND sdpr_status.meta_key = %s AND sdpr_status.meta_value IN (%s, %s))",
+			SDPR_Reservation_Meta::STATUS,
+			SDPR_Reservation_Status::PENDING,
+			SDPR_Reservation_Status::ACTIVE
+		);
+		if ( $closed ) {
+			$predicate = $wpdb->prepare(
+				"EXISTS (SELECT 1 FROM {$wpdb->postmeta} sdpr_status WHERE sdpr_status.post_id = {$wpdb->posts}.ID AND sdpr_status.meta_key = %s AND sdpr_status.meta_value NOT IN (%s, %s))",
+				SDPR_Reservation_Meta::STATUS,
+				SDPR_Reservation_Status::PENDING,
+				SDPR_Reservation_Status::ACTIVE
+			);
+		}
 		if ( isset( $identity['author'] ) ) {
 			$args['author'] = $identity['author'];
 		} else {
-			$args['meta_query'] = array_merge( $identity['meta_query'], $args['meta_query'] );
+			$predicate .= ' AND ' . $wpdb->prepare(
+				"{$wpdb->posts}.ID IN (SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = %s AND meta_value = %s)",
+				SDPR_Reservation_Meta::EMAIL,
+				sanitize_email( $email_address )
+			);
 		}
-		return $args;
+		return SDPR_Reservation_Query::run( $args, $predicate )->posts;
 	}
 }

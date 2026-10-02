@@ -32,15 +32,6 @@ final class SDPR_Expiration_Service {
 		}
 	}
 
-	public function migrate_inventory_states() {
-		if ( '1' === (string) get_option( 'sdpr_inventory_state_version', '' ) ) {
-			return;
-		}
-		if ( $this->inventory->backfill_missing_states( 500 ) < 500 ) {
-			update_option( 'sdpr_inventory_state_version', '1', false );
-		}
-	}
-
 	public function expire_old_reservations() {
 		$ids = get_posts(
 			array(

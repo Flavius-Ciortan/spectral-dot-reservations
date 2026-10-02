@@ -343,9 +343,9 @@ class SDPR_Admin_Reservations {
 	}
 
 	private function get_filtered_reservations( $status_filter = 'all', $search_query = '', $search_type = 'email', $page = 1 ) {
-		$meta_query               = array();
-		$customer_reservation_ids = null;
-		$force_empty              = false;
+		$meta_query         = array();
+		$customer_predicate = '';
+		$force_empty        = false;
 
 		if ( 'all' !== $status_filter ) {
 			$meta_query[] = array(
@@ -402,7 +402,7 @@ class SDPR_Admin_Reservations {
 					break;
 
 				case 'customer_name':
-					$customer_reservation_ids = $this->get_customer_match_ids( $search_query );
+					$customer_predicate = $this->customer_search_predicate( $search_query );
 					break;
 			}
 		}
@@ -419,78 +419,35 @@ class SDPR_Admin_Reservations {
 		if ( ! empty( $meta_query ) ) {
 			$args['meta_query'] = $meta_query;
 		}
-		if ( null !== $customer_reservation_ids ) {
-			$args['post__in'] = $customer_reservation_ids ? $customer_reservation_ids : array( 0 );
-		}
 		if ( $force_empty ) {
 			$args['post__in'] = array( 0 );
 		}
 
+		if ( $customer_predicate ) {
+			$args['no_found_rows'] = false;
+			return SDPR_Reservation_Query::run( $args, $customer_predicate );
+		}
 		return new WP_Query( $args );
 	}
 
-	/**
-	 * Get reservation IDs matching logged-in or guest customer data.
-	 *
-	 * @param string $search_query Search query.
-	 * @return int[]
-	 */
-	private function get_customer_match_ids( $search_query ) {
+	/** Match account and guest identities without unbounded PHP ID lists or a user cap. */
+	private function customer_search_predicate( $search_query ) {
+		global $wpdb;
 		$search_query = trim( $search_query );
 		if ( '' === $search_query ) {
-			return array();
+			return '1 = 0';
 		}
-
-		$user_query = new WP_User_Query(
-			array(
-				'search'         => '*' . $search_query . '*',
-				'search_columns' => array( 'display_name', 'user_email', 'user_login' ),
-				'fields'         => 'ID',
-				'number'         => 100,
-			)
+		$like = '%' . $wpdb->esc_like( $search_query ) . '%';
+		return $wpdb->prepare(
+			"{$wpdb->posts}.post_author IN (SELECT ID FROM {$wpdb->users} WHERE display_name LIKE %s OR user_email LIKE %s OR user_login LIKE %s)
+			OR ({$wpdb->posts}.post_author = 0 AND {$wpdb->posts}.ID IN (SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key IN (%s, %s) AND meta_value LIKE %s))",
+			$like,
+			$like,
+			$like,
+			SDPR_Reservation_Meta::NAME,
+			SDPR_Reservation_Meta::SURNAME,
+			$like
 		);
-
-		$author_ids = array_map( 'absint', $user_query->get_results() );
-		$matches    = array();
-
-		if ( $author_ids ) {
-			$matches = get_posts(
-				array(
-					'post_type'      => 'sdpr_reservation',
-					'post_status'    => 'publish',
-					'fields'         => 'ids',
-					'posts_per_page' => -1,
-					'no_found_rows'  => true,
-					'author__in'     => $author_ids,
-				)
-			);
-		}
-
-		$guest_matches = get_posts(
-			array(
-				'post_type'      => 'sdpr_reservation',
-				'post_status'    => 'publish',
-				'fields'         => 'ids',
-				'posts_per_page' => -1,
-				'no_found_rows'  => true,
-				'author__in'     => array( 0 ),
-				'meta_query'     => array(
-					'relation' => 'OR',
-					array(
-						'key'     => SDPR_Reservation_Meta::NAME,
-						'value'   => $search_query,
-						'compare' => 'LIKE',
-					),
-					array(
-						'key'     => SDPR_Reservation_Meta::SURNAME,
-						'value'   => $search_query,
-						'compare' => 'LIKE',
-					),
-				),
-			)
-		);
-
-		return array_values( array_unique( array_map( 'absint', array_merge( $matches, $guest_matches ) ) ) );
 	}
 
 	private function get_reservations_summary() {

@@ -35,7 +35,6 @@ function sdpr_uninstall_site_data() {
 	} while ( count( $ids ) === 200 );
 	delete_option( 'sdpr_options' );
 	delete_option( 'sdpr_version' );
-	delete_option( 'sdpr_inventory_state_version' );
 
 	global $wpdb;
 	delete_metadata( 'user', 0, $wpdb->prefix . 'sdpr_dismissed_notices', '', true );
