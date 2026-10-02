@@ -19,7 +19,7 @@ Directory artwork is optional for initial code submission. Use these exact names
 The screenshot captions in `readme.txt` match these sequential files:
 - `screenshot-1.jpg` - Plugin settings page
 - `screenshot-2.jpg` - Product page with Reserve button and stopwatch icon
-- `screenshot-3.jpg` - Reservation modal (current layout capture; final contrast-style capture pending)
+- `screenshot-3.jpg` - Reservation confirmation modal
 - `screenshot-4.jpg` - My Account reservations page with active and pending records
 - `screenshot-5.jpg` - Admin reservations dashboard
 - `screenshot-6.jpg` - Basic reservation analytics
@@ -28,9 +28,9 @@ The screenshot captions in `readme.txt` match these sequential files:
 
 Screenshots 1, 2, 4, 5 and 6 were captured directly from the current Free development files on 2026-10-02 and visually reviewed. They show only temporary demonstration products and reservations, not real customer data. No interface elements were recreated or edited into the images. The demo records were removed and the original test-site settings restored after capture.
 
-Screenshot 3 was refreshed from the actual modal on 2026-10-02, including the current stopwatch Reserve button in the product background. Modal opening, Tab/Shift+Tab wrapping, Escape closing, opener-focus restoration, active success and duplicate error display were checked through the browser. The capture then exposed insufficient contrast on the modal submit button. Its default/hover colors and keyboard outlines have been corrected with automated regression coverage, but the image must be retaken to show those final styles.
+Screenshot 3 was refreshed from the actual modal on 2026-10-02 after the contrast and result-state corrections, including the current stopwatch Reserve button in the product background. The heading and close button have a dedicated header row. Successful submissions replace the confirmation question with a result heading and notice; errors keep the confirmation form available. Active and pending success, duplicate errors, modal reset, Tab/Shift+Tab wrapping, Escape closing and opener-focus restoration were checked in the browser. Notice/close-control separation was verified at desktop, 390px and 320px widths.
 
-Browser input stalled again at My Account's native cancellation confirmation. A fresh tab rendered but ignored clicks, so pending-approval submission, native-confirmation admin/customer actions and the final styled-modal capture remain unverified. The complete six-image set is **not yet ready for publication**, and these captures do not constitute final interaction/accessibility sign-off or an exact-release-ZIP test.
+Earlier browser input stalled at My Account's native cancellation confirmation. After recovery, the modal checks and final styled-modal capture were completed. Native-confirmation admin/customer actions still need their broader visual retest. All six images now reflect the current captured interfaces, but these captures do not constitute final interaction/accessibility sign-off or an exact-release-ZIP test.
 
 All screenshots use their actual JPEG format and `.jpg` extension. The previous modal reference was also JPEG data despite its `.png` filename; its extension was corrected without changing its pixels. WordPress.org supports both `.jpg` and `.png` screenshot names; keep exactly one file per number. See the [official directory asset guidance](https://developer.wordpress.org/plugins/wordpress-org/plugin-assets/#screenshots).
 
@@ -45,7 +45,7 @@ All screenshots use their actual JPEG format and `.jpg` extension. The previous 
 #### 3. Reservation Dialog
 ![Reservation dialog and the current stopwatch action in its product background](screenshot-3.jpg)
 
-Layout reference captured before the final button-contrast correction. Retake before publication.
+Current confirmation state with the corrected button contrast and separate close-control header.
 
 #### 4. Customer Reservations
 ![My Account table showing active and pending reservations](screenshot-4.jpg)

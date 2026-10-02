@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-02T01:04:34+03:00\n"
+"POT-Creation-Date: 2026-10-02T11:40:14+03:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: spectral-dot-reservations\n"
@@ -1003,16 +1003,24 @@ msgstr ""
 msgid "Reserve"
 msgstr ""
 
-#: templates/modal-template.php:74
-msgid "Close reservation dialog"
+#: templates/modal-template.php:75
+msgid "Request submitted"
 msgstr ""
 
-#: templates/modal-template.php:83
+#: templates/modal-template.php:75
+msgid "Reservation confirmed"
+msgstr ""
+
+#: templates/modal-template.php:75
 msgid "Reserve this product"
 msgstr ""
 
+#: templates/modal-template.php:76
+msgid "Close reservation dialog"
+msgstr ""
+
 #. translators: %d: approval request duration in hours.
-#: templates/modal-template.php:89
+#: templates/modal-template.php:92
 #, php-format
 msgid "Your request will remain open for up to %d hour."
 msgid_plural "Your request will remain open for up to %d hours."
@@ -1020,7 +1028,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: active reservation duration in hours.
-#: templates/modal-template.php:95
+#: templates/modal-template.php:98
 #, php-format
 msgid "If approved, the product will then be held for %d hour."
 msgid_plural "If approved, the product will then be held for %d hours."
@@ -1028,14 +1036,14 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: reservation duration in hours.
-#: templates/modal-template.php:101
+#: templates/modal-template.php:104
 #, php-format
 msgid "Are you sure you want to reserve this product for %d hour?"
 msgid_plural "Are you sure you want to reserve this product for %d hours?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/modal-template.php:108
+#: templates/modal-template.php:112
 msgid "Yes, Reserve"
 msgstr ""
 

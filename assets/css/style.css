@@ -50,7 +50,7 @@ label[for="rez_check"] {
 }
 
 .sdpr-reservation-notice {
-    margin-bottom: 14px;
+    margin: 0;
     padding: 10px 12px;
     border-radius: 8px;
     border: 1px solid transparent;
@@ -426,7 +426,34 @@ label[for="rez_check"] {
     border: 1px solid rgba(11, 27, 58, 0.12);
 }
 
-/* Ensure form elements are stacked and centered */
+/* Reserve header space for the close control, even when the heading wraps. */
+.sdpr-modal-header {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr) 32px;
+    align-items: start;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+#sdpr-reservation-dialog-title {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0;
+    font-size: 24px;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+.sdpr-reservation-prompt {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#sdpr-reservation-dialog-description {
+    margin: 0;
+}
+
 #sdpr-reservation-form {
   display: flex;
   flex-direction: column;
@@ -457,10 +484,17 @@ label[for="rez_check"] {
 }
 
 /* Close button */
-.modal-close {
-  position: absolute;
-  top: 12px;
-  right: 16px;
+.sdpr-modal-header .modal-close {
+  position: static;
+  grid-column: 3;
+  grid-row: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  line-height: 1;
   background: none;
   border: none;
   font-size: 24px;
@@ -468,12 +502,12 @@ label[for="rez_check"] {
   cursor: pointer;
   transition: color 0.2s;
 }
-.modal-close:hover {
+.sdpr-modal-header .modal-close:hover {
   color: #000;
 }
 
-.modal-close:focus,
-.modal-close:focus-visible {
+.sdpr-modal-header .modal-close:focus,
+.sdpr-modal-header .modal-close:focus-visible {
 	color: #000;
 	outline: 2px solid var(--sdpr-modal-primary-dark);
 	outline-offset: 2px;

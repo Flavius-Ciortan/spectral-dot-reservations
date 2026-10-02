@@ -71,16 +71,19 @@ if ( $sdpr_enable_popup_customization ) {
 
 <div id="sdpr-reservation-modal" class="modal-overlay sdpr-modal-overlay" aria-hidden="true" style="display: none;">
 	<div class="modal-box sdpr-modal-box<?php echo $sdpr_enable_popup_customization ? ' sdpr-modal-box--custom' : ''; ?>" role="dialog" aria-modal="true" aria-labelledby="sdpr-reservation-dialog-title" aria-describedby="sdpr-reservation-dialog-description" tabindex="-1" style="<?php echo esc_attr( $sdpr_modal_box_style ); ?>">
-		<button type="button" class="modal-close" aria-label="<?php esc_attr_e( 'Close reservation dialog', 'spectral-dot-reservations' ); ?>">&times;</button>
+		<div class="sdpr-modal-header">
+			<h2 id="sdpr-reservation-dialog-title" data-result-title="<?php echo esc_attr( $sdpr_requires_approval ? __( 'Request submitted', 'spectral-dot-reservations' ) : __( 'Reservation confirmed', 'spectral-dot-reservations' ) ); ?>"><?php esc_html_e( 'Reserve this product', 'spectral-dot-reservations' ); ?></h2>
+			<button type="button" class="modal-close" aria-label="<?php esc_attr_e( 'Close reservation dialog', 'spectral-dot-reservations' ); ?>">&times;</button>
+		</div>
 		<form id="sdpr-reservation-form">
 			<input type="hidden" name="action" value="sdpr_reserve">
 			<input type="hidden" name="security" value="<?php echo esc_attr( wp_create_nonce( 'sdpr_nonce' ) ); ?>">
 			<input type="hidden" name="product_id" value="<?php echo esc_attr( $sdpr_pid ); ?>">
 
-			<div class="sdpr-reservation-notice" role="status" aria-live="polite" aria-atomic="true" style="display: none;"></div>
-			<?php do_action( 'sdpr_reservation_form_fields', $sdpr_product ); ?>
+			<div id="sdpr-reservation-result" class="sdpr-reservation-notice" role="status" aria-live="polite" aria-atomic="true" style="display: none;"></div>
+			<div class="sdpr-reservation-prompt">
+				<?php do_action( 'sdpr_reservation_form_fields', $sdpr_product ); ?>
 
-			<h2 id="sdpr-reservation-dialog-title"><?php esc_html_e( 'Reserve this product', 'spectral-dot-reservations' ); ?></h2>
 				<p id="sdpr-reservation-dialog-description">
 					<?php
 					if ( $sdpr_requires_approval ) {
@@ -103,7 +106,8 @@ if ( $sdpr_enable_popup_customization ) {
 						);
 					}
 					?>
-			</p>
+				</p>
+			</div>
 
 			<button type="submit" class="submit-btn sdpr-button-primary"><?php esc_html_e( 'Yes, Reserve', 'spectral-dot-reservations' ); ?></button>
 		</form>

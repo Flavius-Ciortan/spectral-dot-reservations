@@ -3,6 +3,9 @@ jQuery(document).ready(function($) {
 	var $modal = $('#sdpr-reservation-modal');
 	var requestPending = false;
 	var reservationComplete = false;
+	var $title = $('#sdpr-reservation-dialog-title');
+	var confirmationTitle = $title.text();
+	var confirmationButtonText = $modal.find('button[type="submit"]').text();
 
 	function responseMessage(response, fallback) {
 		return response && typeof response.data === 'string' && response.data ? response.data : fallback;
@@ -71,6 +74,11 @@ jQuery(document).ready(function($) {
         }
 
         clearNotice();
+		reservationComplete = false;
+		$title.text(confirmationTitle);
+		$modal.find('button[type="submit"]').prop('disabled', false).text(confirmationButtonText);
+		$modal.find('.sdpr-reservation-prompt').show();
+		$modal.find('[role="dialog"]').attr('aria-describedby', 'sdpr-reservation-dialog-description');
         $('#sdpr-reservation-form').find('input[name="product_id"]').val(productId);
         
 		$modal.show().attr('aria-hidden', 'false');
@@ -140,6 +148,9 @@ jQuery(document).ready(function($) {
         .done(function(response) {
             if (response.success) {
 				reservationComplete = true;
+				$modal.find('.sdpr-reservation-prompt').hide();
+				$title.text($title.attr('data-result-title'));
+				$modal.find('[role="dialog"]').attr('aria-describedby', 'sdpr-reservation-result');
                 var successMessage = responseMessage(response, sdprFrontend.i18n.success);
                 renderNotice(successMessage, 'success');
 				$submitBtn.prop('disabled', false).text(sdprFrontend.i18n.done).trigger('focus');
