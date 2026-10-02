@@ -120,11 +120,11 @@ final class SDPR_Reservation_Repository implements SDPR_Reservation_Repository_I
 	}
 
 	public function user_has_open_for_product( $product_id, $user_id, $email = '' ) {
-		return ! empty( $this->find_open_for_identity( $user_id, $email, $product_id ) );
+		return ! empty( $this->find_open_for_identity( $user_id, $email, $product_id, 1 ) );
 	}
 
 	/** Return unique, unexpired open reservations for an account/email identity. */
-	private function find_open_for_identity( $user_id, $email = '', $product_id = 0 ) {
+	private function find_open_for_identity( $user_id, $email = '', $product_id = 0, $limit = -1 ) {
 		$user_id = absint( $user_id );
 		$email   = sanitize_email( $email );
 		if ( ! $email && $user_id ) {
@@ -163,22 +163,27 @@ final class SDPR_Reservation_Repository implements SDPR_Reservation_Repository_I
 			'post_type'      => 'sdpr_reservation',
 			'post_status'    => 'publish',
 			'fields'         => 'ids',
-			'posts_per_page' => -1,
+			'posts_per_page' => $limit,
 			'no_found_rows'  => true,
+			'orderby'        => 'none',
 			'meta_query'     => $base_meta,
 		);
 		$ids  = array();
 		if ( $user_id ) {
 			$args['author'] = $user_id;
 			$ids            = get_posts( $args );
+			if ( 1 === $limit && $ids ) {
+				return array_map( 'absint', $ids );
+			}
 			unset( $args['author'] );
 		}
 		if ( $email ) {
-			$args['meta_query'][] = array(
+			$identity_meta      = array(
 				'key'   => SDPR_Reservation_Meta::EMAIL,
 				'value' => $email,
 			);
-			$ids                  = array_merge( $ids, get_posts( $args ) );
+			$args['meta_query'] = array_merge( array( $identity_meta ), $base_meta );
+			$ids                = array_merge( $ids, get_posts( $args ) );
 		}
 		return array_values( array_unique( array_map( 'absint', $ids ) ) );
 	}

@@ -311,6 +311,19 @@ $wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = $post_id" );
 
 ## Testing
 
+### Query Performance
+
+Run these commands only on a disposable WordPress database, from the plugin checkout:
+
+```bash
+SDPR_QUERY_TEST=1 wp eval-file tests/query-efficiency.php --path=/path/to/disposable-wordpress
+SDPR_PERFORMANCE_TEST=1 SDPR_PERFORMANCE_RECORDS=20000 wp eval-file tests/performance-profile.php --path=/path/to/disposable-wordpress
+```
+
+The query-efficiency regression checks enforce bounded health/export reads and preserve account/email identity, expiry and quota semantics. They also run in CI against the installed release ZIP. The profiler seeds and removes synthetic reservations; it does not reserve real product stock. It defaults to 5,000 records and supports 1,000-50,000 records. Each case clears the WordPress object cache except the explicitly warm count case; the database buffer pool is not reset. The 500 ms target is a local diagnostic, not a throughput or latency guarantee.
+
+Metadata-query advisories are reviewed rather than hidden. Status, identity and deadline filters remain necessary with the current custom-post-type storage model. Paginated admin/account/export results and bounded expiration/health batches limit memory, but complex metadata joins can still become slow on large databases. Do not alter shared WordPress table indexes or remove correctness filters solely to eliminate a static advisory.
+
 ### Manual Testing Checklist
 
 - [ ] Install fresh WordPress
