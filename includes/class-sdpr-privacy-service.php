@@ -135,13 +135,13 @@ final class SDPR_Privacy_Service {
 		$args = array(
 			'post_type'      => 'sdpr_reservation',
 			'post_status'    => 'publish',
-			'fields'         => 'ids',
 			'posts_per_page' => 100,
 			'paged'          => max( 1, absint( $page ) ),
 			'orderby'        => 'ID',
 			'order'          => 'ASC',
 		);
-		return get_posts( array_merge( $args, $this->identity_args( $email_address ) ) );
+		// Export consumes both post fields and metadata; prime the bounded batch together.
+		return array_map( 'absint', wp_list_pluck( get_posts( array_merge( $args, $this->identity_args( $email_address ) ) ), 'ID' ) );
 	}
 
 	private function find_erasable_reservations( $email_address ) {
@@ -187,7 +187,7 @@ final class SDPR_Privacy_Service {
 		if ( isset( $identity['author'] ) ) {
 			$args['author'] = $identity['author'];
 		} else {
-			$args['meta_query'][] = $identity['meta_query'][0];
+			$args['meta_query'] = array_merge( $identity['meta_query'], $args['meta_query'] );
 		}
 		return $args;
 	}

@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
+if ( ! defined( 'WP_CLI' ) || ! WP_CLI || '1' !== getenv( 'SDPR_PERFORMANCE_TEST' ) ) {
 	return;
 }
 
@@ -15,7 +15,7 @@ if ( ! class_exists( 'SDPR_Admin_Reservations' ) ) {
 }
 
 $fixture_prefix = 'SDPR performance fixture ';
-$fixture_total  = 5000;
+$fixture_total  = max( 1000, min( 50000, (int) ( getenv( 'SDPR_PERFORMANCE_RECORDS' ) ?: 5000 ) ) );
 $statuses       = SDPR_Reservation_Status::all();
 $future         = time() + DAY_IN_SECONDS;
 $past           = time() - DAY_IN_SECONDS;
@@ -44,6 +44,9 @@ $cleanup = static function () use ( $wpdb, $fixture_prefix ) {
 register_shutdown_function( $cleanup );
 
 $measure = static function ( $name, $callback ) use ( $wpdb ) {
+	if ( 'status_counts_warm' !== $name ) {
+		wp_cache_flush();
+	}
 	$query_start = (int) $wpdb->num_queries;
 	$time_start  = microtime( true );
 	$result      = $callback();
@@ -107,6 +110,8 @@ for ( $i = 1; $i <= $fixture_total; $i++ ) {
 		SDPR_Reservation_Meta::STATUS     => $status,
 		SDPR_Reservation_Meta::EXPIRES_AT => $expires_at,
 		SDPR_Reservation_Meta::EMAIL      => 'performance-' . ( $i % 500 ) . '@example.invalid',
+		SDPR_Reservation_Meta::INVENTORY_STATE => SDPR_Plugin::get_instance()->get_service( 'inventory' )->get_state( 0, $status ),
+		SDPR_Reservation_Meta::TIMESTAMP_MODEL => 'utc',
 	);
 
 	foreach ( $meta as $key => $value ) {
@@ -167,6 +172,37 @@ $results[] = $measure( 'admin_active_page', static function () use ( $method, $a
 } );
 $results[] = $measure( 'admin_email_search', static function () use ( $method, $admin, $target_email ) {
 	return $method->invoke( $admin, 'all', $target_email, 'email', 1 )->posts;
+} );
+$results[] = $measure( 'inventory_health_sample', static function () {
+	return SDPR_Plugin::get_instance()->get_service( 'inventory' )->find_inconsistent_states( 100 );
+} );
+$results[] = $measure( 'privacy_export_batch', static function () use ( $target_email ) {
+	$result = SDPR_Plugin::get_instance()->get_service( 'privacy' )->export_personal_data( $target_email );
+	return count( $result['data'] );
+} );
+$results[] = $measure( 'privacy_erasable_lookup', static function () use ( $target_email ) {
+	$privacy = SDPR_Plugin::get_instance()->get_service( 'privacy' );
+	$method = new ReflectionMethod( $privacy, 'find_erasable_reservations' );
+	$method->setAccessible( true );
+	return $method->invoke( $privacy, $target_email );
+} );
+$results[] = $measure( 'privacy_retained_lookup', static function () use ( $target_email ) {
+	$privacy = SDPR_Plugin::get_instance()->get_service( 'privacy' );
+	$method = new ReflectionMethod( $privacy, 'has_retained_reservations' );
+	$method->setAccessible( true );
+	return $method->invoke( $privacy, $target_email );
+} );
+$results[] = $measure( 'admin_customer_search', static function () use ( $method, $admin ) {
+	return $method->invoke( $admin, 'all', 'NoMatchingGuest', 'customer_name', 1 )->posts;
+} );
+$results[] = $measure( 'expiration_due_lookup', static function () {
+	return get_posts( array(
+		'post_type' => 'sdpr_reservation', 'post_status' => 'publish', 'fields' => 'ids', 'posts_per_page' => 500, 'no_found_rows' => true,
+		'meta_query' => array(
+			array( 'key' => SDPR_Reservation_Meta::STATUS, 'value' => SDPR_Reservation_Status::open(), 'compare' => 'IN' ),
+			array( 'key' => SDPR_Reservation_Meta::EXPIRES_AT, 'value' => time(), 'type' => 'NUMERIC', 'compare' => '<=' ),
+		),
+	) );
 } );
 
 $cleanup();

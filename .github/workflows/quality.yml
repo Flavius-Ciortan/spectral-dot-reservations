@@ -89,6 +89,8 @@ jobs:
         run: wp eval "define('SDPR_INTEGRATION_TEST', true); require WP_PLUGIN_DIR . '/spectral-dot-reservations/tests/integration-smoke.php';" --path=/tmp/wordpress
       - name: Verify carts, refunds, privacy and customer search
         run: SDPR_REVIEW_TEST=1 wp eval-file tests/review-coverage.php --path=/tmp/wordpress
+      - name: Verify bounded reads and identity semantics
+        run: SDPR_QUERY_TEST=1 wp eval-file tests/query-efficiency.php --path=/tmp/wordpress
       - name: Run concurrent last-unit stress test
         run: bash tests/concurrency-stress.sh /tmp/wordpress
       - name: Verify competing inventory transitions
@@ -169,6 +171,8 @@ jobs:
         run: bash tests/hpos-matrix.sh /tmp/wordpress
       - name: Verify artifact carts, refunds, privacy and search
         run: SDPR_REVIEW_TEST=1 wp eval-file tests/review-coverage.php --path=/tmp/wordpress
+      - name: Verify artifact bounded reads and identity semantics
+        run: SDPR_QUERY_TEST=1 wp eval-file tests/query-efficiency.php --path=/tmp/wordpress
       - name: Run artifact concurrency test
         run: bash tests/concurrency-stress.sh /tmp/wordpress
       - name: Verify artifact competing transitions

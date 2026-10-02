@@ -171,6 +171,7 @@ final class SDPR_Inventory_Manager {
 			)
 		);
 		$invalid = array();
+		update_meta_cache( 'post', $ids );
 		foreach ( $ids as $reservation_id ) {
 			$status = (string) SDPR_Reservation_Meta::get( $reservation_id, SDPR_Reservation_Meta::STATUS );
 			$state  = (string) get_post_meta( $reservation_id, self::META_STATE, true );

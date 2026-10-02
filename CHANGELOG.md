@@ -7,6 +7,7 @@ All notable changes to Spectral Dot Reservations are documented here. The projec
 - Align merchant and customer action buttons with a brighter, contrast-tested palette.
 - Restore only outstanding order stock after partial or full refund restocking.
 - Expand regression coverage for carts, refunds, privacy pagination, customer search and competing inventory transitions.
+- Batch inventory-health metadata and privacy-export reads, and limit duplicate checks to the first matching hold.
 
 Initial public release under the Spectral Dot branding. This is a fresh installation, not an upgrade or migration from a previously published plugin.
 
@@ -18,7 +19,7 @@ Initial public release under the Spectral Dot branding. This is a fresh installa
 - Deterministic release ZIP generation with a checksum.
 - WordPress Coding Standards, PHP compatibility, Plugin Check, and GitHub Actions quality gates.
 - Automated integration, concurrency, activation/deactivation/upgrade/uninstall, HPOS, and exact-artifact test harnesses.
-- A repeatable 5,000-record reservation metadata performance profile.
+- A repeatable reservation metadata performance profile with configurable 1,000-50,000-record fixtures and bounded-query regression checks.
 - Live verification fixtures for classic checkout, block checkout, customer flow, Shop Manager access, and Administrator access.
 - Reduced-motion handling for frontend and admin plugin controls.
 - Complete WordPress.org submission metadata, privacy disclosures, and canonical licensing.
