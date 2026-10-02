@@ -385,6 +385,8 @@ label[for="rez_check"] {
 
 /* Reservation Modal */
 .sdpr-modal-overlay.modal-overlay {
+    --sdpr-modal-primary: #2463db;
+    --sdpr-modal-primary-dark: #1749aa;
     position: fixed;
     top: 0;
     left: 0;
@@ -473,7 +475,7 @@ label[for="rez_check"] {
 .modal-close:focus,
 .modal-close:focus-visible {
 	color: #000;
-	outline: 3px solid rgba(47, 137, 249, 0.5);
+	outline: 2px solid var(--sdpr-modal-primary-dark);
 	outline-offset: 2px;
 }
 
@@ -492,7 +494,7 @@ label[for="rez_check"] {
 
 /* Submit button */
 .sdpr-button-primary.submit-btn {
-    background-color: #2F89F9;
+    background-color: var(--sdpr-modal-primary);
     color: #ffffff;
     height: 40px;
     min-height: 40px;
@@ -507,14 +509,14 @@ label[for="rez_check"] {
 }
 
 .sdpr-button-primary.submit-btn:hover {
-    background-color: #266DED;
+    background-color: var(--sdpr-modal-primary-dark);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .sdpr-button-primary.submit-btn:focus,
 .sdpr-button-primary.submit-btn:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(47, 137, 249, 0.28);
+    outline: 2px solid var(--sdpr-modal-primary-dark);
+    outline-offset: 2px;
 }
 
 .sdpr-button-primary.submit-btn:disabled {

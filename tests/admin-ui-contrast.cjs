@@ -41,3 +41,19 @@ check('Keyboard focus outline', tokens['--sdpr-primary-dark'], tokens['--sdpr-wh
 check('Unchecked toggle track and thumb', tokens['--sdpr-white'], tokens['--sdpr-border-ui'], 3);
 check('Input boundary on white', tokens['--sdpr-border-ui'], tokens['--sdpr-white'], 3);
 check('Input boundary on page background', tokens['--sdpr-border-ui'], '#e2e8f0', 3);
+
+const frontendCss = fs.readFileSync(path.join(__dirname, '../assets/css/style.css'), 'utf8');
+const modalTokens = Object.fromEntries(Array.from(frontendCss.matchAll(/(--sdpr-modal-[\w-]+):\s*([^;]+);/g), match => [match[1], match[2].trim()]));
+check('Modal submit text', '#ffffff', modalTokens['--sdpr-modal-primary']);
+check('Modal hovered submit text', '#ffffff', modalTokens['--sdpr-modal-primary-dark']);
+for (const background of ['#ffffff', '#f8fafc', '#e2e8f0']) {
+    check(`Modal focus outline on ${background}`, modalTokens['--sdpr-modal-primary-dark'], background, 3);
+}
+assert.match(frontendCss, /\.sdpr-button-primary\.submit-btn\s*\{\s*background-color:\s*var\(--sdpr-modal-primary\)/);
+assert.match(frontendCss, /\.sdpr-button-primary\.submit-btn:hover\s*\{\s*background-color:\s*var\(--sdpr-modal-primary-dark\)/);
+for (const selector of ['.modal-close:focus-visible', '.sdpr-button-primary.submit-btn:focus-visible']) {
+    const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const rule = frontendCss.match(new RegExp(`${escaped}\\s*\\{([^}]+)\\}`));
+    assert.ok(rule, `${selector} must have a focus rule.`);
+    assert.match(rule[1], /outline:\s*2px solid var\(--sdpr-modal-primary-dark\)/);
+}
