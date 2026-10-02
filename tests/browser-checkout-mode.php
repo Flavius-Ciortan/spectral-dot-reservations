@@ -1,11 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) || '1' !== getenv( 'HTP_BROWSER_CHECKOUT_TEST' ) ) {
+if ( ! defined( 'ABSPATH' ) || '1' !== getenv( 'SDPR_BROWSER_CHECKOUT_TEST' ) ) {
 	exit( 1 );
 }
 
-$mode    = sanitize_key( (string) getenv( 'HTP_CHECKOUT_MODE' ) );
-$context = get_option( 'htp_browser_checkout_context', array() );
+$mode    = sanitize_key( (string) getenv( 'SDPR_CHECKOUT_MODE' ) );
+$context = get_option( 'sdpr_browser_checkout_context', array() );
 if ( ! in_array( $mode, array( 'classic', 'blocks' ), true ) || empty( $context[ $mode . '_page' ] ) ) {
 	exit( 1 );
 }

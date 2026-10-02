@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1544" height="500" viewBox="0 0 1544 500" role="img" aria-labelledby="title desc">
-  <title id="title">Hold This Product</title>
+  <title id="title">Spectral Dot Reservations</title>
   <desc id="desc">Timed product reservations for WooCommerce.</desc>
   <defs>
     <linearGradient id="background" x1="0" y1="0" x2="1544" y2="500" gradientUnits="userSpaceOnUse">
@@ -31,10 +31,12 @@
   <rect x="92" y="92" width="326" height="326" rx="76" fill="#010b19" opacity="0.34"/>
   <rect x="92" y="74" width="326" height="326" rx="76" fill="url(#panel)"/>
   <rect x="92" y="74" width="326" height="326" rx="76" fill="none" stroke="#ffbf2f" stroke-width="5"/>
-  <image x="126" y="108" width="258" height="258" preserveAspectRatio="xMidYMid meet" xlink:href="../../assets/images/logo-transparent.png"/>
+  <circle cx="255" cy="237" r="100" fill="none" stroke="#082b57" stroke-width="14"/>
+  <path d="M255 166V237L307 272" fill="none" stroke="#082b57" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="255" cy="237" r="21" fill="#16a5c7"/>
 
   <g transform="translate(488 0)">
-    <text x="0" y="221" fill="#ffffff" font-family="Ubuntu, sans-serif" font-size="76" font-weight="700" letter-spacing="-2">Hold This Product</text>
+    <text x="0" y="221" fill="#ffffff" font-family="Ubuntu, sans-serif" font-size="76" font-weight="700" letter-spacing="-2">Spectral Dot</text>
     <rect x="2" y="252" width="92" height="7" rx="3.5" fill="url(#amber)"/>
     <text x="0" y="309" fill="#d9edf1" font-family="Ubuntu, sans-serif" font-size="31" font-weight="400" letter-spacing="0.8">Timed product reservations for WooCommerce</text>
     <g transform="translate(0 348)">

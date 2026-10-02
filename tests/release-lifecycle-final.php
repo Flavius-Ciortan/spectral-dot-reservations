@@ -1,14 +1,14 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) || '1' !== getenv( 'HTP_ALLOW_DESTRUCTIVE_RELEASE_TEST' ) ) {
+if ( ! defined( 'ABSPATH' ) || '1' !== getenv( 'SDPR_ALLOW_DESTRUCTIVE_RELEASE_TEST' ) ) {
 	exit( 1 );
 }
 
-$product_id = (int) getenv( 'HTP_RELEASE_PRODUCT_ID' );
-$user_id    = (int) getenv( 'HTP_RELEASE_USER_ID' );
-$plugin     = HoldThisProduct::get_instance();
-$valid      = $plugin->get_service( 'lifecycle' ) instanceof HTP_Reservation_Lifecycle_Interface
-	&& (bool) wp_next_scheduled( HTP_Reservations::CRON_HOOK );
+$product_id = (int) getenv( 'SDPR_RELEASE_PRODUCT_ID' );
+$user_id    = (int) getenv( 'SDPR_RELEASE_USER_ID' );
+$plugin     = SDPR_Plugin::get_instance();
+$valid      = $plugin->get_service( 'lifecycle' ) instanceof SDPR_Reservation_Lifecycle_Interface
+	&& (bool) wp_next_scheduled( SDPR_Reservations::CRON_HOOK );
 
 wp_delete_post( $product_id, true );
 require_once ABSPATH . 'wp-admin/includes/user.php';

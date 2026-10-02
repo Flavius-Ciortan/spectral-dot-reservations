@@ -1,6 +1,6 @@
 {
-  "name": "hold-this-product/hold-this-product",
-  "description": "Development tooling for the Hold This Product WooCommerce plugin.",
+  "name": "spectral-dot-reservations/spectral-dot-reservations",
+  "description": "Development tooling for the Spectral Dot Reservations WooCommerce plugin.",
   "type": "wordpress-plugin",
   "license": "GPL-3.0-or-later",
   "require": {

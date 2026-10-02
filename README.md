@@ -1,6 +1,6 @@
-# Hold This Product
+# Spectral Dot Reservations
 
-Hold This Product is a WooCommerce extension that lets logged-in customers reserve eligible simple products for a limited time before purchasing them.
+Spectral Dot Reservations is a WooCommerce extension that lets logged-in customers reserve eligible simple products for a limited time before purchasing them.
 
 ## Free Features
 
@@ -25,8 +25,8 @@ The supported Free scope is logged-in customers, one unit per reservation, simpl
 
 1. Install and activate WooCommerce.
 2. Upload the release ZIP through **Plugins > Add New > Upload Plugin**, or install the WordPress.org release.
-3. Activate **Hold This Product**.
-4. Open **Hold This Product > Settings** and enable reservations.
+3. Activate **Spectral Dot Reservations**.
+4. Open **Spectral Dot Reservations > Settings** and enable reservations.
 5. Ensure each reservable product is a published simple product with WooCommerce stock management enabled and positive stock.
 
 SMTP is optional. The plugin uses the standard WordPress mail pipeline, so each merchant can choose whether their hosting mail service is sufficient or an SMTP provider/plugin is needed.

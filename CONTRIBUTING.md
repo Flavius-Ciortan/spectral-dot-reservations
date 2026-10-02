@@ -1,6 +1,6 @@
-# Contributing to Hold This Product
+# Contributing to Spectral Dot Reservations
 
-Thank you for considering a contribution to Hold This Product. This document provides development and review guidelines.
+Thank you for considering a contribution to Spectral Dot Reservations. This document provides development and review guidelines.
 
 ## Table of Contents
 
@@ -35,12 +35,12 @@ This project adheres to a code of conduct. By participating, you are expected to
 
 2. **Setup:**
    ```bash
-   git clone <repository-url> hold-this-product
-   cd hold-this-product
+   git clone <repository-url> spectral-dot-reservations
+   cd spectral-dot-reservations
    ```
 
 3. **Install in WordPress:**
-   - Copy plugin to `wp-content/plugins/hold-this-product`
+   - Copy plugin to `wp-content/plugins/spectral-dot-reservations`
    - Activate in WordPress admin
    - Enable WooCommerce
 
@@ -139,7 +139,7 @@ function doSomething(){
 
 4. **Translation Ready**
    - Use `__()`, `_e()`, `esc_html__()`, `esc_html_e()`
-   - Maintain consistent text domain: `hold-this-product`
+   - Maintain consistent text domain: `spectral-dot-reservations`
    - Provide context where needed
 
 ## Pull Request Process
@@ -257,7 +257,7 @@ Mockups, examples, similar plugins, etc.
 ### File Structure
 
 ```
-hold-this-product/
+spectral-dot-reservations/
 ├── assets/
 │   ├── css/
 │   ├── js/
@@ -269,18 +269,18 @@ hold-this-product/
 ├── templates/
 │   └── myaccount/
 ├── languages/
-├── HoldThisProduct.php
+├── spectral-dot-reservations.php
 ├── readme.txt
 └── USER_GUIDE.md
 ```
 
 ### Naming Conventions
 
-- **Files:** `class-htp-name.php`
-- **Classes:** `HTP_Class_Name`
-- **Functions:** `htp_function_name()`
-- **Hooks:** `htp_hook_name`
-- **Database:** `_htp_meta_key`
+- **Files:** `class-sdpr-name.php`
+- **Classes:** `SDPR_Class_Name`
+- **Functions:** `sdpr_function_name()`
+- **Hooks:** `sdpr_hook_name`
+- **Database:** `_sdpr_meta_key`
 
 ### Adding Hooks
 
@@ -293,7 +293,7 @@ hold-this-product/
  * @param int $product_id The product ID
  * @param int $user_id The user ID
  */
-do_action( 'htp_reservation_created', $reservation_id, $product_id, $user_id );
+do_action( 'sdpr_reservation_created', $reservation_id, $product_id, $user_id );
 ```
 
 ### Database Queries
@@ -390,4 +390,4 @@ By contributing, you agree that your contributions will be licensed under GPL-3.
 
 ---
 
-Thank you for helping improve Hold This Product.
+Thank you for helping improve Spectral Dot Reservations.

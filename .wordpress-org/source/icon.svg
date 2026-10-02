@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
-  <title id="title">Hold This Product icon</title>
-  <desc id="desc">A package held above an open hand.</desc>
+  <title id="title">Spectral Dot Reservations icon</title>
+  <desc id="desc">A spectral dot inside a clock face, representing a timed reservation.</desc>
   <defs>
     <linearGradient id="background" x1="24" y1="20" x2="232" y2="238" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#123f75"/>
@@ -19,7 +19,9 @@
   <path d="M197 0H256V70C241 40 222 17 197 0Z" fill="#ffbf2f" opacity="0.98"/>
   <circle cx="128" cy="135" r="91" fill="#020e20" opacity="0.24"/>
   <circle cx="128" cy="126" r="91" fill="url(#halo)"/>
-  <image x="35" y="33" width="186" height="186" preserveAspectRatio="xMidYMid meet" xlink:href="../../assets/images/logo-transparent.png"/>
+  <circle cx="128" cy="126" r="63" fill="none" stroke="#082b57" stroke-width="9"/>
+  <path d="M128 81V126L161 148" fill="none" stroke="#082b57" stroke-width="9" stroke-linecap="round"/>
+  <circle cx="128" cy="126" r="13" fill="#16a5c7"/>
   <circle cx="214" cy="213" r="12" fill="#ffbf2f"/>
   <circle cx="214" cy="213" r="4" fill="#082b57"/>
 </svg>

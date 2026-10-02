@@ -1,5 +1,5 @@
 <?php
-if ( ! defined( 'HTP_INTEGRATION_TEST' ) ) {
+if ( ! defined( 'SDPR_INTEGRATION_TEST' ) ) {
 	exit;
 }
 
@@ -11,77 +11,78 @@ if ( ! defined( 'ABSPATH' ) ) {
 	require $wp_load;
 }
 
-$GLOBALS['htp_failures'] = array();
-function htp_assert( $condition, $message ) {
-	global $htp_failures;
+$GLOBALS['sdpr_failures'] = array();
+function sdpr_assert( $condition, $message ) {
+	global $sdpr_failures;
 	if ( ! $condition ) {
-		$htp_failures[] = $message;
+		$sdpr_failures[] = $message;
 		echo esc_html( "FAIL: {$message}\n" );
 	} else {
 		echo esc_html( "PASS: {$message}\n" );
 	}
 }
 
-$htp_plugin = HoldThisProduct::get_instance();
-$htp_original_options = get_option( 'holdthisproduct_options', false );
-htp_assert( '1.0.0' === HTP_VERSION, 'Runtime version matches the initial public release.' );
-htp_assert( $htp_plugin->reservations instanceof HTP_Reservations, 'Reservation service initialized.' );
-htp_assert( $htp_plugin->get_service( 'repository' ) instanceof HTP_Reservation_Repository, 'Reservation repository is registered.' );
-htp_assert( $htp_plugin->get_service( 'cart_order' ) instanceof HTP_Cart_Order_Service, 'Cart and order service is registered.' );
-htp_assert( $htp_plugin->get_service( 'expiration' ) instanceof HTP_Expiration_Service, 'Expiration service is registered.' );
-htp_assert( $htp_plugin->get_service( 'repository' ) instanceof HTP_Reservation_Repository_Interface, 'Repository implements its extension contract.' );
-htp_assert( $htp_plugin->get_service( 'lifecycle' ) instanceof HTP_Reservation_Lifecycle_Interface, 'Lifecycle implements its extension contract.' );
-htp_assert( $htp_plugin->get_service( 'rules' ) instanceof HTP_Reservation_Rules, 'Reservation rules service is registered.' );
-htp_assert( $htp_plugin->get_service( 'locks' ) instanceof HTP_Lock_Manager, 'Reservation lock service is registered.' );
-$htp_lock_name = 'integration_exclusivity_' . wp_generate_password( 8, false );
-$htp_locks     = $htp_plugin->get_service( 'locks' );
-$htp_first     = $htp_locks->acquire( array( $htp_lock_name ) );
-$htp_second    = $htp_locks->acquire( array( $htp_lock_name ) );
-htp_assert( is_array( $htp_first ) && is_wp_error( $htp_second ) && 'htp_busy' === $htp_second->get_error_code(), 'Reservation locks remain exclusive on current WordPress versions.' );
-$htp_locks->release( array( 'htp_lock_' . sanitize_key( $htp_lock_name ) => 'not-the-owner' ) );
-$htp_third = $htp_locks->acquire( array( $htp_lock_name ) );
-htp_assert( is_wp_error( $htp_third ), 'A non-owner cannot release a reservation lock.' );
-$htp_locks->release( $htp_first );
-$htp_reacquired = $htp_locks->acquire( array( $htp_lock_name ) );
-htp_assert( is_array( $htp_reacquired ), 'A reservation lock can be acquired after its owner releases it.' );
-$htp_locks->release( $htp_reacquired );
-htp_assert( false !== has_action( 'woocommerce_single_product_summary', array( $htp_plugin->frontend, 'display_reservation_fallback' ) ), 'Frontend has a dedicated sold-out product fallback for add-on waitlists.' );
-htp_assert( false !== has_filter( 'render_block_woocommerce/add-to-cart-form', array( $htp_plugin->frontend, 'add_reservation_block_classes' ) ), 'Frontend registers block Add to Cart layout integration.' );
-$htp_block_markup = '<div class="wp-block-add-to-cart-form wc-block-add-to-cart-form"><form class="cart"><button id="htp_reserve_product" type="button">Reserve</button></form></div>';
-$htp_block_markup = $htp_plugin->frontend->add_reservation_block_classes( $htp_block_markup, array() );
-htp_assert( false !== strpos( $htp_block_markup, 'htp-has-reserve-action' ) && false !== strpos( $htp_block_markup, 'htp-cart-actions' ), 'Reservation-enabled Add to Cart blocks receive stable layout classes.' );
-$htp_dependency_notices = $htp_plugin->get_service( 'dependency_notices' );
-htp_assert( $htp_dependency_notices instanceof HTP_Dependency_Notices, 'Add-on dependency notice service is registered.' );
-htp_assert( $htp_dependency_notices->add( 'htp-contract-test', 'Dependency contract test.', 'warning' ) && isset( $htp_dependency_notices->all()['htp-contract-test'] ), 'Add-ons can register a dependency notice through the shared contract.' );
-$htp_dependency_notices->remove( 'htp-contract-test' );
-htp_assert( post_type_exists( 'htp_reservation' ), 'Reservation post type is registered during normal bootstrap.' );
+$sdpr_plugin = SDPR_Plugin::get_instance();
+$sdpr_original_options = get_option( 'sdpr_options', false );
+sdpr_assert( '1.0.0' === SDPR_VERSION, 'Runtime version matches the initial public release.' );
+sdpr_assert( $sdpr_plugin->reservations instanceof SDPR_Reservations, 'Reservation service initialized.' );
+sdpr_assert( $sdpr_plugin->get_service( 'repository' ) instanceof SDPR_Reservation_Repository, 'Reservation repository is registered.' );
+sdpr_assert( $sdpr_plugin->get_service( 'cart_order' ) instanceof SDPR_Cart_Order_Service, 'Cart and order service is registered.' );
+sdpr_assert( $sdpr_plugin->get_service( 'expiration' ) instanceof SDPR_Expiration_Service, 'Expiration service is registered.' );
+sdpr_assert( $sdpr_plugin->get_service( 'repository' ) instanceof SDPR_Reservation_Repository_Interface, 'Repository implements its extension contract.' );
+sdpr_assert( $sdpr_plugin->get_service( 'lifecycle' ) instanceof SDPR_Reservation_Lifecycle_Interface, 'Lifecycle implements its extension contract.' );
+sdpr_assert( $sdpr_plugin->get_service( 'rules' ) instanceof SDPR_Reservation_Rules, 'Reservation rules service is registered.' );
+sdpr_assert( $sdpr_plugin->get_service( 'locks' ) instanceof SDPR_Lock_Manager, 'Reservation lock service is registered.' );
+$sdpr_lock_name = 'integration_exclusivity_' . wp_generate_password( 8, false );
+$sdpr_locks     = $sdpr_plugin->get_service( 'locks' );
+$sdpr_first     = $sdpr_locks->acquire( array( $sdpr_lock_name ) );
+$sdpr_second    = $sdpr_locks->acquire( array( $sdpr_lock_name ) );
+sdpr_assert( is_array( $sdpr_first ) && is_wp_error( $sdpr_second ) && 'sdpr_busy' === $sdpr_second->get_error_code(), 'Reservation locks remain exclusive on current WordPress versions.' );
+$sdpr_locks->release( array( 'sdpr_lock_' . sanitize_key( $sdpr_lock_name ) => 'not-the-owner' ) );
+$sdpr_third = $sdpr_locks->acquire( array( $sdpr_lock_name ) );
+sdpr_assert( is_wp_error( $sdpr_third ), 'A non-owner cannot release a reservation lock.' );
+$sdpr_locks->release( $sdpr_first );
+$sdpr_reacquired = $sdpr_locks->acquire( array( $sdpr_lock_name ) );
+sdpr_assert( is_array( $sdpr_reacquired ), 'A reservation lock can be acquired after its owner releases it.' );
+$sdpr_locks->release( $sdpr_reacquired );
+sdpr_assert( false !== has_action( 'woocommerce_single_product_summary', array( $sdpr_plugin->frontend, 'display_reservation_fallback' ) ), 'Frontend has a dedicated sold-out product fallback for add-on waitlists.' );
+sdpr_assert( false !== has_filter( 'render_block_woocommerce/add-to-cart-form', array( $sdpr_plugin->frontend, 'add_reservation_block_classes' ) ), 'Frontend registers block Add to Cart layout integration.' );
+$sdpr_block_markup = '<div class="wp-block-add-to-cart-form wc-block-add-to-cart-form"><form class="cart"><button id="sdpr_reserve_product" type="button">Reserve</button></form></div>';
+$sdpr_block_markup = $sdpr_plugin->frontend->add_reservation_block_classes( $sdpr_block_markup, array() );
+sdpr_assert( false !== strpos( $sdpr_block_markup, 'sdpr-has-reserve-action' ) && false !== strpos( $sdpr_block_markup, 'sdpr-cart-actions' ), 'Reservation-enabled Add to Cart blocks receive stable layout classes.' );
+$sdpr_dependency_notices = $sdpr_plugin->get_service( 'dependency_notices' );
+sdpr_assert( $sdpr_dependency_notices instanceof SDPR_Dependency_Notices, 'Add-on dependency notice service is registered.' );
+sdpr_assert( $sdpr_dependency_notices->add( 'sdpr-contract-test', 'Dependency contract test.', 'warning' ) && isset( $sdpr_dependency_notices->all()['sdpr-contract-test'] ), 'Add-ons can register a dependency notice through the shared contract.' );
+$sdpr_dependency_notices->remove( 'sdpr-contract-test' );
+sdpr_assert( post_type_exists( 'sdpr_reservation' ), 'Reservation post type is registered during normal bootstrap.' );
 
-wp_clear_scheduled_hook( HTP_Reservations::CRON_HOOK );
-htp_assert( ! wp_next_scheduled( HTP_Reservations::CRON_HOOK ), 'Expiration schedule can be removed for recovery test.' );
-$htp_plugin->reservations->schedule_expiration();
-htp_assert( (bool) wp_next_scheduled( HTP_Reservations::CRON_HOOK ), 'Missing expiration schedule is recreated.' );
+wp_clear_scheduled_hook( SDPR_Reservations::CRON_HOOK );
+sdpr_assert( ! wp_next_scheduled( SDPR_Reservations::CRON_HOOK ), 'Expiration schedule can be removed for recovery test.' );
+$sdpr_plugin->reservations->schedule_expiration();
+sdpr_assert( (bool) wp_next_scheduled( SDPR_Reservations::CRON_HOOK ), 'Missing expiration schedule is recreated.' );
 
-require_once HTP_PLUGIN_PATH . 'includes/admin/class-htp-admin-reservations.php';
-require_once HTP_PLUGIN_PATH . 'includes/admin/class-htp-admin.php';
-$htp_admin = new HTP_Admin( $htp_plugin->reservations );
-$htp_admin_reservations = new HTP_Admin_Reservations( $htp_plugin->reservations );
-$htp_admin_reservations->enqueue_assets();
-htp_assert( wp_script_is( 'holdthisproduct-admin-reservations', 'enqueued' ), 'Reservation admin actions use a versioned external asset.' );
-htp_assert( false !== strpos( (string) wp_scripts()->get_data( 'holdthisproduct-admin-reservations', 'data' ), 'htpReservationsAdmin' ), 'Reservation admin asset receives localized nonces and messages.' );
-$htp_admin->enqueue_admin_scripts( 'toplevel_page_holdthisproduct-settings' );
-htp_assert( wp_script_is( 'holdthisproduct-admin-settings', 'enqueued' ), 'Settings interactions use a versioned external asset.' );
-$htp_filtered_method = new ReflectionMethod( $htp_admin_reservations, 'get_filtered_reservations' );
-$htp_filtered_method->setAccessible( true );
-$htp_invalid_product_query = $htp_filtered_method->invoke( $htp_admin_reservations, 'all', 'not-a-number', 'product_id', 1 );
-$htp_missing_product_query = $htp_filtered_method->invoke( $htp_admin_reservations, 'all', 'HTP product that cannot exist 19f546ef', 'product', 1 );
-htp_assert( $htp_invalid_product_query instanceof WP_Query && 0 === (int) $htp_invalid_product_query->found_posts, 'Invalid product ID search returns an empty WP_Query.' );
-htp_assert( $htp_missing_product_query instanceof WP_Query && 0 === (int) $htp_missing_product_query->found_posts, 'Missing product search returns an empty WP_Query.' );
-htp_assert( get_role( 'shop_manager' ) && get_role( 'shop_manager' )->has_cap( htp_get_manage_capability() ), 'Shop Managers have the reservation management capability.' );
-$htp_sanitized = $htp_admin->sanitize_options( array( 'max_reservations' => 999, 'reservation_duration' => -2, 'popup_customization_logged_in' => array( 'font_family' => 'Arial;background:url(x)', 'background_color' => 'bad' ) ) );
-htp_assert( 100 === $htp_sanitized['max_reservations'], 'Reservation limit is bounded.' );
-htp_assert( 1 === $htp_sanitized['reservation_duration'], 'Duration is bounded.' );
-htp_assert( 'Arial, Helvetica, sans-serif' === $htp_sanitized['popup_customization_logged_in']['font_family'], 'Font value is allowlisted.' );
-$htp_sanitized = $htp_admin->sanitize_options( array(
+require_once SDPR_PLUGIN_PATH . 'includes/admin/class-sdpr-admin-view.php';
+require_once SDPR_PLUGIN_PATH . 'includes/admin/class-sdpr-admin-reservations.php';
+require_once SDPR_PLUGIN_PATH . 'includes/admin/class-sdpr-admin.php';
+$sdpr_admin = new SDPR_Admin( $sdpr_plugin->reservations );
+$sdpr_admin_reservations = new SDPR_Admin_Reservations( $sdpr_plugin->reservations );
+$sdpr_admin_reservations->enqueue_assets();
+sdpr_assert( wp_script_is( 'sdpr-admin-reservations', 'enqueued' ), 'Reservation admin actions use a versioned external asset.' );
+sdpr_assert( false !== strpos( (string) wp_scripts()->get_data( 'sdpr-admin-reservations', 'data' ), 'sdprReservationsAdmin' ), 'Reservation admin asset receives localized nonces and messages.' );
+$sdpr_admin->enqueue_admin_scripts( 'toplevel_page_sdpr-settings' );
+sdpr_assert( wp_script_is( 'sdpr-admin-settings', 'enqueued' ), 'Settings interactions use a versioned external asset.' );
+$sdpr_filtered_method = new ReflectionMethod( $sdpr_admin_reservations, 'get_filtered_reservations' );
+$sdpr_filtered_method->setAccessible( true );
+$sdpr_invalid_product_query = $sdpr_filtered_method->invoke( $sdpr_admin_reservations, 'all', 'not-a-number', 'product_id', 1 );
+$sdpr_missing_product_query = $sdpr_filtered_method->invoke( $sdpr_admin_reservations, 'all', 'SDPR product that cannot exist 19f546ef', 'product', 1 );
+sdpr_assert( $sdpr_invalid_product_query instanceof WP_Query && 0 === (int) $sdpr_invalid_product_query->found_posts, 'Invalid product ID search returns an empty WP_Query.' );
+sdpr_assert( $sdpr_missing_product_query instanceof WP_Query && 0 === (int) $sdpr_missing_product_query->found_posts, 'Missing product search returns an empty WP_Query.' );
+sdpr_assert( get_role( 'shop_manager' ) && get_role( 'shop_manager' )->has_cap( sdpr_get_manage_capability() ), 'Shop Managers have the reservation management capability.' );
+$sdpr_sanitized = $sdpr_admin->sanitize_options( array( 'max_reservations' => 999, 'reservation_duration' => -2, 'popup_customization_logged_in' => array( 'font_family' => 'Arial;background:url(x)', 'background_color' => 'bad' ) ) );
+sdpr_assert( 100 === $sdpr_sanitized['max_reservations'], 'Reservation limit is bounded.' );
+sdpr_assert( 1 === $sdpr_sanitized['reservation_duration'], 'Duration is bounded.' );
+sdpr_assert( 'Arial, Helvetica, sans-serif' === $sdpr_sanitized['popup_customization_logged_in']['font_family'], 'Font value is allowlisted.' );
+$sdpr_sanitized = $sdpr_admin->sanitize_options( array(
 	'max_reservations' => 0,
 	'reservation_duration' => 999,
 	'popup_customization_logged_in' => array(
@@ -91,418 +92,439 @@ $htp_sanitized = $htp_admin->sanitize_options( array(
 		'text_color' => '#123456',
 	),
 ) );
-htp_assert( 1 === $htp_sanitized['max_reservations'], 'Zero reservation limit is raised to one.' );
-htp_assert( 168 === $htp_sanitized['reservation_duration'], 'Excessive duration is capped.' );
-htp_assert( 0 === $htp_sanitized['popup_customization_logged_in']['border_radius'], 'Negative border radius is raised to zero.' );
-htp_assert( 40 === $htp_sanitized['popup_customization_logged_in']['font_size'], 'Excessive font size is capped.' );
-htp_assert( '#ffffff' === $htp_sanitized['popup_customization_logged_in']['background_color'], 'Invalid popup color uses the default.' );
-htp_assert( ! empty( get_settings_errors( 'holdthisproduct_options' ) ), 'Corrected settings produce validation feedback.' );
+sdpr_assert( 1 === $sdpr_sanitized['max_reservations'], 'Zero reservation limit is raised to one.' );
+sdpr_assert( 168 === $sdpr_sanitized['reservation_duration'], 'Excessive duration is capped.' );
+sdpr_assert( 0 === $sdpr_sanitized['popup_customization_logged_in']['border_radius'], 'Negative border radius is raised to zero.' );
+sdpr_assert( 40 === $sdpr_sanitized['popup_customization_logged_in']['font_size'], 'Excessive font size is capped.' );
+sdpr_assert( '#ffffff' === $sdpr_sanitized['popup_customization_logged_in']['background_color'], 'Invalid popup color uses the default.' );
+sdpr_assert( ! empty( get_settings_errors( 'sdpr_options' ) ), 'Corrected settings produce validation feedback.' );
 
-update_option( 'holdthisproduct_options', array( 'enable_reservation' => 1, 'max_reservations' => 3, 'reservation_duration' => 24, 'pending_duration' => 1, 'require_admin_approval' => 1, 'enable_email_notifications' => 0 ) );
-$htp_preserved = $htp_admin->sanitize_options( array( 'max_reservations' => 3, 'reservation_duration' => 12 ) );
-htp_assert( 1 === $htp_preserved['pending_duration'], 'Hidden pending duration is preserved when settings are saved.' );
-$htp_user_id = wp_insert_user( array( 'user_login' => 'htp-test-user', 'user_pass' => wp_generate_password( 24 ), 'user_email' => 'htp@example.test', 'role' => 'customer' ) );
-wp_set_current_user( $htp_user_id );
-$htp_product = new WC_Product_Simple();
-$htp_product->set_name( 'Reservation test product' );
-$htp_product->set_status( 'publish' );
-$htp_product->set_regular_price( '10' );
-$htp_product->set_manage_stock( true );
-$htp_product->set_stock_quantity( 1 );
-$htp_product_id = $htp_product->save();
+update_option( 'sdpr_options', array( 'enable_reservation' => 1, 'max_reservations' => 3, 'reservation_duration' => 24, 'pending_duration' => 1, 'require_admin_approval' => 1, 'enable_email_notifications' => 0 ) );
+$sdpr_preserved = $sdpr_admin->sanitize_options( array( 'max_reservations' => 3, 'reservation_duration' => 12 ) );
+sdpr_assert( 1 === $sdpr_preserved['pending_duration'], 'Hidden pending duration is preserved when settings are saved.' );
+$sdpr_user_id = wp_insert_user( array( 'user_login' => 'sdpr-test-user', 'user_pass' => wp_generate_password( 24 ), 'user_email' => 'sdpr@example.test', 'role' => 'customer' ) );
+wp_set_current_user( $sdpr_user_id );
+$sdpr_product = new WC_Product_Simple();
+$sdpr_product->set_name( 'Reservation test product' );
+$sdpr_product->set_status( 'publish' );
+$sdpr_product->set_regular_price( '10' );
+$sdpr_product->set_manage_stock( true );
+$sdpr_product->set_stock_quantity( 1 );
+$sdpr_product_id = $sdpr_product->save();
 
-$htp_immediate_product = new WC_Product_Simple();
-$htp_immediate_product->set_name( 'Immediate reservation test product' );
-$htp_immediate_product->set_status( 'publish' );
-$htp_immediate_product->set_regular_price( '10' );
-$htp_immediate_product->set_manage_stock( true );
-$htp_immediate_product->set_stock_quantity( 2 );
-$htp_immediate_product_id = $htp_immediate_product->save();
-$htp_original_product       = $GLOBALS['product'] ?? null;
-$htp_original_query_object  = $GLOBALS['wp_query']->queried_object;
-$htp_original_query_id      = $GLOBALS['wp_query']->queried_object_id;
-$htp_original_is_singular   = $GLOBALS['wp_query']->is_singular;
-$GLOBALS['product']         = wc_get_product( $htp_immediate_product_id );
-$GLOBALS['wp_query']->queried_object    = get_post( $htp_immediate_product_id );
-$GLOBALS['wp_query']->queried_object_id = $htp_immediate_product_id;
+$sdpr_immediate_product = new WC_Product_Simple();
+$sdpr_immediate_product->set_name( 'Immediate reservation test product' );
+$sdpr_immediate_product->set_status( 'publish' );
+$sdpr_immediate_product->set_regular_price( '10' );
+$sdpr_immediate_product->set_manage_stock( true );
+$sdpr_immediate_product->set_stock_quantity( 2 );
+$sdpr_immediate_product_id = $sdpr_immediate_product->save();
+$sdpr_original_product       = $GLOBALS['product'] ?? null;
+$sdpr_original_query_object  = $GLOBALS['wp_query']->queried_object;
+$sdpr_original_query_id      = $GLOBALS['wp_query']->queried_object_id;
+$sdpr_original_is_singular   = $GLOBALS['wp_query']->is_singular;
+$GLOBALS['product']         = wc_get_product( $sdpr_immediate_product_id );
+$GLOBALS['wp_query']->queried_object    = get_post( $sdpr_immediate_product_id );
+$GLOBALS['wp_query']->queried_object_id = $sdpr_immediate_product_id;
 $GLOBALS['wp_query']->is_singular       = true;
 ob_start();
-$htp_plugin->frontend->display_reservation_fallback();
-$htp_in_stock_fallback_markup = ob_get_clean();
-htp_assert( '' === $htp_in_stock_fallback_markup, 'In-stock products wait for the standard Add to Cart button hook.' );
+$sdpr_plugin->frontend->display_reservation_fallback();
+$sdpr_in_stock_fallback_markup = ob_get_clean();
+sdpr_assert( '' === $sdpr_in_stock_fallback_markup, 'In-stock products wait for the standard Add to Cart button hook.' );
 ob_start();
-include HTP_PLUGIN_PATH . 'templates/form-template.php';
-$htp_reserve_button_markup = ob_get_clean();
-htp_assert( 1 === preg_match( '/>\s*Reserve\s*<\/button>/', $htp_reserve_button_markup ), 'The product action uses the concise Reserve label.' );
-$htp_waitlist_product = new WC_Product_Simple();
-$htp_waitlist_product->set_name( 'Waitlist fallback test product' );
-$htp_waitlist_product->set_status( 'publish' );
-$htp_waitlist_product->set_regular_price( '10' );
-$htp_waitlist_product->set_manage_stock( true );
-$htp_waitlist_product->set_stock_quantity( 0 );
-$htp_waitlist_product->set_stock_status( 'outofstock' );
-$htp_waitlist_product_id = $htp_waitlist_product->save();
-$htp_waitlist_eligibility = static function ( $reservable, $product ) use ( $htp_waitlist_product_id ) {
-	return $product instanceof WC_Product && $htp_waitlist_product_id === $product->get_id() ? true : $reservable;
+( static function () { include SDPR_PLUGIN_PATH . 'templates/form-template.php'; } )();
+$sdpr_reserve_button_markup = ob_get_clean();
+sdpr_assert( 1 === preg_match( '/<svg[^>]*aria-hidden="true"[^>]*>.*<\/svg>\s*<span>Reserve<\/span>\s*<\/button>/s', $sdpr_reserve_button_markup ), 'The product action pairs a decorative stopwatch with the concise Reserve label.' );
+$sdpr_waitlist_product = new WC_Product_Simple();
+$sdpr_waitlist_product->set_name( 'Waitlist fallback test product' );
+$sdpr_waitlist_product->set_status( 'publish' );
+$sdpr_waitlist_product->set_regular_price( '10' );
+$sdpr_waitlist_product->set_manage_stock( true );
+$sdpr_waitlist_product->set_stock_quantity( 0 );
+$sdpr_waitlist_product->set_stock_status( 'outofstock' );
+$sdpr_waitlist_product_id = $sdpr_waitlist_product->save();
+$sdpr_waitlist_eligibility = static function ( $reservable, $product ) use ( $sdpr_waitlist_product_id ) {
+	return $product instanceof WC_Product && $sdpr_waitlist_product_id === $product->get_id() ? true : $reservable;
 };
-add_filter( 'htp_product_is_reservable', $htp_waitlist_eligibility, 10, 2 );
-$GLOBALS['product'] = wc_get_product( $htp_waitlist_product_id );
-$GLOBALS['wp_query']->queried_object    = get_post( $htp_waitlist_product_id );
-$GLOBALS['wp_query']->queried_object_id = $htp_waitlist_product_id;
+add_filter( 'sdpr_product_is_reservable', $sdpr_waitlist_eligibility, 10, 2 );
+$GLOBALS['product'] = wc_get_product( $sdpr_waitlist_product_id );
+$GLOBALS['wp_query']->queried_object    = get_post( $sdpr_waitlist_product_id );
+$GLOBALS['wp_query']->queried_object_id = $sdpr_waitlist_product_id;
 ob_start();
-$htp_plugin->frontend->display_reservation_fallback();
-$htp_waitlist_fallback_markup = ob_get_clean();
-remove_filter( 'htp_product_is_reservable', $htp_waitlist_eligibility, 10 );
-htp_assert( 1 === preg_match( '/>\s*Reserve\s*<\/button>/', $htp_waitlist_fallback_markup ), 'Extension-enabled sold-out products retain the dedicated fallback action.' );
-$GLOBALS['product'] = wc_get_product( $htp_immediate_product_id );
+$sdpr_plugin->frontend->display_reservation_fallback();
+$sdpr_waitlist_fallback_markup = ob_get_clean();
+remove_filter( 'sdpr_product_is_reservable', $sdpr_waitlist_eligibility, 10 );
+sdpr_assert( 1 === preg_match( '/<svg[^>]*aria-hidden="true"[^>]*>.*<\/svg>\s*<span>Reserve<\/span>\s*<\/button>/s', $sdpr_waitlist_fallback_markup ), 'Extension-enabled sold-out products retain the dedicated fallback action.' );
+$GLOBALS['product'] = wc_get_product( $sdpr_immediate_product_id );
 ob_start();
-include HTP_PLUGIN_PATH . 'templates/modal-template.php';
-$htp_modal_markup   = ob_get_clean();
-$GLOBALS['product']                     = $htp_original_product;
-$GLOBALS['wp_query']->queried_object    = $htp_original_query_object;
-$GLOBALS['wp_query']->queried_object_id = $htp_original_query_id;
-$GLOBALS['wp_query']->is_singular       = $htp_original_is_singular;
-htp_assert( false !== strpos( $htp_modal_markup, 'aria-labelledby="htp-reservation-dialog-title"' ), 'Reservation dialog is associated with its visible heading.' );
-htp_assert( false !== strpos( $htp_modal_markup, 'aria-describedby="htp-reservation-dialog-description"' ), 'Reservation dialog is associated with its explanatory text.' );
-htp_assert( false !== strpos( $htp_modal_markup, 'class="modal-close"' ) && false !== strpos( $htp_modal_markup, 'aria-label="Close reservation dialog"' ), 'Reservation dialog has a keyboard-focusable named close control.' );
-htp_assert( false !== strpos( $htp_modal_markup, 'aria-atomic="true"' ), 'Reservation result notice is exposed as an atomic live region.' );
-$htp_original_post = isset( $GLOBALS['post'] ) ? $GLOBALS['post'] : null;
-$GLOBALS['post'] = get_post( $htp_immediate_product_id );
-$htp_admin->enqueue_admin_scripts( 'post.php' );
-htp_assert( wp_script_is( 'holdthisproduct-admin-product', 'enqueued' ), 'Product reservation actions use a versioned external asset.' );
-htp_assert( false !== strpos( (string) wp_scripts()->get_data( 'holdthisproduct-admin-product', 'data' ), 'htpProductReservations' ), 'Product admin asset receives its localized nonce and messages.' );
-$GLOBALS['post'] = $htp_original_post;
-update_option( 'holdthisproduct_options', array( 'enable_reservation' => 1, 'max_reservations' => 3, 'reservation_duration' => 24, 'pending_duration' => 1, 'require_admin_approval' => 0, 'enable_email_notifications' => 0 ) );
-$htp_eligibility_passthrough = static function ( $reservable ) {
+( static function () { include SDPR_PLUGIN_PATH . 'templates/modal-template.php'; } )();
+$sdpr_modal_markup   = ob_get_clean();
+sdpr_assert( false !== strpos( $sdpr_modal_markup, 'up to 1 hour.' ) && false !== strpos( $sdpr_modal_markup, 'held for 24 hours.' ), 'Approval dialog substitutes and pluralizes both translated durations.' );
+sdpr_assert( false !== strpos( $sdpr_modal_markup, 'data-result-title="Request submitted"' ), 'Pending reservation modal provides its translated result heading.' );
+sdpr_assert( strpos( $sdpr_modal_markup, 'class="sdpr-modal-header"' ) < strpos( $sdpr_modal_markup, '<form id="sdpr-reservation-form"' ) && 1 === preg_match( '/class="sdpr-modal-header">.*?class="modal-close".*?<\/div>\s*<form/s', $sdpr_modal_markup ), 'The modal heading and close control occupy a separate header before notices.' );
+sdpr_assert( false !== strpos( $sdpr_modal_markup, 'id="sdpr-reservation-result"' ) && false !== strpos( $sdpr_modal_markup, 'class="sdpr-reservation-prompt"' ), 'Modal result and confirmation content have separate accessible targets.' );
+$sdpr_modal_options = get_option( 'sdpr_options' );
+$sdpr_active_modal_options = $sdpr_modal_options;
+$sdpr_active_modal_options['require_admin_approval'] = 0;
+update_option( 'sdpr_options', $sdpr_active_modal_options );
+ob_start();
+( static function () { include SDPR_PLUGIN_PATH . 'templates/modal-template.php'; } )();
+$sdpr_active_modal_markup = ob_get_clean();
+update_option( 'sdpr_options', $sdpr_modal_options );
+sdpr_assert( false !== strpos( $sdpr_active_modal_markup, 'data-result-title="Reservation confirmed"' ), 'Immediate reservation modal provides its translated result heading.' );
+$GLOBALS['product']                     = $sdpr_original_product;
+$GLOBALS['wp_query']->queried_object    = $sdpr_original_query_object;
+$GLOBALS['wp_query']->queried_object_id = $sdpr_original_query_id;
+$GLOBALS['wp_query']->is_singular       = $sdpr_original_is_singular;
+sdpr_assert( false !== strpos( $sdpr_modal_markup, 'aria-labelledby="sdpr-reservation-dialog-title"' ), 'Reservation dialog is associated with its visible heading.' );
+sdpr_assert( false !== strpos( $sdpr_modal_markup, 'aria-describedby="sdpr-reservation-dialog-description"' ), 'Reservation dialog is associated with its explanatory text.' );
+sdpr_assert( false !== strpos( $sdpr_modal_markup, 'class="modal-close"' ) && false !== strpos( $sdpr_modal_markup, 'aria-label="Close reservation dialog"' ), 'Reservation dialog has a keyboard-focusable named close control.' );
+sdpr_assert( false !== strpos( $sdpr_modal_markup, 'aria-atomic="true"' ), 'Reservation result notice is exposed as an atomic live region.' );
+$sdpr_original_post = isset( $GLOBALS['post'] ) ? $GLOBALS['post'] : null;
+$GLOBALS['post'] = get_post( $sdpr_immediate_product_id );
+$sdpr_admin->enqueue_admin_scripts( 'post.php' );
+sdpr_assert( wp_script_is( 'sdpr-admin-product', 'enqueued' ), 'Product reservation actions use a versioned external asset.' );
+sdpr_assert( false !== strpos( (string) wp_scripts()->get_data( 'sdpr-admin-product', 'data' ), 'sdprProductReservations' ), 'Product admin asset receives its localized nonce and messages.' );
+$GLOBALS['post'] = $sdpr_original_post;
+update_option( 'sdpr_options', array( 'enable_reservation' => 1, 'max_reservations' => 3, 'reservation_duration' => 24, 'pending_duration' => 1, 'require_admin_approval' => 0, 'enable_email_notifications' => 0 ) );
+$sdpr_eligibility_passthrough = static function ( $reservable ) {
 	return $reservable;
 };
-$htp_reservable_before_filter = $htp_plugin->reservations->is_product_reservable( $htp_immediate_product_id );
-add_filter( 'htp_product_is_reservable', $htp_eligibility_passthrough );
-htp_assert( $htp_reservable_before_filter === $htp_plugin->reservations->is_product_reservable( $htp_immediate_product_id ), 'A no-op eligibility extension does not change Free behavior.' );
-remove_filter( 'htp_product_is_reservable', $htp_eligibility_passthrough );
-$htp_transitions = array();
-$htp_transition_listener = static function ( $transition ) use ( &$htp_transitions ) {
-	$htp_transitions[] = $transition;
+$sdpr_reservable_before_filter = $sdpr_plugin->reservations->is_product_reservable( $sdpr_immediate_product_id );
+add_filter( 'sdpr_product_is_reservable', $sdpr_eligibility_passthrough );
+sdpr_assert( $sdpr_reservable_before_filter === $sdpr_plugin->reservations->is_product_reservable( $sdpr_immediate_product_id ), 'A no-op eligibility extension does not change Free behavior.' );
+remove_filter( 'sdpr_product_is_reservable', $sdpr_eligibility_passthrough );
+$sdpr_transitions = array();
+$sdpr_transition_listener = static function ( $transition ) use ( &$sdpr_transitions ) {
+	$sdpr_transitions[] = $transition;
 };
-add_action( 'htp_reservation_transitioned', $htp_transition_listener );
-$htp_counts_before_immediate = $htp_plugin->reservations->get_status_counts();
-$htp_immediate_id = $htp_plugin->reservations->create_reservation( $htp_immediate_product_id, $htp_user_id );
-htp_assert( $htp_immediate_id && 'active' === get_post_meta( $htp_immediate_id, '_htp_status', true ), 'Immediate reservation activates through the inventory transaction.' );
-$htp_product_name_query = $htp_filtered_method->invoke( $htp_admin_reservations, 'all', 'Immediate reservation test', 'product', 1 );
-htp_assert( in_array( $htp_immediate_id, wp_list_pluck( $htp_product_name_query->posts, 'ID' ), true ), 'Product-name search uses the WordPress query API and returns matching reservations.' );
-$htp_admin_render_deprecations = array();
+add_action( 'sdpr_reservation_transitioned', $sdpr_transition_listener );
+$sdpr_counts_before_immediate = $sdpr_plugin->reservations->get_status_counts();
+$sdpr_immediate_id = $sdpr_plugin->reservations->create_reservation( $sdpr_immediate_product_id, $sdpr_user_id );
+sdpr_assert( $sdpr_immediate_id && 'active' === get_post_meta( $sdpr_immediate_id, '_sdpr_status', true ), 'Immediate reservation activates through the inventory transaction.' );
+$sdpr_previous_post = $GLOBALS['post'] ?? null;
+$GLOBALS['post'] = get_post( $sdpr_immediate_product_id );
+ob_start();
+$sdpr_admin->add_product_reservations_list();
+$sdpr_product_reservations_markup = ob_get_clean();
+$sdpr_admin->enqueue_admin_scripts( 'post.php' );
+$GLOBALS['post'] = $sdpr_previous_post;
+sdpr_assert( false !== strpos( $sdpr_product_reservations_markup, 'sdpr-product-reservation-feedback' ) && false !== strpos( (string) wp_scripts()->get_data( 'sdpr-admin-product', 'data' ), 'Dismiss this notice.' ), 'Product reservation actions provide local, dismissible and translated feedback.' );
+$sdpr_product_name_query = $sdpr_filtered_method->invoke( $sdpr_admin_reservations, 'all', 'Immediate reservation test', 'product', 1 );
+sdpr_assert( in_array( $sdpr_immediate_id, wp_list_pluck( $sdpr_product_name_query->posts, 'ID' ), true ), 'Product-name search uses the WordPress query API and returns matching reservations.' );
+$sdpr_admin_render_deprecations = array();
 set_error_handler(
-	static function ( $severity, $message ) use ( &$htp_admin_render_deprecations ) {
+	static function ( $severity, $message ) use ( &$sdpr_admin_render_deprecations ) {
 		if ( E_DEPRECATED === $severity ) {
-			$htp_admin_render_deprecations[] = $message;
+			$sdpr_admin_render_deprecations[] = $message;
 		}
 		return false;
 	},
 	E_DEPRECATED
 );
 ob_start();
-$htp_admin_reservations->render_page();
-$htp_admin_reservations_markup = ob_get_clean();
+$sdpr_admin_reservations->render_page();
+$sdpr_admin_reservations_markup = ob_get_clean();
 restore_error_handler();
-htp_assert( empty( $htp_admin_render_deprecations ), 'Single-page reservation management renders without PHP deprecations.' );
-htp_assert( false !== strpos( $htp_admin_reservations_markup, 'for="status-filter"' ) && false !== strpos( $htp_admin_reservations_markup, 'for="search-type"' ) && false !== strpos( $htp_admin_reservations_markup, 'for="reservation-search"' ), 'Reservation management filters expose programmatic labels.' );
-$htp_counts_after_immediate = $htp_plugin->reservations->get_status_counts();
-htp_assert( $htp_counts_before_immediate[ HTP_Reservation_Status::ACTIVE ] + 1 === $htp_counts_after_immediate[ HTP_Reservation_Status::ACTIVE ], 'Status-count cache is invalidated when a reservation becomes active.' );
-htp_assert( $htp_immediate_product_id === (int) HTP_Reservation_Meta::get( $htp_immediate_id, HTP_Reservation_Meta::PRODUCT_ID ), 'Canonical metadata accessor reads reservation product data.' );
-htp_assert( ! empty( $htp_transitions ) && HTP_Reservation_Status::ACTIVE === $htp_transitions[0]['to'], 'Lifecycle transition action receives a stable transition payload.' );
-htp_assert( HTP_Inventory_Manager::STATE_HELD === get_post_meta( $htp_immediate_id, HTP_Inventory_Manager::META_STATE, true ), 'Immediate reservation records held inventory ownership.' );
-htp_assert( 1 === (int) wc_get_product( $htp_immediate_product_id )->get_stock_quantity( 'edit' ), 'Immediate reservation decreases stock once.' );
-$htp_expiry_before_extension = (int) HTP_Reservation_Meta::get( $htp_immediate_id, HTP_Reservation_Meta::EXPIRES_AT );
-$htp_extension_event = array();
-$htp_extension_listener = static function ( $event ) use ( &$htp_extension_event ) {
-	$htp_extension_event = $event;
+sdpr_assert( empty( $sdpr_admin_render_deprecations ), 'Single-page reservation management renders without PHP deprecations.' );
+sdpr_assert( false !== strpos( $sdpr_admin_reservations_markup, 'for="status-filter"' ) && false !== strpos( $sdpr_admin_reservations_markup, 'for="search-type"' ) && false !== strpos( $sdpr_admin_reservations_markup, 'for="reservation-search"' ), 'Reservation management filters expose programmatic labels.' );
+$sdpr_counts_after_immediate = $sdpr_plugin->reservations->get_status_counts();
+sdpr_assert( $sdpr_counts_before_immediate[ SDPR_Reservation_Status::ACTIVE ] + 1 === $sdpr_counts_after_immediate[ SDPR_Reservation_Status::ACTIVE ], 'Status-count cache is invalidated when a reservation becomes active.' );
+sdpr_assert( $sdpr_immediate_product_id === (int) SDPR_Reservation_Meta::get( $sdpr_immediate_id, SDPR_Reservation_Meta::PRODUCT_ID ), 'Canonical metadata accessor reads reservation product data.' );
+sdpr_assert( ! empty( $sdpr_transitions ) && SDPR_Reservation_Status::ACTIVE === $sdpr_transitions[0]['to'], 'Lifecycle transition action receives a stable transition payload.' );
+sdpr_assert( SDPR_Inventory_Manager::STATE_HELD === get_post_meta( $sdpr_immediate_id, SDPR_Inventory_Manager::META_STATE, true ), 'Immediate reservation records held inventory ownership.' );
+sdpr_assert( 1 === (int) wc_get_product( $sdpr_immediate_product_id )->get_stock_quantity( 'edit' ), 'Immediate reservation decreases stock once.' );
+$sdpr_expiry_before_extension = (int) SDPR_Reservation_Meta::get( $sdpr_immediate_id, SDPR_Reservation_Meta::EXPIRES_AT );
+$sdpr_extension_event = array();
+$sdpr_extension_listener = static function ( $event ) use ( &$sdpr_extension_event ) {
+	$sdpr_extension_event = $event;
 };
-add_action( 'htp_reservation_extended', $htp_extension_listener );
-$htp_extended_expiry = $htp_plugin->get_service( 'lifecycle' )->extend( $htp_immediate_id, 2, 'contract_test' );
-htp_assert( $htp_expiry_before_extension + ( 2 * HOUR_IN_SECONDS ) === $htp_extended_expiry, 'Lifecycle extends an open deadline by the exact requested duration.' );
-htp_assert( $htp_immediate_id === $htp_extension_event['reservation_id'] && 'contract_test' === $htp_extension_event['source'], 'Deadline extension emits its stable result contract.' );
-$htp_email_content_seen = array();
-$htp_email_result_seen = array();
-$htp_email_filter = static function ( $content, $event, $reservation_id ) use ( &$htp_email_content_seen, $htp_immediate_id ) {
-	if ( $htp_immediate_id === $reservation_id && 'created' === $event ) {
+add_action( 'sdpr_reservation_extended', $sdpr_extension_listener );
+$sdpr_extended_expiry = $sdpr_plugin->get_service( 'lifecycle' )->extend( $sdpr_immediate_id, 2, 'contract_test' );
+sdpr_assert( $sdpr_expiry_before_extension + ( 2 * HOUR_IN_SECONDS ) === $sdpr_extended_expiry, 'Lifecycle extends an open deadline by the exact requested duration.' );
+sdpr_assert( $sdpr_immediate_id === $sdpr_extension_event['reservation_id'] && 'contract_test' === $sdpr_extension_event['source'], 'Deadline extension emits its stable result contract.' );
+$sdpr_email_content_seen = array();
+$sdpr_email_result_seen = array();
+$sdpr_email_filter = static function ( $content, $event, $reservation_id ) use ( &$sdpr_email_content_seen, $sdpr_immediate_id ) {
+	if ( $sdpr_immediate_id === $reservation_id && 'created' === $event ) {
 		$content['subject']     = 'Contract-filtered subject';
-		$htp_email_content_seen = $content;
+		$sdpr_email_content_seen = $content;
 	}
 	return $content;
 };
-$htp_mail_short_circuit = static function () {
+$sdpr_mail_short_circuit = static function () {
 	return true;
 };
-$htp_email_result_listener = static function ( $sent, $event, $reservation_id ) use ( &$htp_email_result_seen, $htp_immediate_id ) {
-	if ( $htp_immediate_id === $reservation_id && 'created' === $event ) {
-		$htp_email_result_seen = array( $sent, $event, $reservation_id );
+$sdpr_email_result_listener = static function ( $sent, $event, $reservation_id ) use ( &$sdpr_email_result_seen, $sdpr_immediate_id ) {
+	if ( $sdpr_immediate_id === $reservation_id && 'created' === $event ) {
+		$sdpr_email_result_seen = array( $sent, $event, $reservation_id );
 	}
 };
-add_filter( 'htp_email_content', $htp_email_filter, 10, 3 );
-add_filter( 'pre_wp_mail', $htp_mail_short_circuit );
-add_action( 'htp_email_sent', $htp_email_result_listener, 10, 3 );
-update_option( 'holdthisproduct_options', array( 'enable_reservation' => 1, 'max_reservations' => 3, 'reservation_duration' => 24, 'pending_duration' => 1, 'require_admin_approval' => 0, 'enable_email_notifications' => 1 ) );
-$htp_plugin->get_service( 'notifications' )->dispatch( 'created', $htp_immediate_id, 'htp@example.test' );
-htp_assert( 'Contract-filtered subject' === $htp_email_content_seen['subject'], 'Transactional email content is filtered once before delivery.' );
-htp_assert( true === $htp_email_result_seen[0], 'Transactional email result event reports the mail transport result.' );
-remove_filter( 'htp_email_content', $htp_email_filter, 10 );
-remove_filter( 'pre_wp_mail', $htp_mail_short_circuit );
-remove_action( 'htp_email_sent', $htp_email_result_listener, 10 );
-update_option( 'holdthisproduct_options', array( 'enable_reservation' => 1, 'max_reservations' => 3, 'reservation_duration' => 24, 'pending_duration' => 1, 'require_admin_approval' => 0, 'enable_email_notifications' => 0 ) );
-htp_assert( $htp_plugin->reservations->cancel_reservation( $htp_immediate_id ), 'Immediate reservation can be cancelled.' );
-htp_assert( is_wp_error( $htp_plugin->get_service( 'lifecycle' )->extend( $htp_immediate_id, 2 ) ), 'Terminal reservations cannot be extended.' );
-$htp_counts_after_cancel = $htp_plugin->reservations->get_status_counts();
-htp_assert( $htp_counts_before_immediate[ HTP_Reservation_Status::ACTIVE ] === $htp_counts_after_cancel[ HTP_Reservation_Status::ACTIVE ], 'Status-count cache is invalidated when an active reservation is cancelled.' );
-htp_assert( HTP_Inventory_Manager::STATE_RELEASED === get_post_meta( $htp_immediate_id, HTP_Inventory_Manager::META_STATE, true ), 'Cancellation records released inventory ownership.' );
-htp_assert( 2 === (int) wc_get_product( $htp_immediate_product_id )->get_stock_quantity( 'edit' ), 'Transactional cancellation restores immediate reservation stock.' );
+add_filter( 'sdpr_email_content', $sdpr_email_filter, 10, 3 );
+add_filter( 'pre_wp_mail', $sdpr_mail_short_circuit );
+add_action( 'sdpr_email_sent', $sdpr_email_result_listener, 10, 3 );
+update_option( 'sdpr_options', array( 'enable_reservation' => 1, 'max_reservations' => 3, 'reservation_duration' => 24, 'pending_duration' => 1, 'require_admin_approval' => 0, 'enable_email_notifications' => 1 ) );
+$sdpr_plugin->get_service( 'notifications' )->dispatch( 'created', $sdpr_immediate_id, 'sdpr@example.test' );
+sdpr_assert( 'Contract-filtered subject' === $sdpr_email_content_seen['subject'], 'Transactional email content is filtered once before delivery.' );
+sdpr_assert( true === $sdpr_email_result_seen[0], 'Transactional email result event reports the mail transport result.' );
+remove_filter( 'sdpr_email_content', $sdpr_email_filter, 10 );
+remove_filter( 'pre_wp_mail', $sdpr_mail_short_circuit );
+remove_action( 'sdpr_email_sent', $sdpr_email_result_listener, 10 );
+update_option( 'sdpr_options', array( 'enable_reservation' => 1, 'max_reservations' => 3, 'reservation_duration' => 24, 'pending_duration' => 1, 'require_admin_approval' => 0, 'enable_email_notifications' => 0 ) );
+sdpr_assert( $sdpr_plugin->reservations->cancel_reservation( $sdpr_immediate_id ), 'Immediate reservation can be cancelled.' );
+sdpr_assert( is_wp_error( $sdpr_plugin->get_service( 'lifecycle' )->extend( $sdpr_immediate_id, 2 ) ), 'Terminal reservations cannot be extended.' );
+$sdpr_counts_after_cancel = $sdpr_plugin->reservations->get_status_counts();
+sdpr_assert( $sdpr_counts_before_immediate[ SDPR_Reservation_Status::ACTIVE ] === $sdpr_counts_after_cancel[ SDPR_Reservation_Status::ACTIVE ], 'Status-count cache is invalidated when an active reservation is cancelled.' );
+sdpr_assert( SDPR_Inventory_Manager::STATE_RELEASED === get_post_meta( $sdpr_immediate_id, SDPR_Inventory_Manager::META_STATE, true ), 'Cancellation records released inventory ownership.' );
+sdpr_assert( 2 === (int) wc_get_product( $sdpr_immediate_product_id )->get_stock_quantity( 'edit' ), 'Transactional cancellation restores immediate reservation stock.' );
 
-$htp_quantity_filter = static function ( $quantity, $requested ) {
+$sdpr_quantity_filter = static function ( $quantity, $requested ) {
 	return max( 1, min( 3, $requested ) );
 };
-add_filter( 'htp_reservation_quantity', $htp_quantity_filter, 10, 2 );
-$htp_quantity_product = new WC_Product_Simple();
-$htp_quantity_product->set_name( 'Quantity reservation test product' );
-$htp_quantity_product->set_status( 'publish' );
-$htp_quantity_product->set_regular_price( '10' );
-$htp_quantity_product->set_manage_stock( true );
-$htp_quantity_product->set_stock_quantity( 5 );
-$htp_quantity_product_id = $htp_quantity_product->save();
-$htp_quantity_result     = $htp_plugin->get_service( 'lifecycle' )->request( $htp_quantity_product_id, $htp_user_id, 2 );
-$htp_quantity_id         = is_wp_error( $htp_quantity_result ) ? 0 : $htp_quantity_result['reservation_id'];
-htp_assert( $htp_quantity_id && 2 === (int) HTP_Reservation_Meta::get( $htp_quantity_id, HTP_Reservation_Meta::QUANTITY ), 'Filtered request quantity is stored canonically.' );
-htp_assert( 3 === (int) wc_get_product( $htp_quantity_product_id )->get_stock_quantity( 'edit' ), 'Multi-unit reservation decreases the exact held quantity.' );
-htp_assert( 5 === (int) wc_get_product( $htp_quantity_product_id )->get_stock_quantity(), 'Owner stock allowance includes the exact held quantity.' );
-$htp_quantity_order = wc_create_order( array( 'customer_id' => $htp_user_id ) );
-$htp_quantity_item_id = $htp_quantity_order->add_product( wc_get_product( $htp_quantity_product_id ), 3 );
-$htp_quantity_item = $htp_quantity_order->get_item( $htp_quantity_item_id );
-$htp_quantity_item->add_meta_data( HTP_Reservation_Meta::LINKED_RESERVATION, $htp_quantity_id, true );
-$htp_quantity_item->save();
-$htp_quantity_order->save();
-$htp_plugin->reservations->transfer_holds_to_order( $htp_quantity_order );
-htp_assert( 2 === (int) wc_get_product( $htp_quantity_product_id )->get_stock_quantity( 'edit' ), 'Transfer reduces only the order quantity beyond the multi-unit hold.' );
-$htp_quantity_order->update_status( 'cancelled' );
-htp_assert( 5 === (int) wc_get_product( $htp_quantity_product_id )->get_stock_quantity( 'edit' ), 'Cancelling a multi-unit order restores the complete order quantity once.' );
+add_filter( 'sdpr_reservation_quantity', $sdpr_quantity_filter, 10, 2 );
+$sdpr_quantity_product = new WC_Product_Simple();
+$sdpr_quantity_product->set_name( 'Quantity reservation test product' );
+$sdpr_quantity_product->set_status( 'publish' );
+$sdpr_quantity_product->set_regular_price( '10' );
+$sdpr_quantity_product->set_manage_stock( true );
+$sdpr_quantity_product->set_stock_quantity( 5 );
+$sdpr_quantity_product_id = $sdpr_quantity_product->save();
+$sdpr_quantity_result     = $sdpr_plugin->get_service( 'lifecycle' )->request( $sdpr_quantity_product_id, $sdpr_user_id, 2 );
+$sdpr_quantity_id         = is_wp_error( $sdpr_quantity_result ) ? 0 : $sdpr_quantity_result['reservation_id'];
+sdpr_assert( $sdpr_quantity_id && 2 === (int) SDPR_Reservation_Meta::get( $sdpr_quantity_id, SDPR_Reservation_Meta::QUANTITY ), 'Filtered request quantity is stored canonically.' );
+sdpr_assert( 3 === (int) wc_get_product( $sdpr_quantity_product_id )->get_stock_quantity( 'edit' ), 'Multi-unit reservation decreases the exact held quantity.' );
+sdpr_assert( 5 === (int) wc_get_product( $sdpr_quantity_product_id )->get_stock_quantity(), 'Owner stock allowance includes the exact held quantity.' );
+$sdpr_quantity_order = wc_create_order( array( 'customer_id' => $sdpr_user_id ) );
+$sdpr_quantity_item_id = $sdpr_quantity_order->add_product( wc_get_product( $sdpr_quantity_product_id ), 3 );
+$sdpr_quantity_item = $sdpr_quantity_order->get_item( $sdpr_quantity_item_id );
+$sdpr_quantity_item->add_meta_data( SDPR_Reservation_Meta::LINKED_RESERVATION, $sdpr_quantity_id, true );
+$sdpr_quantity_item->save();
+$sdpr_quantity_order->save();
+$sdpr_plugin->reservations->transfer_holds_to_order( $sdpr_quantity_order );
+sdpr_assert( 2 === (int) wc_get_product( $sdpr_quantity_product_id )->get_stock_quantity( 'edit' ), 'Transfer reduces only the order quantity beyond the multi-unit hold.' );
+$sdpr_quantity_order->update_status( 'cancelled' );
+sdpr_assert( 5 === (int) wc_get_product( $sdpr_quantity_product_id )->get_stock_quantity( 'edit' ), 'Cancelling a multi-unit order restores the complete order quantity once.' );
 
-update_option( 'holdthisproduct_options', array( 'enable_reservation' => 1, 'max_reservations' => 3, 'reservation_duration' => 24, 'pending_duration' => 1, 'require_admin_approval' => 1, 'enable_email_notifications' => 0 ) );
-$htp_pending_quantity = $htp_plugin->get_service( 'lifecycle' )->request( $htp_quantity_product_id, $htp_user_id, 3 );
-$htp_pending_quantity_id = is_wp_error( $htp_pending_quantity ) ? 0 : $htp_pending_quantity['reservation_id'];
-wc_update_product_stock( wc_get_product( $htp_quantity_product_id ), 2, 'set' );
-$htp_pending_quantity_approval = $htp_plugin->reservations->approve_reservation( $htp_pending_quantity_id );
-htp_assert( is_wp_error( $htp_pending_quantity_approval ) && 'htp_no_stock' === $htp_pending_quantity_approval->get_error_code(), 'Approval rejects a multi-unit request when its full quantity is unavailable.' );
-htp_assert( 2 === (int) wc_get_product( $htp_quantity_product_id )->get_stock_quantity( 'edit' ), 'Rejected multi-unit approval leaves stock unchanged.' );
-htp_assert( true === $htp_plugin->reservations->cancel_reservation( $htp_pending_quantity_id ), 'Pending multi-unit request can be cancelled without changing stock.' );
+update_option( 'sdpr_options', array( 'enable_reservation' => 1, 'max_reservations' => 3, 'reservation_duration' => 24, 'pending_duration' => 1, 'require_admin_approval' => 1, 'enable_email_notifications' => 0 ) );
+$sdpr_pending_quantity = $sdpr_plugin->get_service( 'lifecycle' )->request( $sdpr_quantity_product_id, $sdpr_user_id, 3 );
+$sdpr_pending_quantity_id = is_wp_error( $sdpr_pending_quantity ) ? 0 : $sdpr_pending_quantity['reservation_id'];
+wc_update_product_stock( wc_get_product( $sdpr_quantity_product_id ), 2, 'set' );
+$sdpr_pending_quantity_approval = $sdpr_plugin->reservations->approve_reservation( $sdpr_pending_quantity_id );
+sdpr_assert( is_wp_error( $sdpr_pending_quantity_approval ) && 'sdpr_no_stock' === $sdpr_pending_quantity_approval->get_error_code(), 'Approval rejects a multi-unit request when its full quantity is unavailable.' );
+sdpr_assert( 2 === (int) wc_get_product( $sdpr_quantity_product_id )->get_stock_quantity( 'edit' ), 'Rejected multi-unit approval leaves stock unchanged.' );
+sdpr_assert( true === $sdpr_plugin->reservations->cancel_reservation( $sdpr_pending_quantity_id ), 'Pending multi-unit request can be cancelled without changing stock.' );
 
-$htp_variable = new WC_Product_Variable();
-$htp_variable->set_name( 'Variation reservation parent' );
-$htp_variable->set_status( 'publish' );
-$htp_variable_id = $htp_variable->save();
-$htp_variation = new WC_Product_Variation();
-$htp_variation->set_parent_id( $htp_variable_id );
-$htp_variation->set_status( 'publish' );
-$htp_variation->set_regular_price( '10' );
-$htp_variation->set_manage_stock( true );
-$htp_variation->set_stock_quantity( 4 );
-$htp_variation_id = $htp_variation->save();
-$htp_variation_inventory_filter = static function ( $supported, $product ) {
+$sdpr_variable = new WC_Product_Variable();
+$sdpr_variable->set_name( 'Variation reservation parent' );
+$sdpr_variable->set_status( 'publish' );
+$sdpr_variable_id = $sdpr_variable->save();
+$sdpr_variation = new WC_Product_Variation();
+$sdpr_variation->set_parent_id( $sdpr_variable_id );
+$sdpr_variation->set_status( 'publish' );
+$sdpr_variation->set_regular_price( '10' );
+$sdpr_variation->set_manage_stock( true );
+$sdpr_variation->set_stock_quantity( 4 );
+$sdpr_variation_id = $sdpr_variation->save();
+$sdpr_variation_inventory_filter = static function ( $supported, $product ) {
 	return $supported || $product instanceof WC_Product_Variation;
 };
-add_filter( 'htp_product_supports_reservation_inventory', $htp_variation_inventory_filter, 10, 2 );
-update_option( 'holdthisproduct_options', array( 'enable_reservation' => 1, 'max_reservations' => 3, 'reservation_duration' => 24, 'pending_duration' => 1, 'require_admin_approval' => 0, 'enable_email_notifications' => 0 ) );
-$htp_variation_result = $htp_plugin->get_service( 'lifecycle' )->request( $htp_variation_id, $htp_user_id, 2 );
-$htp_variation_reservation_id = is_wp_error( $htp_variation_result ) ? 0 : $htp_variation_result['reservation_id'];
-htp_assert( $htp_variation_reservation_id && $htp_variation_id === (int) HTP_Reservation_Meta::get( $htp_variation_reservation_id, HTP_Reservation_Meta::PRODUCT_ID ), 'Variation reservation stores the concrete variation identity.' );
-htp_assert( 2 === (int) wc_get_product( $htp_variation_id )->get_stock_quantity( 'edit' ), 'Variation reservation holds stock from the variation.' );
-$htp_variation_order = wc_create_order( array( 'customer_id' => $htp_user_id ) );
-$htp_variation_item_id = $htp_variation_order->add_product( wc_get_product( $htp_variation_id ), 2 );
-$htp_variation_item = $htp_variation_order->get_item( $htp_variation_item_id );
-$htp_variation_item->add_meta_data( HTP_Reservation_Meta::LINKED_RESERVATION, $htp_variation_reservation_id, true );
-$htp_variation_item->save();
-$htp_variation_order->save();
-$htp_plugin->reservations->transfer_holds_to_order( $htp_variation_order );
-htp_assert( HTP_Reservation_Status::FULFILLED === HTP_Reservation_Meta::get( $htp_variation_reservation_id, HTP_Reservation_Meta::STATUS ), 'Variation order transfers the exact linked reservation.' );
-htp_assert( 2 === (int) wc_get_product( $htp_variation_id )->get_stock_quantity( 'edit' ), 'Variation fulfillment does not reduce held stock twice.' );
-$htp_variation_order->update_status( 'cancelled' );
-htp_assert( 4 === (int) wc_get_product( $htp_variation_id )->get_stock_quantity( 'edit' ), 'Variation order cancellation restores its stock once.' );
-remove_filter( 'htp_product_supports_reservation_inventory', $htp_variation_inventory_filter, 10 );
-remove_filter( 'htp_reservation_quantity', $htp_quantity_filter, 10 );
+add_filter( 'sdpr_product_supports_reservation_inventory', $sdpr_variation_inventory_filter, 10, 2 );
+update_option( 'sdpr_options', array( 'enable_reservation' => 1, 'max_reservations' => 3, 'reservation_duration' => 24, 'pending_duration' => 1, 'require_admin_approval' => 0, 'enable_email_notifications' => 0 ) );
+$sdpr_variation_result = $sdpr_plugin->get_service( 'lifecycle' )->request( $sdpr_variation_id, $sdpr_user_id, 2 );
+$sdpr_variation_reservation_id = is_wp_error( $sdpr_variation_result ) ? 0 : $sdpr_variation_result['reservation_id'];
+sdpr_assert( $sdpr_variation_reservation_id && $sdpr_variation_id === (int) SDPR_Reservation_Meta::get( $sdpr_variation_reservation_id, SDPR_Reservation_Meta::PRODUCT_ID ), 'Variation reservation stores the concrete variation identity.' );
+sdpr_assert( 2 === (int) wc_get_product( $sdpr_variation_id )->get_stock_quantity( 'edit' ), 'Variation reservation holds stock from the variation.' );
+$sdpr_variation_order = wc_create_order( array( 'customer_id' => $sdpr_user_id ) );
+$sdpr_variation_item_id = $sdpr_variation_order->add_product( wc_get_product( $sdpr_variation_id ), 2 );
+$sdpr_variation_item = $sdpr_variation_order->get_item( $sdpr_variation_item_id );
+$sdpr_variation_item->add_meta_data( SDPR_Reservation_Meta::LINKED_RESERVATION, $sdpr_variation_reservation_id, true );
+$sdpr_variation_item->save();
+$sdpr_variation_order->save();
+$sdpr_plugin->reservations->transfer_holds_to_order( $sdpr_variation_order );
+sdpr_assert( SDPR_Reservation_Status::FULFILLED === SDPR_Reservation_Meta::get( $sdpr_variation_reservation_id, SDPR_Reservation_Meta::STATUS ), 'Variation order transfers the exact linked reservation.' );
+sdpr_assert( 2 === (int) wc_get_product( $sdpr_variation_id )->get_stock_quantity( 'edit' ), 'Variation fulfillment does not reduce held stock twice.' );
+$sdpr_variation_order->update_status( 'cancelled' );
+sdpr_assert( 4 === (int) wc_get_product( $sdpr_variation_id )->get_stock_quantity( 'edit' ), 'Variation order cancellation restores its stock once.' );
+remove_filter( 'sdpr_product_supports_reservation_inventory', $sdpr_variation_inventory_filter, 10 );
+remove_filter( 'sdpr_reservation_quantity', $sdpr_quantity_filter, 10 );
 
-$htp_guest_product = new WC_Product_Simple();
-$htp_guest_product->set_name( 'Verified guest reservation product' );
-$htp_guest_product->set_status( 'publish' );
-$htp_guest_product->set_regular_price( '10' );
-$htp_guest_product->set_manage_stock( true );
-$htp_guest_product->set_stock_quantity( 2 );
-$htp_guest_product_id = $htp_guest_product->save();
-$htp_guest_key        = strtolower( wp_generate_password( 8, false ) );
-$htp_guest_email      = 'htp-verified-guest-' . $htp_guest_key . '@example.test';
-$htp_guest_frontend = static function () {
+$sdpr_guest_product = new WC_Product_Simple();
+$sdpr_guest_product->set_name( 'Verified guest reservation product' );
+$sdpr_guest_product->set_status( 'publish' );
+$sdpr_guest_product->set_regular_price( '10' );
+$sdpr_guest_product->set_manage_stock( true );
+$sdpr_guest_product->set_stock_quantity( 2 );
+$sdpr_guest_product_id = $sdpr_guest_product->save();
+$sdpr_guest_key        = strtolower( wp_generate_password( 8, false ) );
+$sdpr_guest_email      = 'sdpr-verified-guest-' . $sdpr_guest_key . '@example.test';
+$sdpr_guest_frontend = static function () {
 	return true;
 };
 wp_set_current_user( 0 );
-add_filter( 'htp_guest_reservation_frontend_enabled', $htp_guest_frontend );
-htp_assert( $htp_plugin->reservations->is_product_reservable( $htp_guest_product_id ), 'An add-on can expose anonymous reservation UI without inventing a verified identity.' );
-remove_filter( 'htp_guest_reservation_frontend_enabled', $htp_guest_frontend );
-wp_set_current_user( $htp_user_id );
-$htp_guest_disabled   = $htp_plugin->get_service( 'lifecycle' )->request_guest( $htp_guest_product_id, $htp_guest_email );
-htp_assert( is_wp_error( $htp_guest_disabled ) && 'htp_not_reservable' === $htp_guest_disabled->get_error_code(), 'Free guest lifecycle remains disabled without an explicit extension opt-in.' );
-$htp_guest_opt_in = static function () {
+add_filter( 'sdpr_guest_reservation_frontend_enabled', $sdpr_guest_frontend );
+sdpr_assert( $sdpr_plugin->reservations->is_product_reservable( $sdpr_guest_product_id ), 'An add-on can expose anonymous reservation UI without inventing a verified identity.' );
+remove_filter( 'sdpr_guest_reservation_frontend_enabled', $sdpr_guest_frontend );
+wp_set_current_user( $sdpr_user_id );
+$sdpr_guest_disabled   = $sdpr_plugin->get_service( 'lifecycle' )->request_guest( $sdpr_guest_product_id, $sdpr_guest_email );
+sdpr_assert( is_wp_error( $sdpr_guest_disabled ) && 'sdpr_not_reservable' === $sdpr_guest_disabled->get_error_code(), 'Free guest lifecycle remains disabled without an explicit extension opt-in.' );
+$sdpr_guest_opt_in = static function () {
 	return true;
 };
-add_filter( 'htp_allow_guest_reservations', $htp_guest_opt_in );
-$htp_guest_result         = $htp_plugin->get_service( 'lifecycle' )->request_guest( $htp_guest_product_id, $htp_guest_email );
-$htp_guest_reservation_id = is_wp_error( $htp_guest_result ) ? 0 : $htp_guest_result['reservation_id'];
-htp_assert( $htp_guest_reservation_id && 0 === (int) get_post_field( 'post_author', $htp_guest_reservation_id ), 'Verified guest reservation uses the canonical authorless Free record.' );
-htp_assert( $htp_guest_email === HTP_Reservation_Meta::get( $htp_guest_reservation_id, HTP_Reservation_Meta::EMAIL ), 'Verified guest identity is stored on the canonical reservation.' );
-htp_assert( 1 === $htp_plugin->reservations->count_open_reservations( 0, $htp_guest_email ), 'Guest email identity consumes the normal open-reservation quota.' );
-htp_assert( 1 === (int) wc_get_product( $htp_guest_product_id )->get_stock_quantity( 'edit' ), 'Verified guest reservation holds stock through the Free inventory transaction.' );
-$htp_guest_duplicate = $htp_plugin->get_service( 'lifecycle' )->request_guest( $htp_guest_product_id, $htp_guest_email );
-htp_assert( is_wp_error( $htp_guest_duplicate ) && 'htp_duplicate' === $htp_guest_duplicate->get_error_code(), 'Repeated verified guest identity cannot create a duplicate hold.' );
-$htp_guest_user_id = wp_insert_user(
+add_filter( 'sdpr_allow_guest_reservations', $sdpr_guest_opt_in );
+$sdpr_guest_result         = $sdpr_plugin->get_service( 'lifecycle' )->request_guest( $sdpr_guest_product_id, $sdpr_guest_email );
+$sdpr_guest_reservation_id = is_wp_error( $sdpr_guest_result ) ? 0 : $sdpr_guest_result['reservation_id'];
+sdpr_assert( $sdpr_guest_reservation_id && 0 === (int) get_post_field( 'post_author', $sdpr_guest_reservation_id ), 'Verified guest reservation uses the canonical authorless Free record.' );
+sdpr_assert( $sdpr_guest_email === SDPR_Reservation_Meta::get( $sdpr_guest_reservation_id, SDPR_Reservation_Meta::EMAIL ), 'Verified guest identity is stored on the canonical reservation.' );
+sdpr_assert( 1 === $sdpr_plugin->reservations->count_open_reservations( 0, $sdpr_guest_email ), 'Guest email identity consumes the normal open-reservation quota.' );
+sdpr_assert( 1 === (int) wc_get_product( $sdpr_guest_product_id )->get_stock_quantity( 'edit' ), 'Verified guest reservation holds stock through the Free inventory transaction.' );
+$sdpr_guest_duplicate = $sdpr_plugin->get_service( 'lifecycle' )->request_guest( $sdpr_guest_product_id, $sdpr_guest_email );
+sdpr_assert( is_wp_error( $sdpr_guest_duplicate ) && 'sdpr_duplicate' === $sdpr_guest_duplicate->get_error_code(), 'Repeated verified guest identity cannot create a duplicate hold.' );
+$sdpr_guest_user_id = wp_insert_user(
 	array(
-		'user_login' => 'htp-verified-guest-' . $htp_guest_key,
+		'user_login' => 'sdpr-verified-guest-' . $sdpr_guest_key,
 		'user_pass'  => wp_generate_password( 24 ),
-		'user_email' => $htp_guest_email,
+		'user_email' => $sdpr_guest_email,
 		'role'       => 'customer',
 	)
 );
-$htp_account_duplicate = $htp_plugin->get_service( 'lifecycle' )->request( $htp_guest_product_id, $htp_guest_user_id );
-htp_assert( is_wp_error( $htp_account_duplicate ) && 'htp_duplicate' === $htp_account_duplicate->get_error_code(), 'Creating an account with a guest email cannot bypass duplicate protection.' );
-htp_assert( true === $htp_plugin->reservations->cancel_reservation( $htp_guest_reservation_id ), 'Verified guest reservation cancels through the Free lifecycle.' );
-htp_assert( 2 === (int) wc_get_product( $htp_guest_product_id )->get_stock_quantity( 'edit' ), 'Guest cancellation restores stock exactly once.' );
-remove_filter( 'htp_allow_guest_reservations', $htp_guest_opt_in );
-update_option( 'holdthisproduct_options', array( 'enable_reservation' => 1, 'max_reservations' => 3, 'reservation_duration' => 24, 'pending_duration' => 1, 'require_admin_approval' => 1, 'enable_email_notifications' => 0 ) );
+$sdpr_account_duplicate = $sdpr_plugin->get_service( 'lifecycle' )->request( $sdpr_guest_product_id, $sdpr_guest_user_id );
+sdpr_assert( is_wp_error( $sdpr_account_duplicate ) && 'sdpr_duplicate' === $sdpr_account_duplicate->get_error_code(), 'Creating an account with a guest email cannot bypass duplicate protection.' );
+sdpr_assert( true === $sdpr_plugin->reservations->cancel_reservation( $sdpr_guest_reservation_id ), 'Verified guest reservation cancels through the Free lifecycle.' );
+sdpr_assert( 2 === (int) wc_get_product( $sdpr_guest_product_id )->get_stock_quantity( 'edit' ), 'Guest cancellation restores stock exactly once.' );
+remove_filter( 'sdpr_allow_guest_reservations', $sdpr_guest_opt_in );
+update_option( 'sdpr_options', array( 'enable_reservation' => 1, 'max_reservations' => 3, 'reservation_duration' => 24, 'pending_duration' => 1, 'require_admin_approval' => 1, 'enable_email_notifications' => 0 ) );
 
-function htp_test_reservation( $product_id, $user_id, $status, $expires ) {
-	$id = wp_insert_post( array( 'post_type' => 'htp_reservation', 'post_status' => 'publish', 'post_author' => $user_id, 'post_title' => 'Test reservation' ) );
-	update_post_meta( $id, '_htp_product_id', $product_id );
-	update_post_meta( $id, '_htp_status', $status );
-	update_post_meta( $id, '_htp_expires_at', $expires );
-	update_post_meta( $id, '_htp_qty', 1 );
-	update_post_meta( $id, '_htp_email', 'htp@example.test' );
+function sdpr_test_reservation( $product_id, $user_id, $status, $expires ) {
+	$id = wp_insert_post( array( 'post_type' => 'sdpr_reservation', 'post_status' => 'publish', 'post_author' => $user_id, 'post_title' => 'Test reservation' ) );
+	update_post_meta( $id, '_sdpr_product_id', $product_id );
+	update_post_meta( $id, '_sdpr_status', $status );
+	update_post_meta( $id, '_sdpr_expires_at', $expires );
+	update_post_meta( $id, '_sdpr_qty', 1 );
+	update_post_meta( $id, '_sdpr_email', 'sdpr@example.test' );
 	return $id;
 }
 
-$htp_pending_id = htp_test_reservation( $htp_product_id, $htp_user_id, 'pending_approval', time() + HOUR_IN_SECONDS );
-$htp_vetoed_id = htp_test_reservation( $htp_product_id, $htp_user_id, 'pending_approval', time() + HOUR_IN_SECONDS );
-$htp_approval_veto = static function ( $allowed, $reservation_id, $from, $to, $source ) use ( $htp_vetoed_id ) {
-	return $htp_vetoed_id === $reservation_id && 'approve' === $source ? false : $allowed;
+$sdpr_pending_id = sdpr_test_reservation( $sdpr_product_id, $sdpr_user_id, 'pending_approval', time() + HOUR_IN_SECONDS );
+$sdpr_vetoed_id = sdpr_test_reservation( $sdpr_product_id, $sdpr_user_id, 'pending_approval', time() + HOUR_IN_SECONDS );
+$sdpr_approval_veto = static function ( $allowed, $reservation_id, $from, $to, $source ) use ( $sdpr_vetoed_id ) {
+	return $sdpr_vetoed_id === $reservation_id && 'approve' === $source ? false : $allowed;
 };
-add_filter( 'htp_reservation_transition_allowed', $htp_approval_veto, 10, 5 );
-$htp_veto_result = $htp_plugin->reservations->approve_reservation( $htp_vetoed_id );
-htp_assert( is_wp_error( $htp_veto_result ) && HTP_Reservation_Status::PENDING === HTP_Reservation_Meta::get( $htp_vetoed_id, HTP_Reservation_Meta::STATUS ), 'Transition filters can safely veto approval before inventory changes.' );
-htp_assert( 1 === (int) wc_get_product( $htp_product_id )->get_stock_quantity( 'edit' ), 'A vetoed approval does not change stock.' );
-remove_filter( 'htp_reservation_transition_allowed', $htp_approval_veto, 10 );
-htp_assert( true === $htp_plugin->reservations->deny_reservation( $htp_vetoed_id, 'Contract test' ), 'Pending reservation denial uses the lifecycle service.' );
-htp_assert( HTP_Inventory_Manager::STATE_RELEASED === HTP_Reservation_Meta::get( $htp_vetoed_id, HTP_Reservation_Meta::INVENTORY_STATE ), 'Denial records terminal inventory ownership consistently.' );
-htp_assert( true === $htp_plugin->reservations->approve_reservation( $htp_pending_id ), 'Pending reservation approves.' );
-$htp_product = wc_get_product( $htp_product_id );
-htp_assert( 0 === (int) $htp_product->get_stock_quantity( 'edit' ), 'Approval holds physical stock once.' );
-htp_assert( HTP_Inventory_Manager::STATE_HELD === get_post_meta( $htp_pending_id, HTP_Inventory_Manager::META_STATE, true ), 'Approval records held inventory ownership.' );
-htp_assert( 1 === (int) $htp_product->get_stock_quantity(), 'Owner can purchase the held last unit.' );
-htp_assert( is_wp_error( $htp_plugin->reservations->approve_reservation( $htp_pending_id ) ), 'Repeated approval is rejected.' );
-htp_assert( true === $htp_plugin->reservations->cancel_reservation( $htp_pending_id ), 'Active reservation cancels.' );
-htp_assert( false === $htp_plugin->reservations->cancel_reservation( $htp_pending_id ), 'Repeated cancellation is rejected.' );
-$htp_product = wc_get_product( $htp_product_id );
-htp_assert( 1 === (int) $htp_product->get_stock_quantity( 'edit' ), 'Cancellation restores stock exactly once.' );
-htp_assert( HTP_Inventory_Manager::STATE_RELEASED === get_post_meta( $htp_pending_id, HTP_Inventory_Manager::META_STATE, true ), 'Cancellation records released inventory ownership.' );
+add_filter( 'sdpr_reservation_transition_allowed', $sdpr_approval_veto, 10, 5 );
+$sdpr_veto_result = $sdpr_plugin->reservations->approve_reservation( $sdpr_vetoed_id );
+sdpr_assert( is_wp_error( $sdpr_veto_result ) && SDPR_Reservation_Status::PENDING === SDPR_Reservation_Meta::get( $sdpr_vetoed_id, SDPR_Reservation_Meta::STATUS ), 'Transition filters can safely veto approval before inventory changes.' );
+sdpr_assert( 1 === (int) wc_get_product( $sdpr_product_id )->get_stock_quantity( 'edit' ), 'A vetoed approval does not change stock.' );
+remove_filter( 'sdpr_reservation_transition_allowed', $sdpr_approval_veto, 10 );
+sdpr_assert( true === $sdpr_plugin->reservations->deny_reservation( $sdpr_vetoed_id, 'Contract test' ), 'Pending reservation denial uses the lifecycle service.' );
+sdpr_assert( SDPR_Inventory_Manager::STATE_RELEASED === SDPR_Reservation_Meta::get( $sdpr_vetoed_id, SDPR_Reservation_Meta::INVENTORY_STATE ), 'Denial records terminal inventory ownership consistently.' );
+sdpr_assert( true === $sdpr_plugin->reservations->approve_reservation( $sdpr_pending_id ), 'Pending reservation approves.' );
+$sdpr_product = wc_get_product( $sdpr_product_id );
+sdpr_assert( 0 === (int) $sdpr_product->get_stock_quantity( 'edit' ), 'Approval holds physical stock once.' );
+sdpr_assert( SDPR_Inventory_Manager::STATE_HELD === get_post_meta( $sdpr_pending_id, SDPR_Inventory_Manager::META_STATE, true ), 'Approval records held inventory ownership.' );
+sdpr_assert( 1 === (int) $sdpr_product->get_stock_quantity(), 'Owner can purchase the held last unit.' );
+sdpr_assert( is_wp_error( $sdpr_plugin->reservations->approve_reservation( $sdpr_pending_id ) ), 'Repeated approval is rejected.' );
+sdpr_assert( true === $sdpr_plugin->reservations->cancel_reservation( $sdpr_pending_id ), 'Active reservation cancels.' );
+sdpr_assert( false === $sdpr_plugin->reservations->cancel_reservation( $sdpr_pending_id ), 'Repeated cancellation is rejected.' );
+$sdpr_product = wc_get_product( $sdpr_product_id );
+sdpr_assert( 1 === (int) $sdpr_product->get_stock_quantity( 'edit' ), 'Cancellation restores stock exactly once.' );
+sdpr_assert( SDPR_Inventory_Manager::STATE_RELEASED === get_post_meta( $sdpr_pending_id, SDPR_Inventory_Manager::META_STATE, true ), 'Cancellation records released inventory ownership.' );
 
-$htp_expired_pending = htp_test_reservation( $htp_product_id, $htp_user_id, 'pending_approval', time() - 1 );
-htp_assert( 0 === $htp_plugin->reservations->count_open_reservations( $htp_user_id ), 'Expired pending requests do not consume reservation quota.' );
-$htp_plugin->reservations->expire_old_reservations();
-htp_assert( 'expired' === get_post_meta( $htp_expired_pending, '_htp_status', true ), 'Pending requests expire.' );
-htp_assert( 1 === (int) wc_get_product( $htp_product_id )->get_stock_quantity( 'edit' ), 'Pending expiry does not change stock.' );
+$sdpr_expired_pending = sdpr_test_reservation( $sdpr_product_id, $sdpr_user_id, 'pending_approval', time() - 1 );
+sdpr_assert( 0 === $sdpr_plugin->reservations->count_open_reservations( $sdpr_user_id ), 'Expired pending requests do not consume reservation quota.' );
+$sdpr_plugin->reservations->expire_old_reservations();
+sdpr_assert( 'expired' === get_post_meta( $sdpr_expired_pending, '_sdpr_status', true ), 'Pending requests expire.' );
+sdpr_assert( 1 === (int) wc_get_product( $sdpr_product_id )->get_stock_quantity( 'edit' ), 'Pending expiry does not change stock.' );
 
-$htp_cart = new WC_Cart();
-$htp_cart_item_key = $htp_cart->add_to_cart( $htp_product_id, 1 );
-htp_assert( $htp_cart_item_key && empty( $htp_cart->cart_contents[ $htp_cart_item_key ]['_htp_reservation_id'] ), 'Cart item added before reservation starts unlinked.' );
-$htp_active_id = htp_test_reservation( $htp_product_id, $htp_user_id, 'active', time() + HOUR_IN_SECONDS );
-wc_update_product_stock( wc_get_product( $htp_product_id ), 1, 'decrease' );
-$htp_plugin->get_service( 'cart_order' )->clear_cache();
-$htp_plugin->reservations->sync_cart_reservations( $htp_cart );
-htp_assert( $htp_active_id === (int) $htp_cart->cart_contents[ $htp_cart_item_key ]['_htp_reservation_id'], 'Existing cart item is linked after the reservation is created.' );
-htp_assert( $htp_active_id === $htp_plugin->get_service( 'repository' )->find_active( $htp_product_id, $htp_user_id ), 'Synthetic checkout fixture resolves through the canonical active-reservation query.' );
-htp_assert( wc_get_product( $htp_product_id )->is_in_stock(), 'The reservation owner passes WooCommerce stock availability for the held last unit.' );
-$htp_order = wc_create_order( array( 'customer_id' => $htp_user_id ) );
-$htp_item_id = $htp_order->add_product( wc_get_product( $htp_product_id ), 1 );
-$htp_item = $htp_order->get_item( $htp_item_id );
-$htp_item->add_meta_data( '_htp_reservation_id', $htp_active_id, true );
-$htp_item->save();
-$htp_order->save();
-$htp_reserve_stock_succeeded = true;
-$htp_reserve_stock_message = '';
+$sdpr_cart = new WC_Cart();
+$sdpr_cart_item_key = $sdpr_cart->add_to_cart( $sdpr_product_id, 1 );
+sdpr_assert( $sdpr_cart_item_key && empty( $sdpr_cart->cart_contents[ $sdpr_cart_item_key ]['_sdpr_reservation_id'] ), 'Cart item added before reservation starts unlinked.' );
+$sdpr_active_id = sdpr_test_reservation( $sdpr_product_id, $sdpr_user_id, 'active', time() + HOUR_IN_SECONDS );
+wc_update_product_stock( wc_get_product( $sdpr_product_id ), 1, 'decrease' );
+$sdpr_plugin->get_service( 'cart_order' )->clear_cache();
+$sdpr_plugin->reservations->sync_cart_reservations( $sdpr_cart );
+sdpr_assert( $sdpr_active_id === (int) $sdpr_cart->cart_contents[ $sdpr_cart_item_key ]['_sdpr_reservation_id'], 'Existing cart item is linked after the reservation is created.' );
+sdpr_assert( $sdpr_active_id === $sdpr_plugin->get_service( 'repository' )->find_active( $sdpr_product_id, $sdpr_user_id ), 'Synthetic checkout fixture resolves through the canonical active-reservation query.' );
+sdpr_assert( wc_get_product( $sdpr_product_id )->is_in_stock(), 'The reservation owner passes WooCommerce stock availability for the held last unit.' );
+$sdpr_order = wc_create_order( array( 'customer_id' => $sdpr_user_id ) );
+$sdpr_item_id = $sdpr_order->add_product( wc_get_product( $sdpr_product_id ), 1 );
+$sdpr_item = $sdpr_order->get_item( $sdpr_item_id );
+$sdpr_item->add_meta_data( '_sdpr_reservation_id', $sdpr_active_id, true );
+$sdpr_item->save();
+$sdpr_order->save();
+$sdpr_reserve_stock_succeeded = true;
+$sdpr_reserve_stock_message = '';
 try {
-	wc_reserve_stock_for_order( $htp_order );
-} catch ( Throwable $htp_stock_error ) {
-	$htp_reserve_stock_succeeded = false;
-	$htp_reserve_stock_message = $htp_stock_error->getMessage();
+	wc_reserve_stock_for_order( $sdpr_order );
+} catch ( Throwable $sdpr_stock_error ) {
+	$sdpr_reserve_stock_succeeded = false;
+	$sdpr_reserve_stock_message = $sdpr_stock_error->getMessage();
 }
-htp_assert( $htp_reserve_stock_succeeded, 'WooCommerce checkout can reserve stock when the last unit is already held. ' . $htp_reserve_stock_message );
-do_action( 'woocommerce_store_api_checkout_order_processed', $htp_order );
-htp_assert( 'fulfilled' === get_post_meta( $htp_active_id, '_htp_status', true ), 'Order fulfills the exact linked reservation.' );
-htp_assert( HTP_Inventory_Manager::STATE_TRANSFERRED === get_post_meta( $htp_active_id, HTP_Inventory_Manager::META_STATE, true ), 'Fulfillment transfers inventory ownership to the order.' );
-htp_assert( 0 === (int) wc_get_product( $htp_product_id )->get_stock_quantity( 'edit' ), 'Checkout does not decrement the held unit twice.' );
-$htp_order->update_status( 'cancelled' );
-htp_assert( 1 === (int) wc_get_product( $htp_product_id )->get_stock_quantity( 'edit' ), 'Cancelled order restores stock exactly once.' );
-htp_assert( 'order_cancelled' === get_post_meta( $htp_active_id, '_htp_status', true ), 'Cancelled order has an explicit reservation status.' );
-htp_assert( HTP_Inventory_Manager::STATE_RELEASED === get_post_meta( $htp_active_id, HTP_Inventory_Manager::META_STATE, true ), 'Cancelled order records released inventory ownership.' );
-$htp_plugin->reservations->restore_transferred_order_stock( $htp_order->get_id() );
-htp_assert( 1 === (int) wc_get_product( $htp_product_id )->get_stock_quantity( 'edit' ), 'Repeated order restoration is idempotent.' );
+sdpr_assert( $sdpr_reserve_stock_succeeded, 'WooCommerce checkout can reserve stock when the last unit is already held. ' . $sdpr_reserve_stock_message );
+do_action( 'woocommerce_store_api_checkout_order_processed', $sdpr_order );
+sdpr_assert( 'fulfilled' === get_post_meta( $sdpr_active_id, '_sdpr_status', true ), 'Order fulfills the exact linked reservation.' );
+sdpr_assert( SDPR_Inventory_Manager::STATE_TRANSFERRED === get_post_meta( $sdpr_active_id, SDPR_Inventory_Manager::META_STATE, true ), 'Fulfillment transfers inventory ownership to the order.' );
+sdpr_assert( 0 === (int) wc_get_product( $sdpr_product_id )->get_stock_quantity( 'edit' ), 'Checkout does not decrement the held unit twice.' );
+$sdpr_order->update_status( 'cancelled' );
+sdpr_assert( 1 === (int) wc_get_product( $sdpr_product_id )->get_stock_quantity( 'edit' ), 'Cancelled order restores stock exactly once.' );
+sdpr_assert( 'order_cancelled' === get_post_meta( $sdpr_active_id, '_sdpr_status', true ), 'Cancelled order has an explicit reservation status.' );
+sdpr_assert( SDPR_Inventory_Manager::STATE_RELEASED === get_post_meta( $sdpr_active_id, SDPR_Inventory_Manager::META_STATE, true ), 'Cancelled order records released inventory ownership.' );
+$sdpr_plugin->reservations->restore_transferred_order_stock( $sdpr_order->get_id() );
+sdpr_assert( 1 === (int) wc_get_product( $sdpr_product_id )->get_stock_quantity( 'edit' ), 'Repeated order restoration is idempotent.' );
 
 require_once ABSPATH . 'wp-admin/includes/user.php';
-$htp_privacy_user_id = wp_insert_user( array( 'user_login' => 'htp-privacy-user', 'user_pass' => wp_generate_password( 24 ), 'user_email' => 'htp-privacy@example.test', 'role' => 'customer' ) );
-$htp_privacy_ids = array();
-for ( $htp_i = 0; $htp_i < 101; $htp_i++ ) {
-	$htp_privacy_ids[] = htp_test_reservation( $htp_product_id, $htp_privacy_user_id, 'expired', time() - HOUR_IN_SECONDS );
+$sdpr_privacy_user_id = wp_insert_user( array( 'user_login' => 'sdpr-privacy-user', 'user_pass' => wp_generate_password( 24 ), 'user_email' => 'sdpr-privacy@example.test', 'role' => 'customer' ) );
+$sdpr_privacy_ids = array();
+for ( $sdpr_i = 0; $sdpr_i < 101; $sdpr_i++ ) {
+	$sdpr_privacy_ids[] = sdpr_test_reservation( $sdpr_product_id, $sdpr_privacy_user_id, 'expired', time() - HOUR_IN_SECONDS );
 }
-HTP_Reservation_Meta::update( $htp_privacy_ids[0], HTP_Reservation_Meta::NAME, 'Privacy' );
-HTP_Reservation_Meta::update( $htp_privacy_ids[0], HTP_Reservation_Meta::SURNAME, 'Customer' );
-HTP_Reservation_Meta::update( $htp_privacy_ids[0], HTP_Reservation_Meta::DENIAL_REASON, 'Contains personal context' );
-$htp_export       = $htp_plugin->reservations->export_personal_data( 'htp-privacy@example.test', 1 );
-$htp_export_names = wp_list_pluck( $htp_export['data'][0]['data'], 'name' );
-htp_assert( in_array( 'User ID', $htp_export_names, true ) && in_array( 'First name', $htp_export_names, true ) && in_array( 'Created', $htp_export_names, true ) && in_array( 'Inventory state', $htp_export_names, true ) && in_array( 'Related order ID', $htp_export_names, true ), 'Privacy exporter includes all customer and reservation identifiers.' );
-$htp_erase_first = $htp_plugin->reservations->erase_personal_data( 'htp-privacy@example.test', 1 );
-$htp_erase_second = $htp_plugin->reservations->erase_personal_data( 'htp-privacy@example.test', 2 );
-$htp_privacy_remaining = get_posts( array( 'post_type' => 'htp_reservation', 'post_status' => 'publish', 'author' => $htp_privacy_user_id, 'fields' => 'ids', 'posts_per_page' => -1 ) );
-htp_assert( ! $htp_erase_first['done'] && $htp_erase_second['done'] && empty( $htp_privacy_remaining ), 'Privacy eraser processes a shrinking result set without skipping records.' );
-htp_assert( '' === HTP_Reservation_Meta::get( $htp_privacy_ids[0], HTP_Reservation_Meta::NAME ) && '' === HTP_Reservation_Meta::get( $htp_privacy_ids[0], HTP_Reservation_Meta::SURNAME ) && '' === HTP_Reservation_Meta::get( $htp_privacy_ids[0], HTP_Reservation_Meta::DENIAL_REASON ), 'Privacy eraser removes customer names and free-text denial details.' );
+SDPR_Reservation_Meta::update( $sdpr_privacy_ids[0], SDPR_Reservation_Meta::NAME, 'Privacy' );
+SDPR_Reservation_Meta::update( $sdpr_privacy_ids[0], SDPR_Reservation_Meta::SURNAME, 'Customer' );
+SDPR_Reservation_Meta::update( $sdpr_privacy_ids[0], SDPR_Reservation_Meta::DENIAL_REASON, 'Contains personal context' );
+$sdpr_export       = $sdpr_plugin->reservations->export_personal_data( 'sdpr-privacy@example.test', 1 );
+$sdpr_export_names = wp_list_pluck( $sdpr_export['data'][0]['data'], 'name' );
+sdpr_assert( in_array( 'User ID', $sdpr_export_names, true ) && in_array( 'First name', $sdpr_export_names, true ) && in_array( 'Created', $sdpr_export_names, true ) && in_array( 'Inventory state', $sdpr_export_names, true ) && in_array( 'Related order ID', $sdpr_export_names, true ), 'Privacy exporter includes all customer and reservation identifiers.' );
+$sdpr_erase_first = $sdpr_plugin->reservations->erase_personal_data( 'sdpr-privacy@example.test', 1 );
+$sdpr_erase_second = $sdpr_plugin->reservations->erase_personal_data( 'sdpr-privacy@example.test', 2 );
+$sdpr_privacy_remaining = get_posts( array( 'post_type' => 'sdpr_reservation', 'post_status' => 'publish', 'author' => $sdpr_privacy_user_id, 'fields' => 'ids', 'posts_per_page' => -1 ) );
+sdpr_assert( ! $sdpr_erase_first['done'] && $sdpr_erase_second['done'] && empty( $sdpr_privacy_remaining ), 'Privacy eraser processes a shrinking result set without skipping records.' );
+sdpr_assert( '' === SDPR_Reservation_Meta::get( $sdpr_privacy_ids[0], SDPR_Reservation_Meta::NAME ) && '' === SDPR_Reservation_Meta::get( $sdpr_privacy_ids[0], SDPR_Reservation_Meta::SURNAME ) && '' === SDPR_Reservation_Meta::get( $sdpr_privacy_ids[0], SDPR_Reservation_Meta::DENIAL_REASON ), 'Privacy eraser removes customer names and free-text denial details.' );
 
-$htp_delete_user_id = wp_insert_user( array( 'user_login' => 'htp-delete-user', 'user_pass' => wp_generate_password( 24 ), 'user_email' => 'htp-delete@example.test', 'role' => 'customer' ) );
-$htp_delete_reservation_id = htp_test_reservation( $htp_product_id, $htp_delete_user_id, 'active', time() + HOUR_IN_SECONDS );
-wp_delete_user( $htp_delete_user_id );
-htp_assert( 'htp_reservation' === get_post_type( $htp_delete_reservation_id ), 'Deleting a customer does not delete a reservation with an inventory obligation.' );
+$sdpr_delete_user_id = wp_insert_user( array( 'user_login' => 'sdpr-delete-user', 'user_pass' => wp_generate_password( 24 ), 'user_email' => 'sdpr-delete@example.test', 'role' => 'customer' ) );
+$sdpr_delete_reservation_id = sdpr_test_reservation( $sdpr_product_id, $sdpr_delete_user_id, 'active', time() + HOUR_IN_SECONDS );
+wp_delete_user( $sdpr_delete_user_id );
+sdpr_assert( 'sdpr_reservation' === get_post_type( $sdpr_delete_reservation_id ), 'Deleting a customer does not delete a reservation with an inventory obligation.' );
 
-wp_delete_post( $htp_pending_id, true );
-wp_delete_post( $htp_vetoed_id, true );
-wp_delete_post( $htp_expired_pending, true );
-wp_delete_post( $htp_active_id, true );
-wp_delete_post( $htp_immediate_id, true );
-foreach ( $htp_privacy_ids as $htp_privacy_id ) {
-	wp_delete_post( $htp_privacy_id, true );
+wp_delete_post( $sdpr_pending_id, true );
+wp_delete_post( $sdpr_vetoed_id, true );
+wp_delete_post( $sdpr_expired_pending, true );
+wp_delete_post( $sdpr_active_id, true );
+wp_delete_post( $sdpr_immediate_id, true );
+foreach ( $sdpr_privacy_ids as $sdpr_privacy_id ) {
+	wp_delete_post( $sdpr_privacy_id, true );
 }
-wp_delete_post( $htp_delete_reservation_id, true );
-wp_delete_post( $htp_product_id, true );
-wp_delete_post( $htp_immediate_product_id, true );
-wp_delete_post( $htp_waitlist_product_id, true );
-$htp_quantity_order->delete( true );
-$htp_variation_order->delete( true );
-wp_delete_post( $htp_quantity_id, true );
-wp_delete_post( $htp_pending_quantity_id, true );
-wp_delete_post( $htp_variation_reservation_id, true );
-wp_delete_post( $htp_variation_id, true );
-wp_delete_post( $htp_variable_id, true );
-wp_delete_post( $htp_quantity_product_id, true );
-wp_delete_post( $htp_guest_reservation_id, true );
-wp_delete_post( $htp_guest_product_id, true );
-$htp_order->delete( true );
-wp_delete_user( $htp_privacy_user_id );
-wp_delete_user( $htp_guest_user_id );
-wp_delete_user( $htp_user_id );
-remove_action( 'htp_reservation_transitioned', $htp_transition_listener );
-remove_action( 'htp_reservation_extended', $htp_extension_listener );
-if ( false === $htp_original_options ) {
-	delete_option( 'holdthisproduct_options' );
+wp_delete_post( $sdpr_delete_reservation_id, true );
+wp_delete_post( $sdpr_product_id, true );
+wp_delete_post( $sdpr_immediate_product_id, true );
+wp_delete_post( $sdpr_waitlist_product_id, true );
+$sdpr_quantity_order->delete( true );
+$sdpr_variation_order->delete( true );
+wp_delete_post( $sdpr_quantity_id, true );
+wp_delete_post( $sdpr_pending_quantity_id, true );
+wp_delete_post( $sdpr_variation_reservation_id, true );
+wp_delete_post( $sdpr_variation_id, true );
+wp_delete_post( $sdpr_variable_id, true );
+wp_delete_post( $sdpr_quantity_product_id, true );
+wp_delete_post( $sdpr_guest_reservation_id, true );
+wp_delete_post( $sdpr_guest_product_id, true );
+$sdpr_order->delete( true );
+wp_delete_user( $sdpr_privacy_user_id );
+wp_delete_user( $sdpr_guest_user_id );
+wp_delete_user( $sdpr_user_id );
+remove_action( 'sdpr_reservation_transitioned', $sdpr_transition_listener );
+remove_action( 'sdpr_reservation_extended', $sdpr_extension_listener );
+if ( false === $sdpr_original_options ) {
+	delete_option( 'sdpr_options' );
 } else {
-	update_option( 'holdthisproduct_options', $htp_original_options );
+	update_option( 'sdpr_options', $sdpr_original_options );
 }
-if ( ! empty( $GLOBALS['htp_failures'] ) ) exit( 1 );
+if ( ! empty( $GLOBALS['sdpr_failures'] ) ) exit( 1 );
 echo esc_html( "All integration assertions passed.\n" );

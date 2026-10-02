@@ -1,23 +1,33 @@
 (function ($, config) {
 	'use strict';
 
+	function makeDismissible($notice) {
+		if ($notice.find('.notice-dismiss').length) {
+			return;
+		}
+		$('<button>', { type: 'button', class: 'notice-dismiss' })
+			.append($('<span>', { class: 'screen-reader-text', text: config.strings.dismiss }))
+			.on('click', function () {
+				$notice.remove();
+				$('#filter-reservations').trigger('focus');
+			})
+			.appendTo($notice);
+	}
+
 	function showNotice(type, message) {
-		$('.htp-inline-notice').remove();
-		$('<div>', { class: 'notice notice-' + type + ' htp-inline-notice is-dismissible' })
+		$('.sdpr-inline-notice').remove();
+		var $notice = $('<div>', { class: 'notice notice-' + type + ' sdpr-inline-notice is-dismissible', role: 'status', 'aria-live': 'polite', tabindex: '-1' })
 			.append($('<p>').text(message))
-			.insertAfter('.wrap h1');
+			.prependTo('.sdpr-reservations-admin .sdpr-admin-content');
+		makeDismissible($notice);
+		$notice.trigger('focus');
 	}
 
 	function responseMessage(response, fallback) {
+		if (response && response.data && typeof response.data.message === 'string') {
+			return response.data.message || fallback;
+		}
 		return response && typeof response.data === 'string' && response.data ? response.data : fallback;
-	}
-
-	function actionButton(classes, label, data) {
-		return $('<button>', { type: 'button', class: 'button button-small ' + classes, text: label }).attr({
-			'data-reservation-id': data.id,
-			'data-customer': data.customer,
-			'data-product': data.product
-		});
 	}
 
 	function rowData($button) {
@@ -28,28 +38,40 @@
 		};
 	}
 
-	function postAction($button, action, nonce, pendingLabel, failureLabel, data, onSuccess) {
+	function postAction($button, action, nonce, pendingLabel, failureLabel, data) {
+		var params = new URL(window.location.href).searchParams;
+		var $actions = $('.sdpr-reservations-admin tbody button');
+		$actions.prop('disabled', true);
 		$button.prop('disabled', true).text(pendingLabel);
 		$.post(config.ajaxUrl, $.extend({
 			action: action,
 			reservation_id: data.id,
-			nonce: nonce
+			nonce: nonce,
+			list_status: params.get('status') || 'all',
+			list_search: params.get('search') || '',
+			list_search_type: params.get('search_type') || 'email',
+			list_paged: $('#sdpr-list-page').val() || 1
 		}, data.extra || {})).done(function (response) {
-			if (response.success) {
-				onSuccess($button, data);
+			if (response.success && response.data && typeof response.data.content === 'string') {
+				$('.sdpr-reservations-admin .sdpr-admin-content').html(response.data.content);
+				$('.sdpr-reservations-admin .notice.is-dismissible').each(function () { makeDismissible($(this)); });
+				showNotice('success', responseMessage(response, failureLabel));
 				return;
 			}
 			showNotice('error', responseMessage(response, failureLabel));
 			$button.prop('disabled', false).text(data.originalLabel);
-		}).fail(function () {
-			showNotice('error', config.strings.requestFailed);
+		}).fail(function (xhr) {
+			showNotice('error', responseMessage(xhr.responseJSON, config.strings.requestFailed));
 			$button.prop('disabled', false).text(data.originalLabel);
+		}).always(function () {
+			$actions.prop('disabled', false);
 		});
 	}
 
 	$(function () {
-		$('#filter-reservations').on('click', function () {
+		$(document).on('click', '#filter-reservations', function () {
 			var url = new URL(window.location.href);
+			url.searchParams.delete('paged');
 			var search = $('#reservation-search').val();
 			url.searchParams.set('status', $('#status-filter').val());
 			url.searchParams.set('search_type', $('#search-type').val());
@@ -61,7 +83,7 @@
 			window.location.href = url.toString();
 		});
 
-		$('#clear-filters').on('click', function () {
+		$(document).on('click', '#clear-filters', function () {
 			var url = new URL(window.location.href);
 			['status', 'search', 'search_type', 'paged'].forEach(function (key) {
 				url.searchParams.delete(key);
@@ -69,42 +91,34 @@
 			window.location.href = url.toString();
 		});
 
-		$('#reservation-search').on('keydown', function (event) {
+		$(document).on('keydown', '#reservation-search', function (event) {
 			if (event.key === 'Enter') {
 				event.preventDefault();
 				$('#filter-reservations').trigger('click');
 			}
 		});
 
-		$(document).on('click', '.htp-delete-reservation', function () {
+		$(document).on('click', '.sdpr-delete-reservation', function () {
 			var $button = $(this);
 			var data = rowData($button);
 			data.originalLabel = config.strings.delete;
 			if (!window.confirm(config.strings.confirmDelete.replace('%1$s', data.customer).replace('%2$s', data.product))) {
 				return;
 			}
-			postAction($button, 'htp_delete_admin_reservation', config.nonces.delete, config.strings.deleting, config.strings.deleteFailed, data, function ($current) {
-				$current.closest('tr').fadeOut(function () { $(this).remove(); });
-				showNotice('success', config.strings.deleted);
-			});
+			postAction($button, 'sdpr_delete_admin_reservation', config.nonces.delete, config.strings.deleting, config.strings.deleteFailed, data);
 		});
 
-		$(document).on('click', '.htp-approve-reservation', function () {
+		$(document).on('click', '.sdpr-approve-reservation', function () {
 			var $button = $(this);
 			var data = rowData($button);
 			data.originalLabel = config.strings.approve;
 			if (!window.confirm(config.strings.confirmApprove.replace('%1$s', data.customer).replace('%2$s', data.product))) {
 				return;
 			}
-			postAction($button, 'htp_approve_reservation', config.nonces.approve, config.strings.approving, config.strings.approveFailed, data, function ($current, currentData) {
-				var $row = $current.closest('tr');
-				$row.find('td:last-child').empty().append(actionButton('htp-cancel-reservation', config.strings.cancel, currentData));
-				$row.find('td:nth-child(3) span').removeClass('status-pending-approval').addClass('status-active').text(config.strings.active);
-				showNotice('success', config.strings.approved);
-			});
+			postAction($button, 'sdpr_approve_reservation', config.nonces.approve, config.strings.approving, config.strings.approveFailed, data);
 		});
 
-		$(document).on('click', '.htp-deny-reservation', function () {
+		$(document).on('click', '.sdpr-deny-reservation', function () {
 			var $button = $(this);
 			var data = rowData($button);
 			var reason = window.prompt(config.strings.denyReason);
@@ -113,16 +127,10 @@
 			}
 			data.extra = { reason: reason };
 			data.originalLabel = config.strings.deny;
-			postAction($button, 'htp_deny_reservation', config.nonces.deny, config.strings.denying, config.strings.denyFailed, data, function ($current, currentData) {
-				var $row = $current.closest('tr');
-				$row.find('td:last-child').empty().append(actionButton('button-link-delete htp-delete-reservation', config.strings.delete, currentData));
-				$row.find('td:nth-child(3) span').removeClass('status-pending-approval').addClass('status-denied').text(config.strings.deniedStatus);
-				$row.find('td:nth-child(6)').text('\u2014').removeClass('time-left-critical time-left-warning');
-				showNotice('success', config.strings.denied);
-			});
+			postAction($button, 'sdpr_deny_reservation', config.nonces.deny, config.strings.denying, config.strings.denyFailed, data);
 		});
 
-		$(document).on('click', '.htp-cancel-reservation', function () {
+		$(document).on('click', '.sdpr-cancel-reservation', function () {
 			var $button = $(this);
 			var data = rowData($button);
 			data.originalLabel = config.strings.cancel;
@@ -133,13 +141,7 @@
 			if (!window.confirm(config.strings.confirmCancel.replace('%1$s', data.customer).replace('%2$s', data.product))) {
 				return;
 			}
-			postAction($button, 'htp_cancel_admin_reservation', config.nonces.cancel, config.strings.cancelling, config.strings.cancelFailed, data, function ($current, currentData) {
-				var $row = $current.closest('tr');
-				$row.find('td:nth-child(3) span').removeClass().addClass('status-cancelled').text(config.strings.cancelledStatus);
-				$row.find('td:nth-child(6)').text('\u2014').removeClass('time-left-critical time-left-warning');
-				$row.find('td:last-child').empty().append(actionButton('button-link-delete htp-delete-reservation', config.strings.delete, currentData));
-				showNotice('success', config.strings.cancelled);
-			});
+			postAction($button, 'sdpr_cancel_admin_reservation', config.nonces.cancel, config.strings.cancelling, config.strings.cancelFailed, data);
 		});
 	});
-})(jQuery, window.htpReservationsAdmin || {});
+})(jQuery, window.sdprReservationsAdmin || {});

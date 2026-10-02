@@ -1,6 +1,6 @@
 # WordPress.org Directory Assets
 
-This repository folder contains the finalized WordPress.org directory artwork and its editable vector masters. It is excluded from the release ZIP. After the plugin is approved, copy the PNG files from this folder to the top-level `/assets` directory of the assigned WordPress.org SVN repository, not to `/trunk/assets`. Do not upload the `source/` directory.
+This repository folder contains WordPress.org directory artwork and its editable vector masters. It is excluded from the release ZIP. After the plugin is approved and the screenshot refresh is complete, copy the PNG/JPEG assets from this folder to the top-level `/assets` directory of the assigned WordPress.org SVN repository, not to `/trunk/assets`. Do not upload the `source/` directory or this README.
 
 ## Supported Assets
 
@@ -18,15 +18,47 @@ Directory artwork is optional for initial code submission. Use these exact names
 
 The screenshot captions in `readme.txt` match these sequential files:
 - `screenshot-1.jpg` - Plugin settings page
-- `screenshot-2.jpg` - Product page with Reserve button
-- `screenshot-3.jpg` - Reservation modal
-- `screenshot-4.jpg` - My Account reservations page
+- `screenshot-2.jpg` - Product page with Reserve button and stopwatch icon
+- `screenshot-3.jpg` - Reservation confirmation modal
+- `screenshot-4.jpg` - My Account reservations page with active and pending records
 - `screenshot-5.jpg` - Admin reservations dashboard
 - `screenshot-6.jpg` - Basic reservation analytics
 
+### Refresh Status
+
+Screenshots 1, 2, 4, 5 and 6 were captured directly from the current Free development files on 2026-10-02 and visually reviewed. They show only temporary demonstration products and reservations, not real customer data. No interface elements were recreated or edited into the images. The demo records were removed and the original test-site settings restored after capture.
+
+Screenshot 3 was refreshed from the actual modal on 2026-10-02 after the contrast and result-state corrections, including the current stopwatch Reserve button in the product background. The heading and close button have a dedicated header row. Successful submissions replace the confirmation question with a result heading and notice; errors keep the confirmation form available. Active and pending success, duplicate errors, modal reset, Tab/Shift+Tab wrapping, Escape closing and opener-focus restoration were checked in the browser. Notice/close-control separation was verified at desktop, 390px and 320px widths.
+
+Earlier browser input stalled at My Account's native cancellation confirmation. After recovery, the modal checks and final styled-modal capture were completed. Native-confirmation admin/customer actions still need their broader visual retest. All six images now reflect the current captured interfaces, but these captures do not constitute final interaction/accessibility sign-off or an exact-release-ZIP test.
+
+All screenshots use their actual JPEG format and `.jpg` extension. The previous modal reference was also JPEG data despite its `.png` filename; its extension was corrected without changing its pixels. WordPress.org supports both `.jpg` and `.png` screenshot names; keep exactly one file per number. See the [official directory asset guidance](https://developer.wordpress.org/plugins/wordpress-org/plugin-assets/#screenshots).
+
+### Current Gallery
+
+#### 1. Settings
+![Reservation settings, branded header and navigation tabs](screenshot-1.jpg)
+
+#### 2. Product Action
+![Product page with the stopwatch Reserve button beside Add to cart](screenshot-2.jpg)
+
+#### 3. Reservation Dialog
+![Reservation dialog and the current stopwatch action in its product background](screenshot-3.jpg)
+
+Current confirmation state with the corrected button contrast and separate close-control header.
+
+#### 4. Customer Reservations
+![My Account table showing active and pending reservations](screenshot-4.jpg)
+
+#### 5. Reservation Management
+![Admin reservation filters, statuses and approval actions](screenshot-5.jpg)
+
+#### 6. Analytics
+![Reservation summary cards and recent activity](screenshot-6.jpg)
+
 ## Design Guidelines
 
-The PNG assets use the established blue, navy, and amber palette. Icons contain no small text and remain identifiable at 128 pixels. Banners keep essential content in the central safe area. Screenshots were captured from the exact Free release behavior with only local demonstration records.
+The artwork uses the established blue, navy, and amber palette. Icons contain no small text and remain identifiable at 128 pixels. Banners keep essential content in the central safe area. Screenshots show the current Free plugin on a local test site using demonstration records. Recheck all screenshots against the final release candidate before publication.
 
 Editable masters are stored in `source/icon.svg` and `source/banner.svg`. Re-render both required dimensions after changing a master and visually inspect the standard and high-resolution outputs before publication.
 
@@ -37,6 +69,7 @@ When submitting to WordPress.org:
 2. Upload them to the WordPress.org SVN repository's top-level `/assets` directory.
 3. Keep screenshot numbering identical to the captions in `readme.txt`.
 4. Confirm image dimensions and file-size limits against the current Plugin Handbook before upload.
+5. Set the SVN MIME type to `image/jpeg` for `.jpg` assets and `image/png` for `.png` assets.
 
 ## Notes
 

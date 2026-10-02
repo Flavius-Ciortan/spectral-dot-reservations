@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-Security fixes are provided for the latest published Hold This Product release. Upgrade to the newest available version before reporting or reproducing an issue.
+Security fixes are provided for the latest published Spectral Dot Reservations release. Upgrade to the newest available version before reporting or reproducing an issue.
 
 ## Reporting a Vulnerability
 

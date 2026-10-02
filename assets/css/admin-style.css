@@ -1,55 +1,52 @@
 :root {
-    --htp-primary: #2F89F9;
-    --htp-primary-light: #44A0FF;
-    --htp-primary-dark: #266DED;
-    --htp-secondary: #EAF4FF;
-    --htp-accent: #44A0FF;
-    --htp-text-dark: #0b1b3a;
-    --htp-text-light: #2b4a7a;
-    --htp-white: #ffffff;
-    --htp-border: rgba(255, 255, 255, 0.22);
-    --htp-border-ui: rgba(11, 27, 58, 0.16);
-    --htp-success: #10b981;
-    --htp-warning: #f59e0b;
-    --htp-error: #ef4444;
-    --htp-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --htp-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --sdpr-primary: #2463db;
+    --sdpr-primary-light: #44A0FF;
+    --sdpr-primary-dark: #1749aa;
+    --sdpr-secondary: #EAF4FF;
+    --sdpr-accent: #2463db;
+    --sdpr-header-gradient: linear-gradient(135deg, #2463db 0%, #215bc9 35%, #1d52b9 65%, #1749aa 100%);
+    --sdpr-text-dark: #0b1b3a;
+    --sdpr-text-light: #2b4a7a;
+    --sdpr-white: #ffffff;
+    --sdpr-border: rgba(255, 255, 255, 0.22);
+    --sdpr-border-ui: #6b7280;
+    --sdpr-success: #047857;
+    --sdpr-success-dark: #065f46;
+    --sdpr-warning: #92400e;
+    --sdpr-error: #b91c1c;
+    --sdpr-error-dark: #991b1b;
+    --sdpr-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --sdpr-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-/*
- * WP admin layout note:
- * Core uses `#wpcontent` padding in combination with `.wrap` margins.
- * Only zero out `#wpcontent` padding on our Settings page (to allow a full-bleed header),
- * otherwise Analytics/Reservations can look "stuck" to the admin menu.
- */
-body.toplevel_page_holdthisproduct-settings #wpcontent,
-body.holdthisproduct_page_holdthisproduct-settings #wpcontent {
+/* Shared headers are full-width; content keeps its own comfortable inset. */
+body.sdpr-admin-page #wpcontent {
     padding: 0;
 }
 
-body,
-body #wpwrap,
-body #wpcontent {
+body.sdpr-admin-page,
+body.sdpr-admin-page #wpwrap,
+body.sdpr-admin-page #wpcontent {
     background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
 }
 
-.htp-admin-wrapper {
+.sdpr-admin-wrapper {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: transparent;
     padding: 0;
 }
 
-.htp-admin-header {
-    background: linear-gradient(135deg, #44A0FF 0%, #2F89F9 35%, #2776EE 65%, #266DED 100%);
-    color: var(--htp-white);
-    padding: 1.25rem 1.5rem 1rem;
-    box-shadow: var(--htp-shadow-lg);
+.sdpr-admin-header {
+    background: var(--sdpr-header-gradient);
+    color: var(--sdpr-white);
+    padding: 1.25rem 0 1rem;
+    box-shadow: var(--sdpr-shadow-lg);
     position: relative;
     overflow: hidden;
     border-bottom: 1px solid rgba(255, 255, 255, 0.18);
 }
 
-.htp-admin-header::before {
+.sdpr-admin-header::before {
     content: '';
     position: absolute;
     top: 0;
@@ -61,7 +58,9 @@ body #wpcontent {
     pointer-events: none;
 }
 
-.htp-header-content {
+.sdpr-header-content {
+    box-sizing: border-box;
+    padding: 0 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -71,26 +70,27 @@ body #wpcontent {
     z-index: 1;
 }
 
-.htp-title-section {
+.sdpr-title-section {
     flex: 1;
+    min-width: 0;
 }
 
-.htp-main-title {
+.sdpr-main-title {
     font-size: 1.75rem;
+    line-height: 1.3;
     font-weight: 700;
     margin: 0 0 0.75rem 0;
-    color: var(--htp-white);
+    color: var(--sdpr-white);
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.htp-subtitle {
+.sdpr-subtitle {
     font-size: 0.95rem;
     margin: 0;
-    opacity: 0.9;
     font-weight: 400;
 }
 
-.htp-logo-section {
+.sdpr-logo-section {
     flex-shrink: 0;
     margin-left: 1.5rem;
     display: flex;
@@ -98,67 +98,60 @@ body #wpcontent {
     justify-content: center;
 }
 
-.htp-logo {
-    width: 80px;
-    height: 80px;
-    max-width: 100%;
-    max-height: 100%;
+.sdpr-logo {
+    width: 200px;
+    height: auto;
     display: block;
 }
 
-.htp-logo-fallback {
-    background: linear-gradient(135deg, var(--htp-primary) 0%, var(--htp-primary-dark) 100%);
-    color: var(--htp-white);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 18px;
-    letter-spacing: 1px;
-}
-
-.htp-admin-content {
+.sdpr-admin-content {
+    box-sizing: border-box;
     max-width: 1200px;
     margin: 0 auto;
     padding: 1.5rem;
 }
 
+.sdpr-admin-wrapper--wide .sdpr-header-content,
+.sdpr-admin-wrapper--wide .sdpr-admin-content {
+    max-width: none;
+}
+
 /* Navigation Tabs */
-.htp-nav-wrapper {
+.sdpr-nav-wrapper {
     margin-bottom: 1.5rem;
 }
 
-.htp-nav-tabs {
+.sdpr-nav-tabs {
     display: flex;
     gap: 1rem;
     padding-bottom: 0;
     position: relative;
 }
 
-.htp-nav-tabs::after {
+.sdpr-nav-tabs::after {
     content: '';
     position: absolute;
     bottom: -4px;
     left: 0;
     right: 0;
     height: 2px;
-    background: linear-gradient(to right, var(--htp-primary) 0%, var(--htp-primary) 40%, transparent 100%);
+    background: linear-gradient(to right, var(--sdpr-primary) 0%, var(--sdpr-primary) 40%, transparent 100%);
     z-index: 0;
 }
 
-.htp-nav-tab {
+.sdpr-nav-tab {
     display: flex;
     align-items: center;
     gap: 0.375rem;
     padding: 0.75rem 1.25rem;
-    background: var(--htp-white);
-    border: 2px solid var(--htp-border);
+    background: var(--sdpr-white);
+    border: 2px solid var(--sdpr-border);
     border-bottom: none;
     border-radius: 4px 4px 0 0;
     cursor: pointer;
     font-size: 0.8rem;
     font-weight: 600;
-    color: var(--htp-text-light);
+    color: var(--sdpr-text-light);
     transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
     text-decoration: none;
     position: relative;
@@ -166,66 +159,57 @@ body #wpcontent {
     margin-bottom: -2px;
 }
 
-.htp-nav-tab:hover {
-    background: var(--htp-secondary);
-    color: var(--htp-primary);
+.sdpr-nav-tab:hover {
+    background: var(--sdpr-secondary);
+    color: var(--sdpr-primary);
 }
 
-.htp-nav-tab-active {
-    background: var(--htp-primary);
-    border-color: var(--htp-primary);
-    color: var(--htp-white);
-    box-shadow: var(--htp-shadow);
+.sdpr-nav-tab-active {
+    background: var(--sdpr-primary);
+    border-color: var(--sdpr-primary);
+    color: var(--sdpr-white);
+    box-shadow: var(--sdpr-shadow);
 }
 
-.htp-nav-tab-active:hover {
-    background: var(--htp-primary-dark);
-    border-color: var(--htp-primary-dark);
-    color: var(--htp-white);
+.sdpr-nav-tab-active:hover {
+    background: var(--sdpr-primary-dark);
+    border-color: var(--sdpr-primary-dark);
+    color: var(--sdpr-white);
 }
 
-.htp-tab-icon {
-    font-size: 1rem;
+.sdpr-tab-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+    line-height: 1;
+    color: currentColor;
+    flex-shrink: 0;
 }
 
-/* Remove color from user and guests emoji icons */
-.htp-nav-tab[data-target="logged-in"] .htp-tab-icon,
-.htp-nav-tab[data-target="logged-out"] .htp-tab-icon {
-    filter: grayscale(1);
-}
-
-/* Keep them colorless even when active or hover */
-.htp-nav-tab-active[data-target="logged-in"] .htp-tab-icon,
-.htp-nav-tab-active[data-target="logged-out"] .htp-tab-icon,
-.htp-nav-tab[data-target="logged-in"]:hover .htp-tab-icon,
-.htp-nav-tab[data-target="logged-out"]:hover .htp-tab-icon {
-    filter: grayscale(1);
-}
-
-.htp-tab-text {
+.sdpr-tab-text {
     font-weight: 600;
 }
 
 /* Tab Content */
-.htp-tab-container {
+.sdpr-tab-container {
     position: relative;
 }
 
-.htp-tab-content {
+.sdpr-tab-content {
     display: none;
 }
 
-.htp-tab-content.htp-tab-active {
+.sdpr-tab-content.sdpr-tab-active {
     display: block;
     animation: fadeIn 0.3s ease-in-out;
 }
 
 /* Hide form actions initially until JavaScript loads */
-.htp-form-actions {
+.sdpr-form-actions {
     display: none;
 }
 
-.htp-form-actions.htp-ready {
+.sdpr-form-actions.sdpr-ready {
     display: block;
 }
 
@@ -235,111 +219,118 @@ body #wpcontent {
 }
 
 /* Settings Cards */
-.htp-settings-card {
+.sdpr-settings-card {
     background: rgba(255, 255, 255, 0.86);
     border-radius: 8px;
-    box-shadow: var(--htp-shadow);
+    box-shadow: var(--sdpr-shadow);
     overflow: hidden;
     transition: box-shadow 0.3s ease;
     border: 1px solid rgba(255, 255, 255, 0.22);
 }
 
 
-.htp-card-header {
+.sdpr-card-header {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.65) 0%, rgba(234, 244, 255, 0.8) 100%);
     padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid var(--htp-border);
+    border-bottom: 1px solid var(--sdpr-border);
 }
 
-.htp-card-header h3 {
+.sdpr-card-header h3 {
     margin: 0 0 0.375rem 0;
     font-size: 1.125rem;
     font-weight: 700;
-    color: var(--htp-text-dark);
+    color: var(--sdpr-text-dark);
 }
 
-.htp-card-header p {
+.sdpr-card-header p {
     margin: 0;
-    color: var(--htp-text-light);
+    color: var(--sdpr-text-light);
     font-size: 0.8rem;
 }
 
-.htp-card-body {
+.sdpr-card-body {
     padding: 1.5rem;
 }
 
 /* Form Styles */
-.htp-settings-form {
+.sdpr-settings-form {
     max-width: none;
 }
 
 /* Settings tab content: allow full card width (no artificial max-width). */
-#htp-general .htp-card-body,
-#htp-logged-in .htp-card-body,
-#htp-logged-out .htp-card-body {
+#sdpr-general .sdpr-card-body,
+#sdpr-logged-in .sdpr-card-body,
+#sdpr-logged-out .sdpr-card-body {
     max-width: none;
 }
 
 /* Smaller input fields for specific settings */
-.htp-settings-form input[name="holdthisproduct_options[max_reservations]"],
-.htp-settings-form input[name="holdthisproduct_options[reservation_duration]"],
-.htp-settings-form input[name*="[border_radius]"],
-.htp-settings-form input[name*="[font_size]"] {
+.sdpr-settings-form input[name="sdpr_options[max_reservations]"],
+.sdpr-settings-form input[name="sdpr_options[reservation_duration]"],
+.sdpr-settings-form input[name*="[border_radius]"],
+.sdpr-settings-form input[name*="[font_size]"] {
     width: 80px !important;
     max-width: 80px !important;
 }
 
-.htp-settings-form select[name*="[font_family]"] {
+.sdpr-settings-form select[name*="[font_family]"] {
     width: 180px !important;
     max-width: 180px !important;
 }
 
-.htp-settings-form .form-table {
+.sdpr-settings-form .form-table {
     background: transparent;
     border: none;
 }
 
-.htp-settings-form .form-table th {
+.sdpr-settings-form .form-table th {
     background: transparent;
     padding: 0.5rem 0.75rem;
     font-weight: 600;
-    color: var(--htp-text-dark);
-    border: 1px solid var(--htp-border);
+    color: var(--sdpr-text-dark);
+    border: 1px solid var(--sdpr-border);
     border-right: none;
     border-radius: 4px 0 0 4px;
     font-size: 0.875rem;
     vertical-align: middle;
 }
 
-.htp-settings-form .form-table td {
+.sdpr-settings-form .form-table td {
     background: transparent;
     padding: 0.5rem 0.75rem;
-    border: 1px solid var(--htp-border);
+    border: 1px solid var(--sdpr-border);
     border-left: none;
     border-radius: 0 4px 4px 0;
     vertical-align: middle;
     text-align: left;
 }
 
-.htp-settings-form .form-table tr {
+.sdpr-settings-form .form-table tr {
     margin-bottom: 0.875rem;
     display: table-row;
 }
 
-.htp-settings-form .form-table th,
-.htp-settings-form .form-table td {
+.sdpr-settings-form .form-table th,
+.sdpr-settings-form .form-table td {
     display: table-cell;
     vertical-align: middle;
     width: auto;
 }
 
-.htp-settings-form .form-table {
+.sdpr-settings-form .form-table {
     background: transparent;
     border-collapse: separate;
     border-spacing: 0 0.75rem;
 }
 
 /* Toggle Switch Styles */
+.sdpr-settings-form input[type="text"],
+.sdpr-settings-form input[type="number"],
+.sdpr-settings-form select,
+.sdpr-settings-form textarea {
+    border-color: var(--sdpr-border-ui);
+}
+
 .toggle-switch {
     position: relative;
     display: block;
@@ -362,7 +353,7 @@ body #wpcontent {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    background-color: var(--sdpr-border-ui);
     transition: 0.4s;
     border-radius: 24px;
 }
@@ -380,8 +371,13 @@ body #wpcontent {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.toggle-switch input:focus-visible + .slider {
+    outline: 2px solid var(--sdpr-primary-dark);
+    outline-offset: 3px;
+}
+
 .toggle-switch input:checked + .slider {
-    background-color: var(--htp-primary);
+    background-color: var(--sdpr-primary);
 }
 
 .toggle-switch input:checked + .slider:before {
@@ -389,24 +385,24 @@ body #wpcontent {
 }
 
 /* Input Styles */
-.htp-settings-form input[type="text"],
-.htp-settings-form input[type="number"],
-.htp-settings-form select {
+.sdpr-settings-form input[type="text"],
+.sdpr-settings-form input[type="number"],
+.sdpr-settings-form select {
     width: 100%;
     max-width: 250px;
     padding: 0.5rem 0.75rem;
-    border: 1px solid var(--htp-border-ui);
+    border: 1px solid var(--sdpr-border-ui);
     border-radius: 4px;
     font-size: 0.875rem;
-    background-color: var(--htp-white);
+    background-color: var(--sdpr-white);
     transition: background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
     text-align: left;
     margin-left: 0;
 }
 
-.htp-settings-form input[type="text"]:hover,
-.htp-settings-form input[type="number"]:hover,
-.htp-settings-form select:hover {
+.sdpr-settings-form input[type="text"]:hover,
+.sdpr-settings-form input[type="number"]:hover,
+.sdpr-settings-form select:hover {
     border-color: rgba(47, 137, 249, 0.35);
 }
 
@@ -414,7 +410,7 @@ body #wpcontent {
  * Settings layout: render the control and its description on one line.
  * This keeps alignment consistent with the label column in the table.
  */
-.htp-settings-form .htp-setting-field {
+.sdpr-settings-form .sdpr-setting-field {
     display: grid;
     grid-template-columns: max-content 1fr;
     align-items: center;
@@ -422,33 +418,33 @@ body #wpcontent {
     text-align: left;
 }
 
-.htp-settings-form .htp-setting-control {
+.sdpr-settings-form .sdpr-setting-control {
     display: flex;
     align-items: center;
     min-width: 96px;
 }
 
 /* Cancel the "push to the right" defaults when inside a settings row wrapper. */
-.htp-settings-form .htp-setting-field .toggle-switch {
+.sdpr-settings-form .sdpr-setting-field .toggle-switch {
     display: inline-block;
     margin-left: 0;
     margin-right: 0;
 }
 
-.htp-settings-form .htp-setting-field .htp-input-right-align {
+.sdpr-settings-form .sdpr-setting-field .sdpr-input-right-align {
     text-align: left;
 }
 
-.htp-settings-form .htp-setting-field .htp-input-right-align input {
+.sdpr-settings-form .sdpr-setting-field .sdpr-input-right-align input {
     margin-right: 0;
 }
 
-.htp-settings-form .htp-setting-field > .description {
+.sdpr-settings-form .sdpr-setting-field > .description {
     margin: 0;
 }
 
 @media (max-width: 782px) {
-    .htp-settings-form .htp-setting-field {
+    .sdpr-settings-form .sdpr-setting-field {
         grid-template-columns: 1fr;
         row-gap: 6px;
         align-items: start;
@@ -456,24 +452,23 @@ body #wpcontent {
 }
 
 /* Description text under form elements */
-.htp-settings-form .description {
+.sdpr-settings-form .description {
     font-size: 0.75rem;
-    color: var(--htp-text-light);
+    color: var(--sdpr-text-light);
     margin-top: 0.25rem;
     margin-bottom: 0;
     line-height: 1.4;
-    opacity: 0.8;
 }
 
-.htp-settings-form input[type="text"]:focus,
-.htp-settings-form input[type="number"]:focus,
-.htp-settings-form select:focus {
+.sdpr-settings-form input[type="text"]:focus,
+.sdpr-settings-form input[type="number"]:focus,
+.sdpr-settings-form select:focus {
     outline: none;
-    border-color: var(--htp-primary);
+    border-color: var(--sdpr-primary);
     box-shadow: 0 0 0 3px rgba(39, 118, 238, 0.18);
 }
 
-.holdthisproduct-small-input {
+.sdpr-small-input {
     width: 80px !important;
     max-width: 80px !important;
     padding: 0.5rem 0.75rem;
@@ -481,13 +476,13 @@ body #wpcontent {
 }
 
 /* Button Styles */
-.htp-form-actions {
+.sdpr-form-actions {
     margin-top: 1.5rem;
     padding-top: 1.25rem;
-    border-top: 1px solid var(--htp-border);
+    border-top: 1px solid var(--sdpr-border);
 }
 
-.htp-btn {
+.sdpr-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -501,28 +496,28 @@ body #wpcontent {
     text-decoration: none;
 }
 
-.htp-btn-primary {
-    background: linear-gradient(135deg, #44A0FF 0%, #2F89F9 35%, #2776EE 65%, #266DED 100%);
-    color: var(--htp-white);
-    box-shadow: var(--htp-shadow);
+.sdpr-btn-primary {
+    background: var(--sdpr-header-gradient);
+    color: var(--sdpr-white);
+    box-shadow: var(--sdpr-shadow);
 }
 
-.htp-btn-primary:hover {
-    background: linear-gradient(135deg, #2F89F9 0%, #2776EE 55%, #266DED 100%);
+.sdpr-btn-primary:hover {
+    background: var(--sdpr-primary-dark);
     transform: translateY(-2px);
-    box-shadow: var(--htp-shadow-lg);
-    color: var(--htp-white);
+    box-shadow: var(--sdpr-shadow-lg);
+    color: var(--sdpr-white);
 }
 
 /* Save Settings Button - Primary Dark Cyan Style */
-.htp-form-actions .button-primary,
-.htp-form-actions input[type="submit"],
-.htp-form-actions .htp-save-btn,
-.htp-settings-form .button-primary,
-.htp-settings-form input[type="submit"] {
-    background: var(--htp-primary) !important;
+.sdpr-form-actions .button-primary,
+.sdpr-form-actions input[type="submit"],
+.sdpr-form-actions .sdpr-save-btn,
+.sdpr-settings-form .button-primary,
+.sdpr-settings-form input[type="submit"] {
+    background: var(--sdpr-primary) !important;
     border: none !important;
-    color: var(--htp-white) !important;
+    color: var(--sdpr-white) !important;
     padding: 0.625rem 1.5rem !important;
     border-radius: 4px !important;
     box-shadow: none !important;
@@ -535,33 +530,33 @@ body #wpcontent {
     text-decoration: none !important;
 }
 
-.htp-form-actions .button-primary:hover,
-.htp-form-actions .button-primary:focus,
-.htp-form-actions input[type="submit"]:hover,
-.htp-form-actions input[type="submit"]:focus,
-.htp-form-actions .htp-save-btn:hover,
-.htp-form-actions .htp-save-btn:focus,
-.htp-settings-form .button-primary:hover,
-.htp-settings-form .button-primary:focus,
-.htp-settings-form input[type="submit"]:hover,
-.htp-settings-form input[type="submit"]:focus {
-    background: var(--htp-primary-dark) !important;
-    color: var(--htp-white) !important;
-    box-shadow: var(--htp-shadow) !important;
+.sdpr-form-actions .button-primary:hover,
+.sdpr-form-actions .button-primary:focus,
+.sdpr-form-actions input[type="submit"]:hover,
+.sdpr-form-actions input[type="submit"]:focus,
+.sdpr-form-actions .sdpr-save-btn:hover,
+.sdpr-form-actions .sdpr-save-btn:focus,
+.sdpr-settings-form .button-primary:hover,
+.sdpr-settings-form .button-primary:focus,
+.sdpr-settings-form input[type="submit"]:hover,
+.sdpr-settings-form input[type="submit"]:focus {
+    background: var(--sdpr-primary-dark) !important;
+    color: var(--sdpr-white) !important;
+    box-shadow: var(--sdpr-shadow) !important;
 }
 
-/* Global HTP Admin Button Overrides - Comprehensive Coverage */
-.htp-admin-wrapper .button-primary,
-.htp-admin-wrapper input[type="submit"].button-primary,
-.htp-admin-wrapper input[type="submit"][name="submit"],
-.htp-admin-wrapper .submit .button-primary,
-.htp-admin-wrapper #submit,
-body.holdthisproduct_page_holdthisproduct-settings .button-primary,
-body.toplevel_page_holdthisproduct-settings .button-primary,
-body.toplevel_page_holdthisproduct-settings input[type="submit"] {
-    background: var(--htp-primary) !important;
+/* Global SDPR Admin Button Overrides - Comprehensive Coverage */
+.sdpr-admin-wrapper .button-primary,
+.sdpr-admin-wrapper input[type="submit"].button-primary,
+.sdpr-admin-wrapper input[type="submit"][name="submit"],
+.sdpr-admin-wrapper .submit .button-primary,
+.sdpr-admin-wrapper #submit,
+body.sdpr_page_sdpr-settings .button-primary,
+body.toplevel_page_sdpr-settings .button-primary,
+body.toplevel_page_sdpr-settings input[type="submit"] {
+    background: var(--sdpr-primary) !important;
     border: none !important;
-    color: var(--htp-white) !important;
+    color: var(--sdpr-white) !important;
     font-weight: 600 !important;
     padding: 0.625rem 1.5rem !important;
     border-radius: 4px !important;
@@ -572,54 +567,54 @@ body.toplevel_page_holdthisproduct-settings input[type="submit"] {
     transition: background-color 0.18s ease, box-shadow 0.18s ease, color 0.18s ease !important;
 }
 
-.htp-admin-wrapper .button-primary:hover,
-.htp-admin-wrapper .button-primary:focus,
-.htp-admin-wrapper input[type="submit"].button-primary:hover,
-.htp-admin-wrapper input[type="submit"].button-primary:focus,
-.htp-admin-wrapper input[type="submit"][name="submit"]:hover,
-.htp-admin-wrapper input[type="submit"][name="submit"]:focus,
-.htp-admin-wrapper .submit .button-primary:hover,
-.htp-admin-wrapper .submit .button-primary:focus,
-.htp-admin-wrapper #submit:hover,
-.htp-admin-wrapper #submit:focus,
-body.holdthisproduct_page_holdthisproduct-settings .button-primary:hover,
-body.holdthisproduct_page_holdthisproduct-settings .button-primary:focus,
-body.toplevel_page_holdthisproduct-settings .button-primary:hover,
-body.toplevel_page_holdthisproduct-settings .button-primary:focus,
-body.toplevel_page_holdthisproduct-settings input[type="submit"]:hover,
-body.toplevel_page_holdthisproduct-settings input[type="submit"]:focus {
-    background: var(--htp-primary-dark) !important;
-    color: var(--htp-white) !important;
-    box-shadow: var(--htp-shadow) !important;
+.sdpr-admin-wrapper .button-primary:hover,
+.sdpr-admin-wrapper .button-primary:focus,
+.sdpr-admin-wrapper input[type="submit"].button-primary:hover,
+.sdpr-admin-wrapper input[type="submit"].button-primary:focus,
+.sdpr-admin-wrapper input[type="submit"][name="submit"]:hover,
+.sdpr-admin-wrapper input[type="submit"][name="submit"]:focus,
+.sdpr-admin-wrapper .submit .button-primary:hover,
+.sdpr-admin-wrapper .submit .button-primary:focus,
+.sdpr-admin-wrapper #submit:hover,
+.sdpr-admin-wrapper #submit:focus,
+body.sdpr_page_sdpr-settings .button-primary:hover,
+body.sdpr_page_sdpr-settings .button-primary:focus,
+body.toplevel_page_sdpr-settings .button-primary:hover,
+body.toplevel_page_sdpr-settings .button-primary:focus,
+body.toplevel_page_sdpr-settings input[type="submit"]:hover,
+body.toplevel_page_sdpr-settings input[type="submit"]:focus {
+    background: var(--sdpr-primary-dark) !important;
+    color: var(--sdpr-white) !important;
+    box-shadow: var(--sdpr-shadow) !important;
 }
 
-#holdthisproduct-max-reservations-wrapper {
+#sdpr-max-reservations-wrapper {
     display: none;
 }
 
-.column-htp_reservations {
+.column-sdpr_reservations {
     width: 11%;
 }
 
-.htp-reservations-stats {
-    background: linear-gradient(135deg, var(--htp-secondary) 0%, #e0f2fe 100%);
-    border-left: 4px solid var(--htp-primary);
+.sdpr-reservations-stats {
+    background: linear-gradient(135deg, var(--sdpr-secondary) 0%, #e0f2fe 100%);
+    border-left: 4px solid var(--sdpr-primary);
     padding: 1.5rem 2rem;
     margin: 1.5rem 0;
     border-radius: 8px;
-    box-shadow: var(--htp-shadow);
+    box-shadow: var(--sdpr-shadow);
 }
 
-.htp-reservations-stats p {
+.sdpr-reservations-stats p {
     margin: 0;
     font-size: 1rem;
     font-weight: 600;
-    color: var(--htp-text-dark);
+    color: var(--sdpr-text-dark);
 }
 
-.htp-cancel-reservation {
-    background: var(--htp-primary) !important;
-    color: var(--htp-white) !important;
+.sdpr-cancel-reservation {
+    background: var(--sdpr-primary) !important;
+    color: var(--sdpr-white) !important;
     border: none !important;
     padding: 6px 12px !important;
     font-size: 12px !important;
@@ -630,21 +625,21 @@ body.toplevel_page_holdthisproduct-settings input[type="submit"]:focus {
     letter-spacing: 0.5px !important;
 }
 
-.htp-cancel-reservation:hover {
-    background: var(--htp-primary-dark) !important;
-    box-shadow: var(--htp-shadow) !important;
+.sdpr-cancel-reservation:hover {
+    background: var(--sdpr-primary-dark) !important;
+    box-shadow: var(--sdpr-shadow) !important;
 }
 
-.htp-cancel-reservation:disabled {
+.sdpr-cancel-reservation:disabled {
     background: #e5e7eb !important;
     color: #9ca3af !important;
     cursor: not-allowed !important;
     transform: none !important;
 }
 
-.htp-delete-reservation {
-    background: linear-gradient(135deg, var(--htp-error) 0%, #dc2626 100%) !important;
-    color: var(--htp-white) !important;
+.sdpr-delete-reservation {
+    background: linear-gradient(135deg, var(--sdpr-error) 0%, #dc2626 100%) !important;
+    color: var(--sdpr-white) !important;
     border: none !important;
     padding: 6px 12px !important;
     font-size: 12px !important;
@@ -655,21 +650,21 @@ body.toplevel_page_holdthisproduct-settings input[type="submit"]:focus {
     letter-spacing: 0.5px !important;
 }
 
-.htp-delete-reservation:hover {
+.sdpr-delete-reservation:hover {
     background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
-    box-shadow: var(--htp-shadow) !important;
+    box-shadow: var(--sdpr-shadow) !important;
 }
 
-.htp-delete-reservation:disabled {
+.sdpr-delete-reservation:disabled {
     background: #e5e7eb !important;
     color: #9ca3af !important;
     cursor: not-allowed !important;
     transform: none !important;
 }
 
-.htp-approve-reservation {
-    background: linear-gradient(135deg, var(--htp-success) 0%, #059669 100%) !important;
-    color: var(--htp-white) !important;
+.sdpr-approve-reservation {
+    background: linear-gradient(135deg, var(--sdpr-success) 0%, var(--sdpr-success-dark) 100%) !important;
+    color: var(--sdpr-white) !important;
     border: none !important;
     padding: 6px 12px !important;
     font-size: 12px !important;
@@ -680,21 +675,21 @@ body.toplevel_page_holdthisproduct-settings input[type="submit"]:focus {
     letter-spacing: 0.5px !important;
 }
 
-.htp-approve-reservation:hover {
-    background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
-    box-shadow: var(--htp-shadow) !important;
+.sdpr-approve-reservation:hover {
+    background: var(--sdpr-success-dark) !important;
+    box-shadow: var(--sdpr-shadow) !important;
 }
 
-.htp-approve-reservation:disabled {
+.sdpr-approve-reservation:disabled {
     background: #e5e7eb !important;
     color: #9ca3af !important;
     cursor: not-allowed !important;
     transform: none !important;
 }
 
-.htp-deny-reservation {
-    background: linear-gradient(135deg, var(--htp-error) 0%, #dc2626 100%) !important;
-    color: var(--htp-white) !important;
+.sdpr-deny-reservation {
+    background: linear-gradient(135deg, var(--sdpr-error) 0%, #dc2626 100%) !important;
+    color: var(--sdpr-white) !important;
     border: none !important;
     padding: 6px 12px !important;
     font-size: 12px !important;
@@ -705,12 +700,12 @@ body.toplevel_page_holdthisproduct-settings input[type="submit"]:focus {
     letter-spacing: 0.5px !important;
 }
 
-.htp-deny-reservation:hover {
+.sdpr-deny-reservation:hover {
     background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
-    box-shadow: var(--htp-shadow) !important;
+    box-shadow: var(--sdpr-shadow) !important;
 }
 
-.htp-deny-reservation:disabled {
+.sdpr-deny-reservation:disabled {
     background: #e5e7eb !important;
     color: #9ca3af !important;
     cursor: not-allowed !important;
@@ -721,12 +716,12 @@ body.toplevel_page_holdthisproduct-settings input[type="submit"]:focus {
  * WP core uses special styles for `.button-link-delete` and other admin buttons.
  * Increase specificity so our flat button styles stay consistent.
  */
-.wp-core-ui .button.htp-cancel-reservation,
-.wp-core-ui .button.htp-approve-reservation,
-.wp-core-ui .button.htp-deny-reservation,
-.wp-core-ui .button.button-link-delete.htp-deny-reservation,
-.wp-core-ui .button.htp-delete-reservation,
-.wp-core-ui .button.button-link-delete.htp-delete-reservation {
+.wp-core-ui .button.sdpr-cancel-reservation,
+.wp-core-ui .button.sdpr-approve-reservation,
+.wp-core-ui .button.sdpr-deny-reservation,
+.wp-core-ui .button.button-link-delete.sdpr-deny-reservation,
+.wp-core-ui .button.sdpr-delete-reservation,
+.wp-core-ui .button.button-link-delete.sdpr-delete-reservation {
     /* Normalize WP button defaults for consistent sizing in the list table. */
     height: 30px !important;
     min-height: 30px !important;
@@ -738,72 +733,71 @@ body.toplevel_page_holdthisproduct-settings input[type="submit"]:focus {
     box-sizing: border-box !important;
 }
 
-.wp-core-ui .button.htp-cancel-reservation,
-.wp-core-ui .button.htp-approve-reservation,
-.wp-core-ui .button.htp-deny-reservation,
-.wp-core-ui .button.button-link-delete.htp-deny-reservation,
-.wp-core-ui .button.htp-delete-reservation,
-.wp-core-ui .button.button-link-delete.htp-delete-reservation {
+.wp-core-ui .button.sdpr-cancel-reservation,
+.wp-core-ui .button.sdpr-approve-reservation,
+.wp-core-ui .button.sdpr-deny-reservation,
+.wp-core-ui .button.button-link-delete.sdpr-deny-reservation,
+.wp-core-ui .button.sdpr-delete-reservation,
+.wp-core-ui .button.button-link-delete.sdpr-delete-reservation {
     background-image: none !important;
     border: none !important;
-    color: var(--htp-white) !important;
+    color: var(--sdpr-white) !important;
 }
 
-.wp-core-ui .button.htp-cancel-reservation:focus,
-.wp-core-ui .button.htp-cancel-reservation:focus-visible,
-.wp-core-ui .button.htp-approve-reservation:focus,
-.wp-core-ui .button.htp-approve-reservation:focus-visible,
-.wp-core-ui .button.htp-deny-reservation:focus,
-.wp-core-ui .button.htp-deny-reservation:focus-visible,
-.wp-core-ui .button.button-link-delete.htp-deny-reservation:focus,
-.wp-core-ui .button.button-link-delete.htp-deny-reservation:focus-visible,
-.wp-core-ui .button.htp-delete-reservation:focus,
-.wp-core-ui .button.htp-delete-reservation:focus-visible,
-.wp-core-ui .button.button-link-delete.htp-delete-reservation:focus,
-.wp-core-ui .button.button-link-delete.htp-delete-reservation:focus-visible {
-    outline: none !important;
+.wp-core-ui .button.sdpr-cancel-reservation:focus,
+.wp-core-ui .button.sdpr-cancel-reservation:focus-visible,
+.wp-core-ui .button.sdpr-approve-reservation:focus,
+.wp-core-ui .button.sdpr-approve-reservation:focus-visible,
+.wp-core-ui .button.sdpr-deny-reservation:focus,
+.wp-core-ui .button.sdpr-deny-reservation:focus-visible,
+.wp-core-ui .button.button-link-delete.sdpr-deny-reservation:focus,
+.wp-core-ui .button.button-link-delete.sdpr-deny-reservation:focus-visible,
+.wp-core-ui .button.sdpr-delete-reservation:focus,
+.wp-core-ui .button.sdpr-delete-reservation:focus-visible,
+.wp-core-ui .button.button-link-delete.sdpr-delete-reservation:focus,
+.wp-core-ui .button.button-link-delete.sdpr-delete-reservation:focus-visible {
     /* Replace WP's default focus styles with a consistent ring. */
     box-shadow: 0 0 0 3px rgba(47, 137, 249, 0.28) !important;
 }
 
-.wp-core-ui .button.htp-deny-reservation:focus,
-.wp-core-ui .button.htp-deny-reservation:focus-visible,
-.wp-core-ui .button.button-link-delete.htp-deny-reservation:focus,
-.wp-core-ui .button.button-link-delete.htp-deny-reservation:focus-visible,
-.wp-core-ui .button.htp-delete-reservation:focus,
-.wp-core-ui .button.htp-delete-reservation:focus-visible,
-.wp-core-ui .button.button-link-delete.htp-delete-reservation:focus,
-.wp-core-ui .button.button-link-delete.htp-delete-reservation:focus-visible {
+.wp-core-ui .button.sdpr-deny-reservation:focus,
+.wp-core-ui .button.sdpr-deny-reservation:focus-visible,
+.wp-core-ui .button.button-link-delete.sdpr-deny-reservation:focus,
+.wp-core-ui .button.button-link-delete.sdpr-deny-reservation:focus-visible,
+.wp-core-ui .button.sdpr-delete-reservation:focus,
+.wp-core-ui .button.sdpr-delete-reservation:focus-visible,
+.wp-core-ui .button.button-link-delete.sdpr-delete-reservation:focus,
+.wp-core-ui .button.button-link-delete.sdpr-delete-reservation:focus-visible {
     box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25) !important;
 }
 
-.wp-core-ui .button.htp-cancel-reservation {
-    background-color: var(--htp-primary) !important;
+.wp-core-ui .button.sdpr-cancel-reservation {
+    background-color: var(--sdpr-primary) !important;
 }
 
-.wp-core-ui .button.htp-cancel-reservation:hover {
-    background-color: var(--htp-primary-dark) !important;
+.wp-core-ui .button.sdpr-cancel-reservation:hover {
+    background-color: var(--sdpr-primary-dark) !important;
 }
 
-.wp-core-ui .button.htp-approve-reservation {
-    background-color: var(--htp-success) !important;
+.wp-core-ui .button.sdpr-approve-reservation {
+    background-color: var(--sdpr-success) !important;
 }
 
-.wp-core-ui .button.htp-approve-reservation:hover {
-    background-color: #059669 !important;
+.wp-core-ui .button.sdpr-approve-reservation:hover {
+    background-color: var(--sdpr-success-dark) !important;
 }
 
-.wp-core-ui .button.htp-deny-reservation,
-.wp-core-ui .button.button-link-delete.htp-deny-reservation,
-.wp-core-ui .button.htp-delete-reservation,
-.wp-core-ui .button.button-link-delete.htp-delete-reservation {
-    background-color: #ef4444 !important;
+.wp-core-ui .button.sdpr-deny-reservation,
+.wp-core-ui .button.button-link-delete.sdpr-deny-reservation,
+.wp-core-ui .button.sdpr-delete-reservation,
+.wp-core-ui .button.button-link-delete.sdpr-delete-reservation {
+    background-color: var(--sdpr-error) !important;
 }
 
-.wp-core-ui .button.htp-deny-reservation:hover,
-.wp-core-ui .button.button-link-delete.htp-deny-reservation:hover,
-.wp-core-ui .button.htp-delete-reservation:hover,
-.wp-core-ui .button.button-link-delete.htp-delete-reservation:hover {
+.wp-core-ui .button.sdpr-deny-reservation:hover,
+.wp-core-ui .button.button-link-delete.sdpr-deny-reservation:hover,
+.wp-core-ui .button.sdpr-delete-reservation:hover,
+.wp-core-ui .button.button-link-delete.sdpr-delete-reservation:hover {
     background-color: #dc2626 !important;
 }
 
@@ -813,12 +807,12 @@ body.toplevel_page_holdthisproduct-settings input[type="submit"]:focus {
     height: 30px;
     min-height: 30px;
     padding: 0 10px;
-    border: 1px solid var(--htp-border-ui);
+    border: 1px solid var(--sdpr-border-ui);
     border-radius: 4px;
     font-size: 13px;
     line-height: normal;
     box-sizing: border-box;
-    background-color: var(--htp-white);
+    background-color: var(--sdpr-white);
     transition: background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
@@ -835,7 +829,7 @@ body.toplevel_page_holdthisproduct-settings input[type="submit"]:focus {
 #reservation-search:focus,
 #reservation-search:focus-visible {
     outline: none;
-    border-color: var(--htp-primary);
+    border-color: var(--sdpr-primary);
     box-shadow: 0 0 0 3px rgba(39, 118, 238, 0.18);
 }
 
@@ -864,35 +858,33 @@ body.toplevel_page_holdthisproduct-settings input[type="submit"]:focus {
 
 .wp-core-ui #filter-reservations {
     background-image: none !important;
-    background-color: var(--htp-primary) !important;
-    color: var(--htp-white) !important;
+    background-color: var(--sdpr-primary) !important;
+    color: var(--sdpr-white) !important;
 }
 
 .wp-core-ui #filter-reservations:hover {
-    background-color: var(--htp-primary-dark) !important;
-    box-shadow: var(--htp-shadow) !important;
+    background-color: var(--sdpr-primary-dark) !important;
+    box-shadow: var(--sdpr-shadow) !important;
 }
 
 .wp-core-ui #filter-reservations:focus,
 .wp-core-ui #filter-reservations:focus-visible {
-    outline: none !important;
     box-shadow: 0 0 0 3px rgba(47, 137, 249, 0.28) !important;
 }
 
 .wp-core-ui #clear-filters {
     background-image: none !important;
-    background-color: #ef4444 !important;
-    color: var(--htp-white) !important;
+    background-color: var(--sdpr-error) !important;
+    color: var(--sdpr-white) !important;
 }
 
 .wp-core-ui #clear-filters:hover {
     background-color: #dc2626 !important;
-    box-shadow: var(--htp-shadow) !important;
+    box-shadow: var(--sdpr-shadow) !important;
 }
 
 .wp-core-ui #clear-filters:focus,
 .wp-core-ui #clear-filters:focus-visible {
-    outline: none !important;
     box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25) !important;
 }
 
@@ -901,7 +893,7 @@ body.toplevel_page_holdthisproduct-settings input[type="submit"]:focus {
     margin-top: 1rem;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: var(--htp-shadow);
+    box-shadow: var(--sdpr-shadow);
 }
 
 .options_group table.widefat th,
@@ -915,25 +907,25 @@ body.toplevel_page_holdthisproduct-settings input[type="submit"]:focus {
 }
 
 .options_group table.widefat td {
-    background: var(--htp-white);
-    border-bottom: 1px solid var(--htp-border);
+    background: var(--sdpr-white);
+    border-bottom: 1px solid var(--sdpr-border);
 }
 
 .options_group table.widefat tr:nth-child(even) td {
-    background: var(--htp-secondary);
+    background: var(--sdpr-secondary);
 }
 
-.htp-reservation-row {
+.sdpr-reservation-row {
     transition: background-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease, opacity 0.18s ease;
 }
 
-.htp-reservation-row:hover {
-    background-color: var(--htp-secondary) !important;
+.sdpr-reservation-row:hover {
+    background-color: var(--sdpr-secondary) !important;
     transform: translateY(-1px);
-    box-shadow: var(--htp-shadow);
+    box-shadow: var(--sdpr-shadow);
 }
 
-.htp-reservation-row.cancelled {
+.sdpr-reservation-row.cancelled {
     opacity: 0.6;
     background-color: #f9fafb !important;
 }
@@ -943,7 +935,7 @@ td:nth-child(5) {
 }
 
 .time-left-warning {
-    color: var(--htp-warning);
+    color: var(--sdpr-warning);
     font-weight: 700;
     background: #fffbeb;
     padding: 4px 8px;
@@ -952,7 +944,7 @@ td:nth-child(5) {
 }
 
 .time-left-critical {
-    color: var(--htp-error);
+    color: var(--sdpr-error);
     font-weight: 700;
     background: #fef2f2;
     padding: 4px 8px;
@@ -967,16 +959,16 @@ td:nth-child(5) {
     100% { opacity: 1; transform: scale(1); }
 }
 
-.notice.htp-success {
-    border-left-color: var(--htp-success);
+.notice.sdpr-success {
+    border-left-color: var(--sdpr-success);
     background: #f0fdf4;
 }
 
 .wp-list-table.widefat.fixed.striped {
-    border: 1px solid var(--htp-border);
+    border: 1px solid var(--sdpr-border);
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: var(--htp-shadow);
+    box-shadow: var(--sdpr-shadow);
 }
 
 .wp-list-table th {
@@ -985,7 +977,7 @@ td:nth-child(5) {
 }
 
 .wp-list-table tr:nth-child(even) {
-    background-color: var(--htp-secondary);
+    background-color: var(--sdpr-secondary);
 }
 
 .wp-list-table tr:hover {
@@ -993,46 +985,145 @@ td:nth-child(5) {
 }
 
 /* Responsive Design */
+.sdpr-reservations-filters,
+.sdpr-reservations-filters .actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.sdpr-reservations-filters {
+    margin: 20px 0;
+    justify-content: space-between;
+}
+
+.sdpr-reservations-filters .actions {
+    float: none;
+}
+
+.sdpr-table-scroll {
+    max-width: 100%;
+    overflow-x: auto;
+    border-radius: 8px;
+}
+
+.sdpr-table-scroll:focus-visible {
+    outline: 2px solid var(--sdpr-primary-dark);
+    outline-offset: 3px;
+}
+
+.sdpr-table-hint {
+    display: none;
+}
+
+.sdpr-row-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+@media (max-width: 782px) {
+    .sdpr-reservations-filters .actions {
+        width: 100%;
+    }
+
+    .sdpr-reservations-filters .actions > select,
+    .sdpr-reservations-filters .actions > input {
+        width: 100% !important;
+        max-width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    .sdpr-table-hint {
+        display: block;
+    }
+
+    .sdpr-table-scroll .wp-list-table {
+        display: table;
+        min-width: 1000px;
+    }
+
+    .sdpr-table-scroll--analytics .wp-list-table {
+        min-width: 750px;
+    }
+
+    .sdpr-table-scroll .wp-list-table thead {
+        display: table-header-group;
+    }
+
+    .sdpr-table-scroll .wp-list-table tbody {
+        display: table-row-group;
+    }
+
+    .sdpr-table-scroll .wp-list-table tr {
+        display: table-row;
+    }
+
+    .sdpr-table-scroll .wp-list-table th,
+    .sdpr-table-scroll .wp-list-table td {
+        display: table-cell;
+    }
+}
+
 @media (max-width: 768px) {
-    .htp-header-content {
-        flex-direction: column;
-        text-align: center;
-        gap: 1.5rem;
+    .sdpr-admin-header {
+        padding: 1.25rem 0;
+    }
+
+    .sdpr-header-content {
+        padding: 0 1rem;
+        flex-wrap: wrap;
+    }
+
+    .sdpr-title-section {
+        flex-basis: 100%;
+    }
+
+    .sdpr-main-title {
+        font-size: 1.4rem;
+        line-height: 1.3;
     }
     
-    .htp-logo-section {
+    .sdpr-logo-section {
         margin-left: 0;
+        margin-top: 1rem;
+    }
+
+    .sdpr-logo {
+        width: 180px;
     }
     
-    .htp-nav-tabs {
+    .sdpr-nav-tabs {
         flex-direction: column;
         gap: 0.5rem;
     }
     
-    .htp-nav-tab {
+    .sdpr-nav-tab {
         justify-content: center;
         border-radius: 4px;
-        border: 2px solid var(--htp-border);
+        border: 2px solid var(--sdpr-border);
         top: 0;
     }
     
-    .htp-admin-content {
+    .sdpr-admin-content {
         padding: 1rem;
     }
     
-    .htp-card-body {
+    .sdpr-card-body {
         padding: 1.25rem;
     }
     
-    .htp-card-header {
+    .sdpr-card-header {
         padding: 1rem 1.25rem;
     }
     
-    .htp-settings-form .form-table th,
-    .htp-settings-form .form-table td {
+    .sdpr-settings-form .form-table th,
+    .sdpr-settings-form .form-table td {
         display: block;
         width: 100%;
-        border: 1px solid var(--htp-border);
+        border: 1px solid var(--sdpr-border);
         border-radius: 8px;
         margin-bottom: 0.5rem;
     }
@@ -1062,23 +1153,23 @@ td:nth-child(5) {
 
 /* Status styling for analytics */
 .status-active {
-    color: var(--htp-primary);
+    color: var(--sdpr-primary);
 }
 
 .status-expired {
-    color: #ff8c00;
+    color: var(--sdpr-warning);
 }
 
 .status-cancelled {
-    color: #d63638;
+    color: var(--sdpr-error);
 }
 
 .status-fulfilled {
-    color: #00a32a;
+    color: var(--sdpr-success);
 }
 
 .status-pending-approval {
-    color: #f59e0b;
+    color: var(--sdpr-warning);
     font-weight: bold;
 }
 
@@ -1087,7 +1178,45 @@ td:nth-child(5) {
 }
 
 /* Analytics stat cards */
-.htp-stats-grid .htp-stat-card h3 {
+.sdpr-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.sdpr-stat-card {
+    background: var(--sdpr-white);
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.sdpr-stat-value {
+    font-size: 32px;
+    margin: 0;
+    color: var(--sdpr-primary);
+}
+
+.sdpr-stat-value.status-expired,
+.sdpr-stat-value.status-pending-approval {
+    color: var(--sdpr-warning);
+}
+
+.sdpr-stat-value.status-cancelled,
+.sdpr-stat-value.status-denied {
+    color: var(--sdpr-error);
+}
+
+.sdpr-stat-value.status-fulfilled {
+    color: var(--sdpr-success);
+}
+
+.sdpr-stat-value.status-order-cancelled {
+    color: #7c3aed;
+}
+
+.sdpr-stats-grid .sdpr-stat-card h3 {
     margin: 0 0 10px 0;
     font-size: 14px;
     color: #666;
@@ -1097,59 +1226,59 @@ td:nth-child(5) {
 }
 
 /* Popup Customization Sub-tabs */
-#htp-popup-tabs-wrapper {
+#sdpr-popup-tabs-wrapper {
     margin-bottom: 1.5rem;
 }
 
-#htp-popup-tabs {
+#sdpr-popup-tabs {
     display: flex;
     gap: 0.5rem;
     margin-bottom: 1rem;
-    border-bottom: 2px solid var(--htp-border);
+    border-bottom: 2px solid var(--sdpr-border);
     padding-bottom: 0;
 }
 
-.htp-popup-tab {
+.sdpr-popup-tab {
     padding: 0.5rem 1rem;
-    background: var(--htp-white);
-    border: 2px solid var(--htp-border);
+    background: var(--sdpr-white);
+    border: 2px solid var(--sdpr-border);
     border-bottom: none;
     border-radius: 6px 6px 0 0;
     cursor: pointer;
     font-size: 0.75rem;
     font-weight: 600;
-    color: var(--htp-text-light);
+    color: var(--sdpr-text-light);
     transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
     position: relative;
     top: 2px;
 }
 
-.htp-popup-tab:hover {
-    background: var(--htp-secondary);
-    color: var(--htp-primary);
+.sdpr-popup-tab:hover {
+    background: var(--sdpr-secondary);
+    color: var(--sdpr-primary);
     transform: translateY(-2px);
 }
 
-.htp-popup-tab-active {
-    background: var(--htp-accent);
-    border-color: var(--htp-accent);
-    color: var(--htp-white);
-    box-shadow: var(--htp-shadow);
+.sdpr-popup-tab-active {
+    background: var(--sdpr-accent);
+    border-color: var(--sdpr-accent);
+    color: var(--sdpr-white);
+    box-shadow: var(--sdpr-shadow);
 }
 
-.htp-popup-tab-active:hover {
-    background: var(--htp-primary);
-    border-color: var(--htp-primary);
-    color: var(--htp-white);
+.sdpr-popup-tab-active:hover {
+    background: var(--sdpr-primary);
+    border-color: var(--sdpr-primary);
+    color: var(--sdpr-white);
 }
 
-.htp-popup-tab-content {
+.sdpr-popup-tab-content {
     padding: 1rem 0;
 }
 
-.htp-popup-customization-fields-logged-in,
-.htp-popup-customization-fields-guests {
-    background: var(--htp-secondary);
+.sdpr-popup-customization-fields-logged-in,
+.sdpr-popup-customization-fields-guests {
+    background: var(--sdpr-secondary);
     border-radius: 8px;
     padding: 1rem;
     margin-top: 1rem;
@@ -1158,17 +1287,27 @@ td:nth-child(5) {
 }
 
 /* Right-align input fields to match toggle position */
-.htp-input-right-align {
+.sdpr-input-right-align {
     text-align: right;
 }
 
-.htp-input-right-align input {
+.sdpr-input-right-align input {
     margin-right: 1.25rem;
 }
 
+.sdpr-admin-wrapper a:focus-visible,
+.sdpr-admin-wrapper button:focus-visible,
+.sdpr-admin-wrapper input:focus-visible,
+.sdpr-admin-wrapper select:focus-visible,
+.sdpr-admin-wrapper textarea:focus-visible,
+.sdpr-admin-wrapper [tabindex]:focus-visible {
+    outline: 2px solid var(--sdpr-primary-dark) !important;
+    outline-offset: 2px;
+}
+
 @media (prefers-reduced-motion: reduce) {
-    [class*="htp-"],
-    [id^="htp-"] {
+    [class*="sdpr-"],
+    [id^="sdpr-"] {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         scroll-behavior: auto !important;
