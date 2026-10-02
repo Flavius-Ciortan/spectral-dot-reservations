@@ -43,6 +43,29 @@ check('Input boundary on white', tokens['--sdpr-border-ui'], tokens['--sdpr-whit
 check('Input boundary on page background', tokens['--sdpr-border-ui'], '#e2e8f0', 3);
 
 const frontendCss = fs.readFileSync(path.join(__dirname, '../assets/css/style.css'), 'utf8');
+const frontendTokens = Object.fromEntries(Array.from(frontendCss.matchAll(/(--sdpr-button-[\w-]+):\s*([^;]+);/g), match => [match[1], match[2].trim()]));
+for (const role of ['primary', 'primary-hover', 'error', 'error-hover']) {
+    assert.ok(Object.hasOwn(frontendTokens, `--sdpr-button-${role}`), `My Account must define ${role}.`);
+}
+for (const role of ['primary', 'primary-hover', 'success', 'success-hover', 'error', 'error-hover']) {
+    const token = `--sdpr-button-${role}`;
+    check(`Admin ${role} action text`, tokens['--sdpr-white'], tokens[token]);
+    if (Object.hasOwn(frontendTokens, token)) {
+        assert.equal(frontendTokens[token], tokens[token], `${role} must match in admin and My Account.`);
+        check(`My Account ${role} action text`, '#ffffff', frontendTokens[token]);
+    }
+}
+for (const selector of ['.sdpr-reservations-table .woocommerce-button', '.wp-core-ui .button.sdpr-cancel-reservation']) {
+    const sheet = selector.startsWith('.wp-core-ui') ? css : frontendCss;
+    assert.ok(sheet.includes(`${selector} {`), `${selector} must have a button rule.`);
+    const rule = sheet.slice(sheet.indexOf(`${selector} {`)).split('}')[0];
+    assert.match(rule, /background-color:\s*var\(--sdpr-button-primary\)/);
+}
+assert.match(frontendCss, /\.woocommerce-button\.cancel-reservation\s*\{\s*background-color:\s*var\(--sdpr-button-error\)/);
+assert.match(css, /\.wp-core-ui \.button\.sdpr-approve-reservation\s*\{\s*background-color:\s*var\(--sdpr-button-success\)/);
+assert.match(frontendCss, /\.woocommerce-button:hover\s*\{\s*background-color:\s*var\(--sdpr-button-primary-hover\)/);
+assert.match(frontendCss, /\.woocommerce-button\.cancel-reservation:hover\s*\{\s*background-color:\s*var\(--sdpr-button-error-hover\)/);
+assert.match(css, /\.wp-core-ui \.button\.sdpr-approve-reservation:hover\s*\{\s*background-color:\s*var\(--sdpr-button-success-hover\)/);
 const modalTokens = Object.fromEntries(Array.from(frontendCss.matchAll(/(--sdpr-modal-[\w-]+):\s*([^;]+);/g), match => [match[1], match[2].trim()]));
 check('Modal submit text', '#ffffff', modalTokens['--sdpr-modal-primary']);
 check('Modal hovered submit text', '#ffffff', modalTokens['--sdpr-modal-primary-dark']);

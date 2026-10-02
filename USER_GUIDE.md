@@ -69,6 +69,7 @@ The modal includes a semantic dialog, keyboard focus containment, Escape-to-clos
 - Cancelling an active hold restores stock exactly once.
 - A completed checkout transfers the held inventory obligation to the WooCommerce order.
 - A qualifying cancelled/failed order changes the reservation to **Order cancelled** and restores inventory once.
+- Refund restocking is controlled by WooCommerce. A later cancellation restores only the quantity that has not already been restocked.
 
 ## Merchant Operations
 

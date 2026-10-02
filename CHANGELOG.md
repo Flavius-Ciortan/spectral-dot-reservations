@@ -4,6 +4,10 @@ All notable changes to Spectral Dot Reservations are documented here. The projec
 
 ## 1.0.0 (Unreleased)
 
+- Align merchant and customer action buttons with a brighter, contrast-tested palette.
+- Restore only outstanding order stock after partial or full refund restocking.
+- Expand regression coverage for carts, refunds, privacy pagination, customer search and competing inventory transitions.
+
 Initial public release under the Spectral Dot branding. This is a fresh installation, not an upgrade or migration from a previously published plugin.
 
 ### Added
