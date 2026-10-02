@@ -81,6 +81,10 @@ label[for="rez_check"] {
     --sdpr-success: #10b981;
     --sdpr-warning: #f59e0b;
     --sdpr-error: #ef4444;
+    --sdpr-button-primary: #2563eb;
+    --sdpr-button-primary-hover: #1d4ed8;
+    --sdpr-button-error: #dc2626;
+    --sdpr-button-error-hover: #b91c1c;
     --sdpr-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     margin: 2rem 0;
 }
@@ -263,6 +267,13 @@ label[for="rez_check"] {
 }
 
 /* Action Buttons */
+.sdpr-reservations-table .sdpr-account-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
 .sdpr-reservations-table .woocommerce-button {
     height: 30px;
     min-height: 30px;
@@ -271,7 +282,7 @@ label[for="rez_check"] {
     align-items: center !important;
     justify-content: center !important;
     box-sizing: border-box !important;
-    background-color: var(--sdpr-primary) !important;
+    background-color: var(--sdpr-button-primary) !important;
     color: #ffffff !important;
     border: none !important;
     border-radius: 4px !important;
@@ -280,32 +291,31 @@ label[for="rez_check"] {
     line-height: normal !important;
     text-decoration: none !important;
     transition: background-color 0.18s ease, box-shadow 0.18s ease, color 0.18s ease !important;
-    margin: 0 8px 0 0 !important;
+    margin: 0 !important;
 }
 
 .sdpr-reservations-table .woocommerce-button:hover {
-    background-color: var(--sdpr-primary-dark) !important;
+    background-color: var(--sdpr-button-primary-hover) !important;
     box-shadow: var(--sdpr-shadow) !important;
 }
 
 .sdpr-reservations-table .woocommerce-button:focus,
 .sdpr-reservations-table .woocommerce-button:focus-visible {
     outline: none !important;
-    box-shadow: 0 0 0 3px rgba(47, 137, 249, 0.28) !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.28) !important;
 }
 
 .sdpr-reservations-table .woocommerce-button.cancel-reservation {
-    background-color: var(--sdpr-error) !important;
-    margin-right: 0 !important;
+    background-color: var(--sdpr-button-error) !important;
 }
 
 .sdpr-reservations-table .woocommerce-button.cancel-reservation:hover {
-    background-color: #dc2626 !important;
+    background-color: var(--sdpr-button-error-hover) !important;
 }
 
 .sdpr-reservations-table .woocommerce-button.cancel-reservation:focus,
 .sdpr-reservations-table .woocommerce-button.cancel-reservation:focus-visible {
-    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.22) !important;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.22) !important;
 }
 
 @media (max-width: 768px) {
@@ -315,7 +325,6 @@ label[for="rez_check"] {
 
     .sdpr-reservations-table .woocommerce-button {
         width: 100% !important;
-        margin: 4px 0 !important;
     }
 }
 

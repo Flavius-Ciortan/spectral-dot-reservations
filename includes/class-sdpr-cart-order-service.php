@@ -171,7 +171,8 @@ final class SDPR_Cart_Order_Service {
 			if ( ! $reservation_id ) {
 				continue;
 			}
-			$result = $this->inventory->restore_cancelled_order( $reservation_id, $item->get_product(), max( 1, (int) $item->get_meta( '_reduced_stock', true ) ) );
+			// WooCommerce refunds may already have restored some or all of this quantity.
+			$result = $this->inventory->restore_cancelled_order( $reservation_id, $item->get_product(), max( 0, (int) $item->get_meta( '_reduced_stock', true ) ) );
 			if ( is_wp_error( $result ) ) {
 				continue;
 			}

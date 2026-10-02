@@ -9,6 +9,7 @@ if ( ! defined( 'DOING_AJAX' ) ) {
 	define( 'DOING_AJAX', true );
 }
 $sdpr_test_failures = array();
+$GLOBALS['sdpr_test_failures'] =& $sdpr_test_failures;
 function sdpr_rebrand_assert( $condition, $message ) {
 	global $sdpr_test_failures;
 	if ( ! $condition ) {
@@ -107,6 +108,11 @@ try {
 	$sdpr_response = json_decode( ob_get_clean(), true );
 	sdpr_rebrand_assert( ! empty( $sdpr_response['success'] ), 'Authorized dismissal succeeds through the AJAX handler.' );
 	sdpr_rebrand_assert( ! isset( $sdpr_notices->visible_notices()['test-local'] ), 'Dismissal persists for the current user.' );
+	$sdpr_other_admins = get_users( array( 'role' => 'administrator', 'exclude' => array( $sdpr_user ), 'fields' => 'ID', 'number' => 1 ) );
+	wp_set_current_user( (int) $sdpr_other_admins[0] );
+	sdpr_rebrand_assert( isset( $sdpr_notices->visible_notices()['test-local'] ), 'One administrator dismissal does not hide the notice for another administrator.' );
+	wp_set_current_user( $sdpr_user );
+	sdpr_rebrand_assert( ! isset( $sdpr_notices->visible_notices()['test-local'] ), 'Returning to the dismissing administrator preserves only that user dismissal.' );
 	$sdpr_saved = get_user_option( 'sdpr_dismissed_notices' );
 	sdpr_rebrand_assert( $sdpr_saved['test-local']['until'] <= time() + DAY_IN_SECONDS, 'An unresolved operational issue is not hidden indefinitely.' );
 	$sdpr_notices->add( 'test-local', 'Changed local test notice.', 'success' );

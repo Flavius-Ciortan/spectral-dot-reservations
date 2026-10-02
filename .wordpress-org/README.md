@@ -26,11 +26,11 @@ The screenshot captions in `readme.txt` match these sequential files:
 
 ### Refresh Status
 
-Screenshots 1, 2, 4, 5 and 6 were captured directly from the current Free development files on 2026-10-02 and visually reviewed. They show only temporary demonstration products and reservations, not real customer data. No interface elements were recreated or edited into the images. The demo records were removed and the original test-site settings restored after capture.
+All six screenshots were recaptured on 2026-10-02 from the installed 1.0.0 release ZIP in an isolated QA database and visually reviewed. They use anonymous demonstration records, the final action palette and current branded views. Captures are framed to actual plugin/product content: no WordPress toolbar, admin sidebar, test-site header, navigation or footer is included. Only rectangular cropping was applied; no interface elements were hidden, recreated or edited into the images. The original test site's records and settings were not modified.
 
-Screenshot 3 was refreshed from the actual modal on 2026-10-02 after the contrast and result-state corrections, including the current stopwatch Reserve button in the product background. The heading and close button have a dedicated header row. Successful submissions replace the confirmation question with a result heading and notice; errors keep the confirmation form available. Active and pending success, duplicate errors, modal reset, Tab/Shift+Tab wrapping, Escape closing and opener-focus restoration were checked in the browser. Notice/close-control separation was verified at desktop, 390px and 320px widths.
+Screenshot 3 shows the actual approval-request confirmation dialog. The heading and close button have a dedicated header row. Successful submissions replace the confirmation question with a result heading and notice; errors keep the confirmation form available. Active and pending success, duplicate errors, modal reset, Tab/Shift+Tab wrapping, Escape closing and opener-focus restoration were checked in the earlier browser verification. Notice/close-control separation was verified at desktop, 390px and 320px widths.
 
-Earlier browser input stalled at My Account's native cancellation confirmation. After recovery, the modal checks and final styled-modal capture were completed. Native-confirmation admin/customer actions still need their broader visual retest. All six images now reflect the current captured interfaces, but these captures do not constitute final interaction/accessibility sign-off or an exact-release-ZIP test.
+The earlier browser pass verified administrator and Shop Manager actions, customer cancellation, customer isolation and restricted roles. Screenshots 4 and 5 include the corrected customer action spacing and compact admin urgency badge layout. Desktop wrapping and 390px stacked account buttons retain an 8px gap; the pending badge has its own visible border and does not scale the table cell. These checks do not claim full screen-reader or accessibility conformance certification.
 
 All screenshots use their actual JPEG format and `.jpg` extension. The previous modal reference was also JPEG data despite its `.png` filename; its extension was corrected without changing its pixels. WordPress.org supports both `.jpg` and `.png` screenshot names; keep exactly one file per number. See the [official directory asset guidance](https://developer.wordpress.org/plugins/wordpress-org/plugin-assets/#screenshots).
 
@@ -43,7 +43,7 @@ All screenshots use their actual JPEG format and `.jpg` extension. The previous 
 ![Product page with the stopwatch Reserve button beside Add to cart](screenshot-2.jpg)
 
 #### 3. Reservation Dialog
-![Reservation dialog and the current stopwatch action in its product background](screenshot-3.jpg)
+![Reservation approval-request confirmation dialog](screenshot-3.jpg)
 
 Current confirmation state with the corrected button contrast and separate close-control header.
 

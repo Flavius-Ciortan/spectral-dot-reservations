@@ -2,7 +2,13 @@
 
 All notable changes to Spectral Dot Reservations are documented here. The project follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and semantic versioning.
 
-## 1.0.0 - 2026-09-04
+## 1.0.0 (Unreleased)
+
+- Align merchant and customer action buttons with a brighter, contrast-tested palette.
+- Restore only outstanding order stock after partial or full refund restocking.
+- Expand regression coverage for carts, refunds, privacy pagination, customer search and competing inventory transitions.
+
+Initial public release under the Spectral Dot branding. This is a fresh installation, not an upgrade or migration from a previously published plugin.
 
 ### Added
 
@@ -27,7 +33,7 @@ All notable changes to Spectral Dot Reservations are documented here. The projec
 - Allowed Shop Managers to configure and operate reservations through `manage_woocommerce`.
 - Centralized canonical statuses, metadata keys, labels, summaries, and cached status counts.
 - Moved admin interactions from inline scripts to localized, versioned assets.
-- Normalized internal filenames and release package folder naming while retaining the historical main plugin filename for upgrade compatibility.
+- Standardized the plugin directory, bootstrap, text domain, owned identifiers and release package around `spectral-dot-reservations` and the `sdpr` namespace.
 - Clarified pending-request and active-reservation deadlines throughout the interface.
 - Updated release and user documentation to describe only implemented behavior.
 - Positioned the concise Reserve action beside Add to cart on desktop and directly below it on narrow screens, including block-based product templates.
@@ -52,3 +58,11 @@ All notable changes to Spectral Dot Reservations are documented here. The projec
 - Included customer names and related reservation identifiers in privacy exports.
 - Removed stored customer names and free-text denial details during privacy erasure.
 - Avoided passing an absent single-page pagination result into WordPress HTML sanitization on PHP 8.4.
+- Refreshed reservation counts, filtered rows and approval deadlines after admin actions, with visible dismissible feedback.
+- Corrected responsive admin filter/table layouts, content alignment and text/focus contrast.
+- Separated reservation confirmation content from successful results, with a dedicated close-control header and translated result headings.
+- Pinned the CI command-line runtime and made failed tool setup stop before release verification.
+- Aligned the plugin settings-save capability with its merchant menu capability so Shop Managers can save settings without access to unrelated WordPress options.
+- Replaced the native denial prompt with an accessible inline reason form, explicit submit/cancel controls and focus restoration.
+- Kept customer reservation actions separated when they wrap or stack, and rendered admin urgency indicators as compact badges rather than styled table cells.
+- Added consistent spacing below settings and reservation-action notices within plugin screens.

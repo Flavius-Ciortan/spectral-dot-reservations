@@ -91,13 +91,14 @@ final class SDPR_Inventory_Manager {
 	}
 
 	public function restore_cancelled_order( $reservation_id, $product, $quantity ) {
+		$quantity = max( 0, (int) $quantity );
 		return $this->transition(
 			$reservation_id,
 			SDPR_Reservation_Status::FULFILLED,
 			SDPR_Reservation_Status::ORDER_CANCELLED,
-			$product,
-			max( 1, absint( $quantity ) ),
-			'increase',
+			$quantity ? $product : null,
+			$quantity,
+			$quantity ? 'increase' : '',
 			self::STATE_TRANSFERRED,
 			self::STATE_RELEASED,
 			array(),

@@ -26,7 +26,7 @@ The supported Free scope is logged-in customers, one unit per reservation, simpl
 1. Install and activate WooCommerce.
 2. Upload the release ZIP through **Plugins > Add New > Upload Plugin**, or install the WordPress.org release.
 3. Activate **Spectral Dot Reservations**.
-4. Open **Spectral Dot Reservations > Settings** and enable reservations.
+4. Open **Reservations > Settings** and enable reservations. The Reservations menu sits directly below Products in the WordPress sidebar.
 5. Ensure each reservable product is a published simple product with WooCommerce stock management enabled and positive stock.
 
 SMTP is optional. The plugin uses the standard WordPress mail pipeline, so each merchant can choose whether their hosting mail service is sufficient or an SMTP provider/plugin is needed.

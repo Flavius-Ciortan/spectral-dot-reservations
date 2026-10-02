@@ -1,5 +1,51 @@
 (function ($, config) {
 	'use strict';
+	var $denialForm = null;
+	var $denialOpener = null;
+
+	function closeDenialForm(restoreFocus) {
+		if (!$denialForm || $denialForm.data('pending')) {
+			return;
+		}
+		$denialForm.remove();
+		$denialForm = null;
+		if (restoreFocus && $denialOpener && $.contains(document, $denialOpener[0])) {
+			$denialOpener.trigger('focus');
+		}
+		$denialOpener = null;
+	}
+
+	function showDenialForm($button, data) {
+		if ($denialForm && $denialForm.data('pending')) {
+			return;
+		}
+		closeDenialForm(false);
+		$denialOpener = $button;
+		$denialForm = $('<form>', { class: 'sdpr-denial-form', 'aria-labelledby': 'sdpr-denial-title' });
+		$('<h2>', { id: 'sdpr-denial-title', text: config.strings.denyTitle }).appendTo($denialForm);
+		$('<p>').text(config.strings.confirmDeny.replace('%1$s', data.customer).replace('%2$s', data.product)).appendTo($denialForm);
+		$('<label>', { for: 'sdpr-denial-reason', text: config.strings.denyReason }).appendTo($denialForm);
+		var $reason = $('<input>', { type: 'text', id: 'sdpr-denial-reason', name: 'reason', autocomplete: 'off' }).appendTo($denialForm);
+		var $controls = $('<div>', { class: 'sdpr-denial-actions' }).appendTo($denialForm);
+		$('<button>', { type: 'submit', class: 'button button-primary', text: config.strings.confirmDenial }).appendTo($controls);
+		$('<button>', { type: 'button', class: 'button', text: config.strings.cancelDenial }).on('click', function () {
+			closeDenialForm(true);
+		}).appendTo($controls);
+		$denialForm.on('keydown', function (event) {
+			if (event.key === 'Escape') {
+				event.preventDefault();
+				closeDenialForm(true);
+			}
+		}).on('submit', function (event) {
+			event.preventDefault();
+			if ($denialForm.data('pending')) {
+				return;
+			}
+			data.extra = { reason: $reason.val() };
+			postAction($button, 'sdpr_deny_reservation', config.nonces.deny, config.strings.denying, config.strings.denyFailed, data);
+		}).prependTo('.sdpr-reservations-admin .sdpr-admin-content');
+		$reason.trigger('focus');
+	}
 
 	function makeDismissible($notice) {
 		if ($notice.find('.notice-dismiss').length) {
@@ -41,6 +87,10 @@
 	function postAction($button, action, nonce, pendingLabel, failureLabel, data) {
 		var params = new URL(window.location.href).searchParams;
 		var $actions = $('.sdpr-reservations-admin tbody button');
+		var $denialControls = $('.sdpr-denial-form :input').prop('disabled', true);
+		if ($denialForm) {
+			$denialForm.data('pending', true).attr('aria-busy', 'true');
+		}
 		$actions.prop('disabled', true);
 		$button.prop('disabled', true).text(pendingLabel);
 		$.post(config.ajaxUrl, $.extend({
@@ -54,6 +104,8 @@
 		}, data.extra || {})).done(function (response) {
 			if (response.success && response.data && typeof response.data.content === 'string') {
 				$('.sdpr-reservations-admin .sdpr-admin-content').html(response.data.content);
+				$denialForm = null;
+				$denialOpener = null;
 				$('.sdpr-reservations-admin .notice.is-dismissible').each(function () { makeDismissible($(this)); });
 				showNotice('success', responseMessage(response, failureLabel));
 				return;
@@ -65,6 +117,10 @@
 			$button.prop('disabled', false).text(data.originalLabel);
 		}).always(function () {
 			$actions.prop('disabled', false);
+			$denialControls.prop('disabled', false);
+			if ($denialForm) {
+				$denialForm.data('pending', false).attr('aria-busy', 'false');
+			}
 		});
 	}
 
@@ -121,13 +177,8 @@
 		$(document).on('click', '.sdpr-deny-reservation', function () {
 			var $button = $(this);
 			var data = rowData($button);
-			var reason = window.prompt(config.strings.denyReason);
-			if (reason === null) {
-				return;
-			}
-			data.extra = { reason: reason };
 			data.originalLabel = config.strings.deny;
-			postAction($button, 'sdpr_deny_reservation', config.nonces.deny, config.strings.denying, config.strings.denyFailed, data);
+			showDenialForm($button, data);
 		});
 
 		$(document).on('click', '.sdpr-cancel-reservation', function () {

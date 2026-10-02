@@ -17,7 +17,7 @@ The Free edition reserves one unit per reservation. Variable, grouped, external,
 1. Install and activate WooCommerce.
 2. Install Spectral Dot Reservations from WordPress.org, or upload the release ZIP under **Plugins > Add New > Upload Plugin**.
 3. Activate **Spectral Dot Reservations**.
-4. Open **Spectral Dot Reservations > Settings**.
+4. Open **Reservations > Settings**. The Reservations menu sits directly below Products in the WordPress sidebar.
 5. Enable reservations and save the settings.
 
 ## Settings
@@ -40,7 +40,7 @@ The logged-in customer reservation modal supports:
 - An allowlisted font family.
 - Font size from 10 to 40 pixels.
 
-The modal includes a semantic dialog, keyboard focus containment, Escape-to-close behavior, focus restoration, live notice output, and reduced-motion support.
+The modal includes a semantic dialog, keyboard focus containment, Escape-to-close behavior, focus restoration, live notice output, and reduced-motion support. After a successful submission, the confirmation question is replaced by a result heading and message. Select **Done** or close the dialog to refresh the product page. If a request fails, the confirmation form remains available with an inline error.
 
 ## Customer Workflow
 
@@ -57,7 +57,7 @@ The modal includes a semantic dialog, keyboard focus containment, Escape-to-clos
 
 1. The customer submits a request and sees a pending-approval confirmation.
 2. The request becomes **Pending approval**. Stock is unchanged.
-3. A merchant approves or denies the request under **Spectral Dot Reservations > Reservations**.
+3. A merchant approves or denies the request under **Reservations > Reservations**.
 4. Approval starts the active duration and decreases stock by one.
 5. Denial closes the request without changing stock.
 6. An unanswered request becomes **Expired** when its pending deadline passes.
@@ -69,6 +69,7 @@ The modal includes a semantic dialog, keyboard focus containment, Escape-to-clos
 - Cancelling an active hold restores stock exactly once.
 - A completed checkout transfers the held inventory obligation to the WooCommerce order.
 - A qualifying cancelled/failed order changes the reservation to **Order cancelled** and restores inventory once.
+- Refund restocking is controlled by WooCommerce. A later cancellation restores only the quantity that has not already been restocked.
 
 ## Merchant Operations
 
@@ -76,7 +77,7 @@ Administrators and WooCommerce Shop Managers can use the plugin.
 
 ### Reservations Page
 
-Open **Spectral Dot Reservations > Reservations** to:
+Open **Reservations > Reservations** to:
 
 - Filter by pending, active, expired, cancelled, purchased, denied, or order-cancelled status.
 - Search by email, product name, product ID, display name, email, or login.
@@ -87,13 +88,15 @@ Open **Spectral Dot Reservations > Reservations** to:
 
 Actions are nonce-protected and report the real lifecycle result. If another process changes a reservation first, the interface does not report a false success.
 
+Selecting **Deny** opens an inline form identifying the customer and product. Enter an optional reason, then select **Deny request** to submit or **Keep request** to leave the reservation unchanged. Escape also closes the form and returns focus to the original Deny button. The reason is included in the denial email when notifications are enabled.
+
 ### Product Inventory Panel
 
 Edit a product and open its **Inventory** tab to view active reservations for that product.
 
 ### Analytics
 
-Open **Spectral Dot Reservations > Analytics** to view current totals, status counts, conversion percentage, and recent reservations. This is operational summary data, not historical trend reporting.
+Open **Reservations > Analytics** to view current totals, status counts, conversion percentage, and recent reservations. This is operational summary data, not historical trend reporting.
 
 ### Site Health
 

@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-02T11:40:14+03:00\n"
+"POT-Creation-Date: 2026-10-02T16:40:48+03:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: spectral-dot-reservations\n"
@@ -31,7 +31,7 @@ msgid "Spectral Dot"
 msgstr ""
 
 #: includes/admin/class-sdpr-admin-reservations.php:43
-#: includes/admin/class-sdpr-admin.php:678
+#: includes/admin/class-sdpr-admin.php:679
 msgid "Dismiss this notice."
 msgstr ""
 
@@ -40,7 +40,7 @@ msgid "this product"
 msgstr ""
 
 #: includes/admin/class-sdpr-admin-reservations.php:45
-#: includes/admin/class-sdpr-admin-reservations.php:602
+#: includes/admin/class-sdpr-admin-reservations.php:607
 msgid "Delete"
 msgstr ""
 
@@ -49,7 +49,7 @@ msgid "Deleting..."
 msgstr ""
 
 #: includes/admin/class-sdpr-admin-reservations.php:47
-#: includes/admin/class-sdpr-admin-reservations.php:276
+#: includes/admin/class-sdpr-admin-reservations.php:281
 msgid "Reservation deleted successfully."
 msgstr ""
 
@@ -58,7 +58,7 @@ msgid "Reservation could not be deleted."
 msgstr ""
 
 #: includes/admin/class-sdpr-admin-reservations.php:49
-#: includes/admin/class-sdpr-admin-reservations.php:581
+#: includes/admin/class-sdpr-admin-reservations.php:586
 msgid "Approve"
 msgstr ""
 
@@ -67,7 +67,7 @@ msgid "Approving..."
 msgstr ""
 
 #: includes/admin/class-sdpr-admin-reservations.php:51
-#: includes/admin/class-sdpr-admin-reservations.php:304
+#: includes/admin/class-sdpr-admin-reservations.php:309
 msgid "Reservation approved successfully."
 msgstr ""
 
@@ -81,7 +81,7 @@ msgid "Active"
 msgstr ""
 
 #: includes/admin/class-sdpr-admin-reservations.php:54
-#: includes/admin/class-sdpr-admin-reservations.php:588
+#: includes/admin/class-sdpr-admin-reservations.php:593
 msgid "Deny"
 msgstr ""
 
@@ -90,7 +90,7 @@ msgid "Denying..."
 msgstr ""
 
 #: includes/admin/class-sdpr-admin-reservations.php:56
-#: includes/admin/class-sdpr-admin-reservations.php:334
+#: includes/admin/class-sdpr-admin-reservations.php:339
 msgid "Reservation denied successfully."
 msgstr ""
 
@@ -105,183 +105,201 @@ msgid "Reservation could not be denied."
 msgstr ""
 
 #: includes/admin/class-sdpr-admin-reservations.php:59
-msgid "Please provide a reason for denying this reservation (optional):"
+msgid "Reason for denial (optional)"
 msgstr ""
 
 #: includes/admin/class-sdpr-admin-reservations.php:60
-#: includes/admin/class-sdpr-admin-reservations.php:595
-#: includes/admin/class-sdpr-admin.php:629
-#: includes/admin/class-sdpr-admin.php:677
-#: templates/myaccount/my-reservations.php:193
-msgid "Cancel"
+msgid "Deny reservation"
 msgstr ""
 
 #: includes/admin/class-sdpr-admin-reservations.php:61
-#: includes/admin/class-sdpr-admin.php:675
-msgid "Cancelling..."
+msgid "Deny request"
 msgstr ""
 
 #: includes/admin/class-sdpr-admin-reservations.php:62
-#: includes/admin/class-sdpr-admin-reservations.php:254
+msgid "Keep request"
+msgstr ""
+
+#. translators: 1: customer, 2: product.
+#: includes/admin/class-sdpr-admin-reservations.php:64
+#, php-format
+msgid "Deny the reservation for %1$s on %2$s?"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:65
+#: includes/admin/class-sdpr-admin-reservations.php:600
+#: includes/admin/class-sdpr-admin.php:630
+#: includes/admin/class-sdpr-admin.php:678
+#: templates/myaccount/my-reservations.php:194
+msgid "Cancel"
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:66
 #: includes/admin/class-sdpr-admin.php:676
+msgid "Cancelling..."
+msgstr ""
+
+#: includes/admin/class-sdpr-admin-reservations.php:67
+#: includes/admin/class-sdpr-admin-reservations.php:259
+#: includes/admin/class-sdpr-admin.php:677
 msgid "Reservation cancelled successfully."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:63
+#: includes/admin/class-sdpr-admin-reservations.php:68
 #: includes/class-sdpr-reservation-status.php:39
 #: templates/myaccount/my-reservations.php:113
 msgid "Cancelled"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:64
-#: includes/admin/class-sdpr-admin.php:680
+#: includes/admin/class-sdpr-admin-reservations.php:69
+#: includes/admin/class-sdpr-admin.php:681
 msgid "Reservation could not be cancelled."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:65
+#: includes/admin/class-sdpr-admin-reservations.php:70
 msgid "Missing reservation ID."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:66
-#: includes/admin/class-sdpr-admin.php:681
+#: includes/admin/class-sdpr-admin-reservations.php:71
+#: includes/admin/class-sdpr-admin.php:682
 #: includes/frontend/class-sdpr-frontend.php:176
 msgid "Request failed. Please try again."
 msgstr ""
 
 #. translators: 1: customer, 2: product.
-#: includes/admin/class-sdpr-admin-reservations.php:68
+#: includes/admin/class-sdpr-admin-reservations.php:73
 #, php-format
 msgid "Permanently delete the reservation for %1$s on %2$s? This action cannot be undone."
 msgstr ""
 
 #. translators: 1: customer, 2: product.
-#: includes/admin/class-sdpr-admin-reservations.php:70
+#: includes/admin/class-sdpr-admin-reservations.php:75
 #, php-format
 msgid "Approve the reservation for %1$s on %2$s?"
 msgstr ""
 
 #. translators: 1: customer, 2: product.
-#: includes/admin/class-sdpr-admin-reservations.php:72
+#: includes/admin/class-sdpr-admin-reservations.php:77
 #, php-format
 msgid "Cancel the reservation for %1$s on %2$s?"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:89
+#: includes/admin/class-sdpr-admin-reservations.php:94
 msgid "Manage Reservations"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:90
+#: includes/admin/class-sdpr-admin-reservations.php:95
 msgid "Review customer requests, track active holds and manage reservation statuses."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:116
+#: includes/admin/class-sdpr-admin-reservations.php:121
 msgid "Pending Approval:"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:117
+#: includes/admin/class-sdpr-admin-reservations.php:122
 msgid "Active:"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:118
+#: includes/admin/class-sdpr-admin-reservations.php:123
 msgid "Expired:"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:119
+#: includes/admin/class-sdpr-admin-reservations.php:124
 msgid "Cancelled:"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:120
+#: includes/admin/class-sdpr-admin-reservations.php:125
 msgid "Fulfilled:"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:121
+#: includes/admin/class-sdpr-admin-reservations.php:126
 msgid "Denied:"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:122
+#: includes/admin/class-sdpr-admin-reservations.php:127
 msgid "Order Cancelled:"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:123
+#: includes/admin/class-sdpr-admin-reservations.php:128
 msgid "Total:"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:129
+#: includes/admin/class-sdpr-admin-reservations.php:134
 msgid "Filter reservations by status"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:131
+#: includes/admin/class-sdpr-admin-reservations.php:136
 msgid "All Statuses"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:137
+#: includes/admin/class-sdpr-admin-reservations.php:142
 msgid "Search reservations by"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:139
+#: includes/admin/class-sdpr-admin-reservations.php:144
 #: includes/class-sdpr-privacy-service.php:65
 msgid "Email"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:140
+#: includes/admin/class-sdpr-admin-reservations.php:145
 msgid "Product Name"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:141
+#: includes/admin/class-sdpr-admin-reservations.php:146
 #: includes/class-sdpr-privacy-service.php:49
 msgid "Product ID"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:142
-#: includes/admin/class-sdpr-admin-reservations.php:168
-#: includes/admin/class-sdpr-admin.php:552
+#: includes/admin/class-sdpr-admin-reservations.php:147
+#: includes/admin/class-sdpr-admin-reservations.php:173
+#: includes/admin/class-sdpr-admin.php:553
 #: includes/admin/class-sdpr-analytics.php:178
 msgid "Customer"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:145
+#: includes/admin/class-sdpr-admin-reservations.php:150
 msgid "Search reservations"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:146
+#: includes/admin/class-sdpr-admin-reservations.php:151
 msgid "Search reservations..."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:148
+#: includes/admin/class-sdpr-admin-reservations.php:153
 msgid "Filter"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:149
+#: includes/admin/class-sdpr-admin-reservations.php:154
 msgid "Clear"
 msgstr ""
 
 #. translators: %d: number of reservations.
-#: includes/admin/class-sdpr-admin-reservations.php:153
+#: includes/admin/class-sdpr-admin-reservations.php:158
 #, php-format
 msgid "%d reservations"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:159
+#: includes/admin/class-sdpr-admin-reservations.php:164
 msgid "No reservations found matching your criteria."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:162
+#: includes/admin/class-sdpr-admin-reservations.php:167
 #: includes/admin/class-sdpr-analytics.php:175
 msgid "Scroll horizontally to see all reservation details."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:163
+#: includes/admin/class-sdpr-admin-reservations.php:168
 msgid "Reservation details"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:167
+#: includes/admin/class-sdpr-admin-reservations.php:172
 #: includes/admin/class-sdpr-analytics.php:178
 #: templates/myaccount/my-reservations.php:26
 #: templates/myaccount/my-reservations.php:159
 msgid "Product"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:169
+#: includes/admin/class-sdpr-admin-reservations.php:174
 #: includes/admin/class-sdpr-analytics.php:178
 #: includes/class-sdpr-privacy-service.php:57
 #: templates/myaccount/my-reservations.php:29
@@ -289,12 +307,12 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:170
+#: includes/admin/class-sdpr-admin-reservations.php:175
 msgid "Reserved"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:171
-#: includes/admin/class-sdpr-admin.php:553
+#: includes/admin/class-sdpr-admin-reservations.php:176
+#: includes/admin/class-sdpr-admin.php:554
 #: includes/admin/class-sdpr-analytics.php:178
 #: includes/class-sdpr-privacy-service.php:69
 #: templates/myaccount/my-reservations.php:32
@@ -302,222 +320,222 @@ msgstr ""
 msgid "Expires"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:172
+#: includes/admin/class-sdpr-admin-reservations.php:177
 #: templates/myaccount/my-reservations.php:35
 #: templates/myaccount/my-reservations.php:180
 msgid "Time Left"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:173
+#: includes/admin/class-sdpr-admin-reservations.php:178
 #: templates/myaccount/my-reservations.php:38
 #: templates/myaccount/my-reservations.php:185
 msgid "Actions"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:515
-#: includes/admin/class-sdpr-admin-reservations.php:516
+#: includes/admin/class-sdpr-admin-reservations.php:520
+#: includes/admin/class-sdpr-admin-reservations.php:521
 msgid "No email"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin-reservations.php:556
+#: includes/admin/class-sdpr-admin-reservations.php:561
 #: includes/admin/class-sdpr-analytics.php:208
 #: includes/class-sdpr-reservation-status.php:48
 msgid "Unknown"
 msgstr ""
 
 #. translators: %d: reserved product quantity.
-#: includes/admin/class-sdpr-admin-reservations.php:565
+#: includes/admin/class-sdpr-admin-reservations.php:570
 #, php-format
 msgid "Quantity %d"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:43
-#: includes/admin/class-sdpr-admin.php:410
+#: includes/admin/class-sdpr-admin.php:44
+#: includes/admin/class-sdpr-admin.php:411
 msgid "Product Reservations Settings"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:44
-#: includes/admin/class-sdpr-admin.php:65
+#: includes/admin/class-sdpr-admin.php:45
 #: includes/admin/class-sdpr-admin.php:66
+#: includes/admin/class-sdpr-admin.php:67
 #: includes/class-sdpr-reservations.php:119
 #: includes/class-sdpr-reservations.php:287
 msgid "Reservations"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:55
 #: includes/admin/class-sdpr-admin.php:56
+#: includes/admin/class-sdpr-admin.php:57
 msgid "Settings"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:118
+#: includes/admin/class-sdpr-admin.php:119
 msgid "Enable Reservation"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:119
+#: includes/admin/class-sdpr-admin.php:120
 msgid "Max Reservations Per User"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:120
+#: includes/admin/class-sdpr-admin.php:121
 msgid "Reservation Duration (hours)"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:121
+#: includes/admin/class-sdpr-admin.php:122
 msgid "Approval Request Duration (hours)"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:122
+#: includes/admin/class-sdpr-admin.php:123
 msgid "Enable Email Notifications"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:123
+#: includes/admin/class-sdpr-admin.php:124
 msgid "Require Admin Approval for Reservations"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:158
+#: includes/admin/class-sdpr-admin.php:159
 msgid "Max reservations must be at least 1."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:161
+#: includes/admin/class-sdpr-admin.php:162
 msgid "Max reservations cannot exceed 100."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:168
+#: includes/admin/class-sdpr-admin.php:169
 msgid "Reservation duration must be at least 1 hour."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:171
+#: includes/admin/class-sdpr-admin.php:172
 msgid "Reservation duration cannot exceed 168 hours."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:180
+#: includes/admin/class-sdpr-admin.php:181
 msgid "Approval request duration must be at least 1 hour."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:183
+#: includes/admin/class-sdpr-admin.php:184
 msgid "Approval request duration cannot exceed 168 hours."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:212
+#: includes/admin/class-sdpr-admin.php:213
 msgid "Popup border radius must be between 0 and 50 pixels."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:216
+#: includes/admin/class-sdpr-admin.php:217
 msgid "Popup font size must be between 10 and 40 pixels."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:224
+#: includes/admin/class-sdpr-admin.php:225
 msgid "Popup background color was invalid and has been reset to the default."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:228
+#: includes/admin/class-sdpr-admin.php:229
 msgid "Popup text color was invalid and has been reset to the default."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:232
+#: includes/admin/class-sdpr-admin.php:233
 msgid "Popup font family was invalid and has been reset to the default."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:291
+#: includes/admin/class-sdpr-admin.php:292
 msgid "Enable product reservations across your store."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:307
+#: includes/admin/class-sdpr-admin.php:308
 msgid "Limit how many active reservations a user can have at once."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:325
+#: includes/admin/class-sdpr-admin.php:326
 msgid "How long reservations last (1-168 hours, default: 24)."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:341
+#: includes/admin/class-sdpr-admin.php:342
 msgid "How long an approval request remains open. The active reservation duration starts when it is approved."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:360
+#: includes/admin/class-sdpr-admin.php:361
 msgid "Send email confirmations and status updates to customers."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:379
+#: includes/admin/class-sdpr-admin.php:380
 msgid "Reservations require admin approval before becoming active."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:411
+#: includes/admin/class-sdpr-admin.php:412
 msgid "Set reservation limits, hold durations, approval rules and customer notifications."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:420
+#: includes/admin/class-sdpr-admin.php:421
 msgid "Settings sections"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:423
+#: includes/admin/class-sdpr-admin.php:424
 msgid "General Settings"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:431
-#: includes/admin/class-sdpr-admin.php:457
+#: includes/admin/class-sdpr-admin.php:432
+#: includes/admin/class-sdpr-admin.php:458
 msgid "Pop-up Customization"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:444
+#: includes/admin/class-sdpr-admin.php:445
 msgid "Configuration"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:445
+#: includes/admin/class-sdpr-admin.php:446
 msgid "Configure the basic settings for your reservation system"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:458
+#: includes/admin/class-sdpr-admin.php:459
 msgid "Customize the appearance of the reservation pop-up modal"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:469
+#: includes/admin/class-sdpr-admin.php:470
 msgid "Enable Pop-up Customization"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:478
+#: includes/admin/class-sdpr-admin.php:479
 msgid "Enable custom styling for the reservation pop-up modal."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:486
+#: includes/admin/class-sdpr-admin.php:487
 msgid "Border Radius (px)"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:490
+#: includes/admin/class-sdpr-admin.php:491
 msgid "Background Color"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:494
+#: includes/admin/class-sdpr-admin.php:495
 msgid "Font Family"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:508
+#: includes/admin/class-sdpr-admin.php:509
 msgid "Font Size (px)"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:512
+#: includes/admin/class-sdpr-admin.php:513
 msgid "Text Color"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:522
+#: includes/admin/class-sdpr-admin.php:523
 msgid "Save Settings"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:544
+#: includes/admin/class-sdpr-admin.php:545
 #: includes/admin/class-sdpr-analytics.php:87
 msgid "Active Reservations"
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:548
-#: includes/admin/class-sdpr-admin.php:679
+#: includes/admin/class-sdpr-admin.php:549
+#: includes/admin/class-sdpr-admin.php:680
 msgid "No active reservations for this product."
 msgstr ""
 
-#: includes/admin/class-sdpr-admin.php:554
+#: includes/admin/class-sdpr-admin.php:555
 msgid "Action"
 msgstr ""
 
 #. translators: %s: customer name.
-#: includes/admin/class-sdpr-admin.php:674
+#: includes/admin/class-sdpr-admin.php:675
 #, php-format
 msgid "Cancel the reservation for %s?"
 msgstr ""
@@ -1081,14 +1099,14 @@ msgid_plural "%d minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/myaccount/my-reservations.php:188
+#: templates/myaccount/my-reservations.php:189
 msgid "Add to Cart"
 msgstr ""
 
-#: templates/myaccount/my-reservations.php:192
+#: templates/myaccount/my-reservations.php:193
 msgid "Are you sure you want to cancel this reservation?"
 msgstr ""
 
-#: templates/myaccount/my-reservations.php:206
+#: templates/myaccount/my-reservations.php:208
 msgid "Reservation history pagination"
 msgstr ""

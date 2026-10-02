@@ -52,7 +52,7 @@ Reservation records remain in the database until the plugin is uninstalled. For 
 1. Install and activate WooCommerce.
 2. Install Spectral Dot Reservations from WordPress.org, or upload the release ZIP through **Plugins > Add New > Upload Plugin**.
 3. Activate the plugin.
-4. Open **Spectral Dot Reservations > Settings** and enable reservations.
+4. Open **Reservations > Settings** and enable reservations. Find Reservations directly below Products in the WordPress sidebar.
 5. Configure durations, limits, notifications, and approval behavior.
 6. Ensure reservable products are published simple products with stock management enabled and positive stock.
 
@@ -109,9 +109,10 @@ No. The plugin has no author-operated service, telemetry, tracking, advertisemen
 
 == Changelog ==
 
-= 1.0.0 - 2026-09-04 =
+= 1.0.0 =
 
-* Reworked lifecycle and inventory ownership into transactional, idempotent services
+* Initial public release under the Spectral Dot branding
+* Transactional, idempotent reservation lifecycle and inventory ownership
 * Added safe cart-before-reservation linkage and checkout fulfillment without double stock reduction
 * Added concurrency locking, cron self-healing, inventory diagnostics, and upgrade reconciliation
 * Preserved cross-request lock exclusivity on current WordPress versions
@@ -124,6 +125,8 @@ No. The plugin has no author-operated service, telemetry, tracking, advertisemen
 * Prepared canonical licensing, repository links, and WordPress.org submission documentation
 * Added directory artwork, release screenshots, explicit control labels, keyboard-operable settings tabs, and dialog descriptions
 * Removed an unnecessary analytics metadata join and corrected single-page reservation pagination on PHP 8.4
+* Responsive reservation management with refreshed counts, filters, deadlines and dismissible action notices
+* Separate confirmation and result states in the reservation dialog, with accessible headings and keyboard focus handling
 
 == Upgrade Notice ==
 
