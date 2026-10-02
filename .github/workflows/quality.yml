@@ -17,6 +17,8 @@ jobs:
           php-version: '8.3'
           tools: composer:v2
           coverage: none
+        env:
+          fail-fast: true
       - uses: actions/setup-node@v7
         with:
           node-version: '22'
@@ -63,13 +65,16 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          tools: wp-cli
+          tools: wp-cli:2.12.0
           coverage: none
+        env:
+          fail-fast: true
       - name: Install WordPress and WooCommerce
         env:
           WP_VERSION: ${{ matrix.wordpress }}
           WC_VERSION: ${{ matrix.woocommerce }}
         run: |
+          wp --info
           wp core download --path=/tmp/wordpress --version="$WP_VERSION"
           wp config create --path=/tmp/wordpress --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1:3306
           wp core install --path=/tmp/wordpress --url=http://localhost --title=SDPR --admin_user=admin --admin_password=admin --admin_email=admin@example.test
@@ -134,13 +139,16 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
-          tools: wp-cli
+          tools: wp-cli:2.12.0
           coverage: none
+        env:
+          fail-fast: true
       - uses: actions/download-artifact@v4
         with:
           name: spectral-dot-reservations-release
           path: dist
       - run: |
+          wp --info
           wp core download --path=/tmp/wordpress
           wp config create --path=/tmp/wordpress --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1:3306
           wp core install --path=/tmp/wordpress --url=http://localhost --title=SDPR --admin_user=admin --admin_password=admin --admin_email=admin@example.test
