@@ -116,15 +116,57 @@ final class SDPR_Reservation_Repository implements SDPR_Reservation_Repository_I
 	}
 
 	public function count_open( $user_id, $email = '' ) {
-		return count( $this->find_open_for_identity( $user_id, $email ) );
+		list( $user_id, $email ) = $this->normalize_identity( $user_id, $email );
+		if ( ! $user_id && ! $email ) {
+			return 0;
+		}
+		$args  = array(
+			'post_type'      => 'sdpr_reservation',
+			'post_status'    => 'publish',
+			'fields'         => 'ids',
+			'posts_per_page' => 1,
+			'no_found_rows'  => false,
+			'cache_results'  => false,
+			'orderby'        => 'none',
+			'meta_query'     => array(
+				array(
+					'key'     => SDPR_Reservation_Meta::STATUS,
+					'value'   => SDPR_Reservation_Status::open(),
+					'compare' => 'IN',
+				),
+				array(
+					'key'     => SDPR_Reservation_Meta::EXPIRES_AT,
+					'value'   => time(),
+					'type'    => 'NUMERIC',
+					'compare' => '>',
+				),
+			),
+		);
+		$count = 0;
+		if ( $user_id ) {
+			$query = new WP_Query( array_merge( $args, array( 'author' => $user_id ) ) );
+			$count = (int) $query->found_posts;
+			// The second aggregate is disjoint, so account/email overlap is never counted twice.
+			$args['author__not_in'] = array( $user_id );
+		}
+		if ( $email ) {
+			$email_meta         = array(
+				'key'   => SDPR_Reservation_Meta::EMAIL,
+				'value' => $email,
+			);
+			$args['meta_query'] = array_merge( array( $email_meta ), $args['meta_query'] );
+			$query              = new WP_Query( $args );
+			$count             += (int) $query->found_posts;
+		}
+		return $count;
 	}
 
 	public function user_has_open_for_product( $product_id, $user_id, $email = '' ) {
 		return ! empty( $this->find_open_for_identity( $user_id, $email, $product_id, 1 ) );
 	}
 
-	/** Return unique, unexpired open reservations for an account/email identity. */
-	private function find_open_for_identity( $user_id, $email = '', $product_id = 0, $limit = -1 ) {
+	/** Resolve the same account/email identity for counts and duplicate checks. */
+	private function normalize_identity( $user_id, $email ) {
 		$user_id = absint( $user_id );
 		$email   = sanitize_email( $email );
 		if ( ! $email && $user_id ) {
@@ -135,6 +177,12 @@ final class SDPR_Reservation_Repository implements SDPR_Reservation_Repository_I
 			$user    = get_user_by( 'email', $email );
 			$user_id = $user ? (int) $user->ID : 0;
 		}
+		return array( $user_id, $email );
+	}
+
+	/** A duplicate check needs only one matching reservation per identity path. */
+	private function find_open_for_identity( $user_id, $email = '', $product_id = 0, $limit = 1 ) {
+		list( $user_id, $email ) = $this->normalize_identity( $user_id, $email );
 		if ( ! $user_id && ! $email ) {
 			return array();
 		}

@@ -51,11 +51,22 @@ $measure = static function ( $name, $callback ) use ( $wpdb ) {
 	$time_start  = microtime( true );
 	$result      = $callback();
 	$elapsed     = round( ( microtime( true ) - $time_start ) * 1000, 2 );
+	$query_count = (int) $wpdb->num_queries - $query_start;
+	if ( '1' === getenv( 'SDPR_PERFORMANCE_EXPLAIN' ) && $query_count > 0 ) {
+		foreach ( array_slice( $wpdb->queries, -$query_count ) as $logged ) {
+			$sql = $logged[0];
+			if ( 0 === strpos( ltrim( $sql ), 'SELECT' ) && false !== strpos( $sql, $wpdb->posts ) && false !== strpos( $sql, 'post_type' ) ) {
+				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- EXPLAIN uses the already executed query in this opt-in disposable test harness.
+				$plan = $wpdb->get_results( 'EXPLAIN ' . $sql, ARRAY_A );
+				WP_CLI::line( 'PLAN ' . $name . ': ' . wp_json_encode( array( 'sql' => $sql, 'plan' => $plan ) ) );
+			}
+		}
+	}
 
 	return array(
 		'name'    => $name,
 		'ms'      => $elapsed,
-		'queries' => (int) $wpdb->num_queries - $query_start,
+		'queries' => $query_count,
 		'result'  => is_scalar( $result ) ? $result : count( (array) $result ),
 	);
 };
@@ -145,6 +156,15 @@ $repository = new SDPR_Reservation_Repository();
 $target_id  = 900001;
 $target_email = 'performance-1@example.invalid';
 $target_product = 1001;
+if ( '1' === getenv( 'SDPR_PERFORMANCE_EXPLAIN' ) ) {
+	if ( ! defined( 'SAVEQUERIES' ) ) {
+		define( 'SAVEQUERIES', true );
+	}
+	if ( ! SAVEQUERIES ) {
+		WP_CLI::error( 'Query plans require SAVEQUERIES to be enabled.' );
+	}
+	$wpdb->queries = array();
+}
 
 $results   = array();
 $results[] = $measure( 'status_counts_cold', static function () use ( $repository ) {

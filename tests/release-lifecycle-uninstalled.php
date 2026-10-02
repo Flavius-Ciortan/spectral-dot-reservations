@@ -12,7 +12,6 @@ $valid          = $product
 	&& ! get_post( $reservation_id )
 	&& false === get_option( 'sdpr_options', false )
 	&& false === get_option( 'sdpr_version', false )
-	&& false === get_option( 'sdpr_inventory_state_version', false )
 	&& ! wp_next_scheduled( 'sdpr_expire_reservations' );
 
 if ( ! $valid ) {

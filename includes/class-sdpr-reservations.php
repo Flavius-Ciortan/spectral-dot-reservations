@@ -92,10 +92,6 @@ class SDPR_Reservations {
 		$this->expiration->schedule();
 	}
 
-	public function migrate_inventory_states() {
-		$this->expiration->migrate_inventory_states();
-	}
-
 	public function register_site_health_tests( $tests ) {
 		return $this->expiration->register_site_health_tests( $tests );
 	}

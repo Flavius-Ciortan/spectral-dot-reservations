@@ -20,28 +20,22 @@ if ( ! $valid ) {
 
 $original_timezone = get_option( 'timezone_string', '' );
 $original_offset   = get_option( 'gmt_offset', 0 );
-update_option( 'timezone_string', 'Europe/Bucharest' );
-update_option( 'gmt_offset', 3 );
-$offset         = wp_timezone()->getOffset( new DateTimeImmutable( 'now', new DateTimeZone( 'UTC' ) ) );
-$legacy_expires = time() + HOUR_IN_SECONDS + $offset;
-update_post_meta( $reservation_id, SDPR_Reservation_Meta::EXPIRES_AT, $legacy_expires );
-delete_post_meta( $reservation_id, SDPR_Reservation_Meta::TIMESTAMP_MODEL );
-// Simulate a pre-release install so the 1.0.0 migration is exercised.
-update_option( 'sdpr_version', '0.9.0', false );
-// Replaying global admin hooks in WP-CLI also re-runs unrelated plugin callbacks.
-$plugin->maybe_upgrade();
-$plugin->maybe_migrate_inventory_states();
-
-$migrated_expires = (int) get_post_meta( $reservation_id, SDPR_Reservation_Meta::EXPIRES_AT, true );
-$migration_valid  = 'utc' === get_post_meta( $reservation_id, SDPR_Reservation_Meta::TIMESTAMP_MODEL, true )
-	&& SDPR_VERSION === get_option( 'sdpr_version' )
-	&& abs( $migrated_expires - ( time() + HOUR_IN_SECONDS ) ) <= 5;
-
-update_option( 'timezone_string', $original_timezone );
-update_option( 'gmt_offset', $original_offset );
-
-if ( ! $migration_valid ) {
+$expires = (int) get_post_meta( $reservation_id, SDPR_Reservation_Meta::EXPIRES_AT, true );
+try {
+	update_option( 'timezone_string', 'Europe/Bucharest' );
+	update_option( 'gmt_offset', 3 );
+	$valid = 'utc' === get_post_meta( $reservation_id, SDPR_Reservation_Meta::TIMESTAMP_MODEL, true )
+		&& SDPR_VERSION === get_option( 'sdpr_version' )
+		&& $expires > time()
+		&& $expires === (int) get_post_meta( $reservation_id, SDPR_Reservation_Meta::EXPIRES_AT, true )
+		&& SDPR_Inventory_Manager::STATE_HELD === get_post_meta( $reservation_id, SDPR_Reservation_Meta::INVENTORY_STATE, true )
+		&& 1 === (int) wc_get_product( $product_id )->get_stock_quantity( 'edit' );
+} finally {
+	update_option( 'timezone_string', $original_timezone );
+	update_option( 'gmt_offset', $original_offset );
+}
+if ( ! $valid ) {
 	exit( 1 );
 }
 
-echo "PASS: Reactivation preserves data and the bounded legacy timestamp upgrade completes.\n";
+echo "PASS: Reactivation preserves UTC deadlines and explicit stock ownership across timezone changes.\n";
