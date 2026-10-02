@@ -1,6 +1,6 @@
 # WordPress.org Directory Assets
 
-This repository folder contains WordPress.org directory artwork and its editable vector masters. It is excluded from the release ZIP. After the plugin is approved, copy the PNG files from this folder to the top-level `/assets` directory of the assigned WordPress.org SVN repository, not to `/trunk/assets`. Do not upload the `source/` directory.
+This repository folder contains WordPress.org directory artwork and its editable vector masters. It is excluded from the release ZIP. After the plugin is approved and the screenshot refresh is complete, copy the PNG/JPEG assets from this folder to the top-level `/assets` directory of the assigned WordPress.org SVN repository, not to `/trunk/assets`. Do not upload the `source/` directory or this README.
 
 ## Supported Assets
 
@@ -17,16 +17,44 @@ Directory artwork is optional for initial code submission. Use these exact names
 ### Screenshots
 
 The screenshot captions in `readme.txt` match these sequential files:
-- `screenshot-1.png` - Plugin settings page
-- `screenshot-2.png` - Product page with Reserve button
-- `screenshot-3.png` - Reservation modal
-- `screenshot-4.png` - My Account reservations page
-- `screenshot-5.png` - Admin reservations dashboard
-- `screenshot-6.png` - Basic reservation analytics
+- `screenshot-1.jpg` - Plugin settings page
+- `screenshot-2.jpg` - Product page with Reserve button and stopwatch icon
+- `screenshot-3.jpg` - Reservation modal (previous capture; refresh pending)
+- `screenshot-4.jpg` - My Account reservations page with active and pending records
+- `screenshot-5.jpg` - Admin reservations dashboard
+- `screenshot-6.jpg` - Basic reservation analytics
+
+### Refresh Status
+
+Screenshots 1, 2, 4, 5 and 6 were captured directly from the current Free development files on 2026-10-02 and visually reviewed. They show only temporary demonstration products and reservations, not real customer data. No interface elements were recreated or edited into the images. The demo records were removed and the original test-site settings restored after capture.
+
+Screenshot 3 is retained as a reference, not signed off for publication: its product background predates the current stopwatch button. Browser input is stalled, so the current modal cannot reliably be opened for capture. Replace it with a real current capture after browser recovery. The complete six-image set is **not yet ready for publication**, and these captures do not constitute final interaction/accessibility sign-off or an exact-release-ZIP test.
+
+All screenshots use their actual JPEG format and `.jpg` extension. The previous modal reference was also JPEG data despite its `.png` filename; its extension was corrected without changing its pixels. WordPress.org supports both `.jpg` and `.png` screenshot names; keep exactly one file per number. See the [official directory asset guidance](https://developer.wordpress.org/plugins/wordpress-org/plugin-assets/#screenshots).
+
+### Current Gallery
+
+#### 1. Settings
+![Reservation settings, branded header and navigation tabs](screenshot-1.jpg)
+
+#### 2. Product Action
+![Product page with the stopwatch Reserve button beside Add to cart](screenshot-2.jpg)
+
+#### 3. Reservation Dialog
+Current capture pending. The retained reference is intentionally omitted from this gallery.
+
+#### 4. Customer Reservations
+![My Account table showing active and pending reservations](screenshot-4.jpg)
+
+#### 5. Reservation Management
+![Admin reservation filters, statuses and approval actions](screenshot-5.jpg)
+
+#### 6. Analytics
+![Reservation summary cards and recent activity](screenshot-6.jpg)
 
 ## Design Guidelines
 
-The PNG assets use the established blue, navy, and amber palette. Icons contain no small text and remain identifiable at 128 pixels. Banners keep essential content in the central safe area. Screenshots show the rebranded Free plugin on a local test site using demonstration records. Recheck screenshots against the final release candidate before publication.
+The artwork uses the established blue, navy, and amber palette. Icons contain no small text and remain identifiable at 128 pixels. Banners keep essential content in the central safe area. Screenshots show the current Free plugin on a local test site using demonstration records. Recheck all screenshots against the final release candidate before publication.
 
 Editable masters are stored in `source/icon.svg` and `source/banner.svg`. Re-render both required dimensions after changing a master and visually inspect the standard and high-resolution outputs before publication.
 
@@ -37,6 +65,7 @@ When submitting to WordPress.org:
 2. Upload them to the WordPress.org SVN repository's top-level `/assets` directory.
 3. Keep screenshot numbering identical to the captions in `readme.txt`.
 4. Confirm image dimensions and file-size limits against the current Plugin Handbook before upload.
+5. Set the SVN MIME type to `image/jpeg` for `.jpg` assets and `image/png` for `.png` assets.
 
 ## Notes
 

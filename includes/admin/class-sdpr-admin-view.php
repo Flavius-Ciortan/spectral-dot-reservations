@@ -55,16 +55,14 @@ class SDPR_Admin_View {
 	 */
 	public static function admin_body_class( $classes ) {
 		$screen = get_current_screen();
-		if ( $screen && in_array(
-			$screen->id,
-			array(
-				'toplevel_page_sdpr-settings',
-				'spectral-dot-reservations_page_sdpr-manage-reservations',
-				'spectral-dot-reservations_page_sdpr-analytics',
-			),
-			true
-		) ) {
-			$classes .= ' sdpr-admin-page';
+		if ( ! $screen ) {
+			return $classes;
+		}
+		// WordPress derives submenu screen IDs from the translated parent menu title.
+		foreach ( array( 'sdpr-settings', 'sdpr-manage-reservations', 'sdpr-analytics' ) as $page ) {
+			if ( get_plugin_page_hookname( $page, 'sdpr-settings' ) === $screen->id ) {
+				return $classes . ' sdpr-admin-page';
+			}
 		}
 		return $classes;
 	}

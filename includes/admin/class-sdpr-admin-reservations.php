@@ -82,12 +82,6 @@ class SDPR_Admin_Reservations {
 		$search_type   = isset( $_GET['search_type'] ) ? sanitize_key( wp_unslash( $_GET['search_type'] ) ) : 'email';
 		$page          = isset( $_GET['paged'] ) ? max( 1, absint( wp_unslash( $_GET['paged'] ) ) ) : 1;
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
-		$status_filter = in_array( $status_filter, array_merge( array( 'all' ), SDPR_Reservation_Status::all() ), true ) ? $status_filter : 'all';
-		$search_type   = in_array( $search_type, array( 'email', 'product', 'product_id', 'customer_name' ), true ) ? $search_type : 'email';
-
-		$query        = $this->get_filtered_reservations( $status_filter, $search_query, $search_type, $page );
-		$reservations = $query->posts;
-		$stats        = $this->get_reservations_summary();
 		?>
 		<div class="sdpr-admin-wrapper sdpr-admin-wrapper--wide sdpr-reservations-admin">
 			<?php
@@ -97,6 +91,25 @@ class SDPR_Admin_Reservations {
 			);
 			?>
 			<div class="sdpr-admin-content">
+				<?php $this->render_content( $status_filter, $search_query, $search_type, $page ); ?>
+			</div>
+		</div>
+		<?php
+	}
+
+	private function render_content( $status_filter, $search_query, $search_type, $page ) {
+		$status_filter = in_array( $status_filter, array_merge( array( 'all' ), SDPR_Reservation_Status::all() ), true ) ? $status_filter : 'all';
+		$search_type   = in_array( $search_type, array( 'email', 'product', 'product_id', 'customer_name' ), true ) ? $search_type : 'email';
+		$query         = $this->get_filtered_reservations( $status_filter, $search_query, $search_type, $page );
+		$last_page     = max( 1, (int) $query->max_num_pages );
+		if ( $page > $last_page ) {
+			$page  = $last_page;
+			$query = $this->get_filtered_reservations( $status_filter, $search_query, $search_type, $page );
+		}
+		$reservations = $query->posts;
+		$stats        = $this->get_reservations_summary();
+		?>
+			<input type="hidden" id="sdpr-list-page" value="<?php echo esc_attr( $page ); ?>">
 
 			<div class="sdpr-reservations-stats">
 				<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
@@ -111,7 +124,7 @@ class SDPR_Admin_Reservations {
 				</div>
 			</div>
 
-			<div class="tablenav top" style="margin: 20px 0;">
+			<div class="sdpr-reservations-filters">
 				<div class="alignleft actions">
 					<label class="screen-reader-text" for="status-filter"><?php esc_html_e( 'Filter reservations by status', 'spectral-dot-reservations' ); ?></label>
 					<select name="status_filter" id="status-filter">
@@ -146,6 +159,8 @@ class SDPR_Admin_Reservations {
 					<p><?php esc_html_e( 'No reservations found matching your criteria.', 'spectral-dot-reservations' ); ?></p>
 				</div>
 			<?php else : ?>
+				<p class="sdpr-table-hint"><?php esc_html_e( 'Scroll horizontally to see all reservation details.', 'spectral-dot-reservations' ); ?></p>
+				<div class="sdpr-table-scroll" tabindex="0" role="region" aria-label="<?php esc_attr_e( 'Reservation details', 'spectral-dot-reservations' ); ?>">
 				<table class="wp-list-table widefat fixed striped">
 					<thead>
 						<tr>
@@ -164,6 +179,7 @@ class SDPR_Admin_Reservations {
 						<?php endforeach; ?>
 					</tbody>
 				</table>
+				</div>
 				<?php
 				$pagination = paginate_links(
 					array(
@@ -173,7 +189,8 @@ class SDPR_Admin_Reservations {
 								'status'      => $status_filter,
 								'search_type' => $search_type,
 								'search'      => $search_query,
-							)
+							),
+							admin_url( 'admin.php?page=sdpr-manage-reservations' )
 						),
 						'current' => $page,
 						'total'   => max( 1, (int) $query->max_num_pages ),
@@ -184,10 +201,26 @@ class SDPR_Admin_Reservations {
 				}
 				?>
 			<?php endif; ?>
-			</div>
-		</div>
-
 		<?php
+	}
+
+	private function send_action_success( $message ) {
+		// The same renderer owns the initial page and the complete post-action list.
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- Each action verifies its nonce before reaching this helper.
+		$status = isset( $_POST['list_status'] ) ? sanitize_key( wp_unslash( $_POST['list_status'] ) ) : 'all';
+		$search = isset( $_POST['list_search'] ) ? sanitize_text_field( wp_unslash( $_POST['list_search'] ) ) : '';
+		$type   = isset( $_POST['list_search_type'] ) ? sanitize_key( wp_unslash( $_POST['list_search_type'] ) ) : 'email';
+		$page   = isset( $_POST['list_paged'] ) ? max( 1, absint( wp_unslash( $_POST['list_paged'] ) ) ) : 1;
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
+		ob_start();
+		$this->render_content( $status, $search, $type, $page );
+		$content = ob_get_clean();
+		wp_send_json_success(
+			array(
+				'message' => $message,
+				'content' => $content,
+			)
+		);
 	}
 
 	public function handle_admin_cancel_reservation() {
@@ -218,7 +251,7 @@ class SDPR_Admin_Reservations {
 		SDPR_Reservation_Meta::update( $reservation_id, SDPR_Reservation_Meta::CANCELLED_BY_ADMIN, time() );
 		SDPR_Reservation_Meta::update( $reservation_id, SDPR_Reservation_Meta::CANCELLED_BY_USER, get_current_user_id() );
 
-		wp_send_json_success( 'Reservation cancelled successfully.' );
+		$this->send_action_success( __( 'Reservation cancelled successfully.', 'spectral-dot-reservations' ) );
 	}
 
 	public function handle_admin_delete_reservation() {
@@ -240,7 +273,7 @@ class SDPR_Admin_Reservations {
 
 		$result = wp_delete_post( $reservation_id, true );
 		if ( $result ) {
-			wp_send_json_success( 'Reservation deleted successfully.' );
+			$this->send_action_success( __( 'Reservation deleted successfully.', 'spectral-dot-reservations' ) );
 		}
 
 		wp_send_json_error( 'Failed to delete reservation.' );
@@ -268,7 +301,7 @@ class SDPR_Admin_Reservations {
 		if ( is_wp_error( $result ) ) {
 			wp_send_json_error( $result->get_error_message() );
 		} elseif ( $result ) {
-			wp_send_json_success( 'Reservation approved successfully.' );
+			$this->send_action_success( __( 'Reservation approved successfully.', 'spectral-dot-reservations' ) );
 		}
 
 		wp_send_json_error( 'Failed to approve reservation.' );
@@ -298,7 +331,7 @@ class SDPR_Admin_Reservations {
 		if ( is_wp_error( $result ) ) {
 			wp_send_json_error( $result->get_error_message() );
 		} elseif ( $result ) {
-			wp_send_json_success( 'Reservation denied successfully.' );
+			$this->send_action_success( __( 'Reservation denied successfully.', 'spectral-dot-reservations' ) );
 		}
 
 		wp_send_json_error( 'Failed to deny reservation.' );
@@ -518,8 +551,9 @@ class SDPR_Admin_Reservations {
 			}
 		}
 
-		$status_class       = 'status-' . str_replace( '_', '-', $status );
-			$status_display = ucwords( str_replace( '_', ' ', $status ) );
+		$status_class   = 'status-' . str_replace( '_', '-', $status );
+		$status_labels  = SDPR_Reservation_Status::labels();
+		$status_display = isset( $status_labels[ $status ] ) ? $status_labels[ $status ] : __( 'Unknown', 'spectral-dot-reservations' );
 
 		echo '<tr>';
 		echo '<td>';
@@ -537,13 +571,13 @@ class SDPR_Admin_Reservations {
 		echo '<td>' . esc_html( $reserved_date ) . '</td>';
 		echo '<td>' . esc_html( $expires_disp ) . '</td>';
 		echo '<td class="' . esc_attr( $time_class ) . '">' . esc_html( $time_left ) . '</td>';
-		echo '<td>';
+		echo '<td><div class="sdpr-row-actions">';
 
 		if ( SDPR_Reservation_Status::PENDING === $status ) {
 			echo '<button type="button" class="button button-small sdpr-approve-reservation" ';
 			echo 'data-reservation-id="' . esc_attr( $reservation->ID ) . '" ';
 			echo 'data-customer="' . esc_attr( $customer_short ) . '" ';
-			echo 'data-product="' . esc_attr( $product_name ) . '" style="margin-right: 5px;">';
+			echo 'data-product="' . esc_attr( $product_name ) . '">';
 			echo esc_html__( 'Approve', 'spectral-dot-reservations' );
 			echo '</button>';
 
@@ -569,7 +603,7 @@ class SDPR_Admin_Reservations {
 			echo '</button>';
 		}
 
-		echo '</td>';
+		echo '</div></td>';
 		echo '</tr>';
 	}
 }

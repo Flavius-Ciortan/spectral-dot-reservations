@@ -25,6 +25,7 @@ $sdpr_die_filter = static function () {
 add_filter( 'wp_die_ajax_handler', $sdpr_die_filter );
 $sdpr_original_user = get_current_user_id();
 $sdpr_original_screen = get_current_screen();
+$sdpr_original_page_hooks = isset( $GLOBALS['admin_page_hooks'] ) ? $GLOBALS['admin_page_hooks'] : array();
 $sdpr_user = wp_insert_user( array(
 	'user_login' => 'sdpr-notice-test-' . wp_generate_password( 10, false ),
 	'user_pass' => wp_generate_password( 24 ),
@@ -58,10 +59,16 @@ try {
 	sdpr_rebrand_assert( false === strpos( $sdpr_menu_svg, 'fill="none"' ) && false === strpos( $sdpr_menu_svg, 'stroke=' ) && false !== strpos( $sdpr_menu_svg, 'fill-rule="evenodd"' ), 'Menu icon stays hollow when WordPress recolors its fills.' );
 	set_current_screen( 'dashboard' );
 	sdpr_rebrand_assert( 'existing' === SDPR_Admin_View::admin_body_class( 'existing' ), 'Shared admin layout does not affect unrelated screens.' );
-	foreach ( array( 'toplevel_page_sdpr-settings', 'spectral-dot-reservations_page_sdpr-manage-reservations', 'spectral-dot-reservations_page_sdpr-analytics' ) as $sdpr_screen ) {
-		set_current_screen( $sdpr_screen );
-		sdpr_rebrand_assert( 'existing sdpr-admin-page' === SDPR_Admin_View::admin_body_class( 'existing' ), 'Shared layout preserves existing classes on ' . $sdpr_screen . '.' );
+	foreach ( array( 'reservations', 'reservari-produse' ) as $sdpr_menu_title ) {
+		$GLOBALS['admin_page_hooks']['sdpr-settings'] = $sdpr_menu_title;
+		foreach ( array( 'sdpr-settings', 'sdpr-manage-reservations', 'sdpr-analytics' ) as $sdpr_page ) {
+			$sdpr_screen = get_plugin_page_hookname( $sdpr_page, 'sdpr-settings' );
+			set_current_screen( $sdpr_screen );
+			sdpr_rebrand_assert( 'existing sdpr-admin-page' === SDPR_Admin_View::admin_body_class( 'existing' ), 'Shared layout preserves existing classes on ' . $sdpr_screen . '.' );
+		}
 	}
+	set_current_screen( 'reservations_page_unrelated-settings' );
+	sdpr_rebrand_assert( 'existing' === SDPR_Admin_View::admin_body_class( 'existing' ), 'Shared layout excludes unrelated submenu screens.' );
 	$sdpr_original_errors = isset( $GLOBALS['wp_settings_errors'] ) ? $GLOBALS['wp_settings_errors'] : array();
 	$GLOBALS['wp_settings_errors'] = array();
 	add_settings_error( 'general', 'settings_updated', 'Settings saved.', 'success' );
@@ -81,7 +88,7 @@ try {
 	}
 	set_current_screen( 'plugins' );
 	sdpr_rebrand_assert( array( 'test-dependency' ) === array_keys( $sdpr_notices->visible_notices() ), 'Plugins screen receives only explicit dependency notices.' );
-	foreach ( array( 'toplevel_page_sdpr-settings', 'spectral-dot-reservations_page_sdpr-manage-reservations', 'spectral-dot-reservations_page_sdpr-analytics' ) as $sdpr_screen ) {
+	foreach ( array( 'toplevel_page_sdpr-settings', 'reservations_page_sdpr-manage-reservations', 'reservations_page_sdpr-analytics' ) as $sdpr_screen ) {
 		set_current_screen( $sdpr_screen );
 		sdpr_rebrand_assert( 2 === count( $sdpr_notices->visible_notices() ), 'Authorized plugin screen receives notices: ' . $sdpr_screen );
 	}
@@ -136,6 +143,7 @@ try {
 	remove_filter( 'wp_die_ajax_handler', $sdpr_die_filter );
 	wp_set_current_user( $sdpr_original_user );
 	$GLOBALS['current_screen'] = $sdpr_original_screen;
+	$GLOBALS['admin_page_hooks'] = $sdpr_original_page_hooks;
 	wp_delete_user( $sdpr_user );
 }
 if ( $sdpr_test_failures ) {

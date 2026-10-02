@@ -77,50 +77,50 @@ class SDPR_Analytics {
 			?>
 			<div class="sdpr-admin-content">
 
-			<div class="sdpr-stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0;">
-				<div class="sdpr-stat-card" style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+			<div class="sdpr-stats-grid">
+				<div class="sdpr-stat-card">
 					<h3><?php esc_html_e( 'Total Reservations', 'spectral-dot-reservations' ); ?></h3>
-					<p style="font-size: 32px; margin: 0; color: #0073aa;"><?php echo esc_html( $stats['total'] ); ?></p>
+					<p class="sdpr-stat-value"><?php echo esc_html( $stats['total'] ); ?></p>
 				</div>
 
-				<div class="sdpr-stat-card" style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+				<div class="sdpr-stat-card">
 					<h3><?php esc_html_e( 'Active Reservations', 'spectral-dot-reservations' ); ?></h3>
-					<p style="font-size: 32px; margin: 0; color: #2F89F9;"><?php echo esc_html( $stats['active'] ); ?></p>
+					<p class="sdpr-stat-value status-active"><?php echo esc_html( $stats['active'] ); ?></p>
 				</div>
 
-				<div class="sdpr-stat-card" style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+				<div class="sdpr-stat-card">
 					<h3><?php esc_html_e( 'Pending Approval', 'spectral-dot-reservations' ); ?></h3>
-					<p style="font-size: 32px; margin: 0; color: #f59e0b;"><?php echo esc_html( $stats['pending_approval'] ); ?></p>
+					<p class="sdpr-stat-value status-pending-approval"><?php echo esc_html( $stats['pending_approval'] ); ?></p>
 				</div>
 
-				<div class="sdpr-stat-card" style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+				<div class="sdpr-stat-card">
 					<h3><?php esc_html_e( 'Expired Reservations', 'spectral-dot-reservations' ); ?></h3>
-					<p style="font-size: 32px; margin: 0; color: #ff8c00;"><?php echo esc_html( $stats['expired'] ); ?></p>
+					<p class="sdpr-stat-value status-expired"><?php echo esc_html( $stats['expired'] ); ?></p>
 				</div>
 
-				<div class="sdpr-stat-card" style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+				<div class="sdpr-stat-card">
 					<h3><?php esc_html_e( 'Cancelled Reservations', 'spectral-dot-reservations' ); ?></h3>
-					<p style="font-size: 32px; margin: 0; color: #d63638;"><?php echo esc_html( $stats['cancelled'] ); ?></p>
+					<p class="sdpr-stat-value status-cancelled"><?php echo esc_html( $stats['cancelled'] ); ?></p>
 				</div>
 
-				<div class="sdpr-stat-card" style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+				<div class="sdpr-stat-card">
 					<h3><?php esc_html_e( 'Fulfilled Reservations', 'spectral-dot-reservations' ); ?></h3>
-					<p style="font-size: 32px; margin: 0; color: #00a32a;"><?php echo esc_html( $stats['fulfilled'] ); ?></p>
+					<p class="sdpr-stat-value status-fulfilled"><?php echo esc_html( $stats['fulfilled'] ); ?></p>
 				</div>
 
-				<div class="sdpr-stat-card" style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+				<div class="sdpr-stat-card">
 					<h3><?php esc_html_e( 'Denied Reservations', 'spectral-dot-reservations' ); ?></h3>
-					<p style="font-size: 32px; margin: 0; color: #991b1b;"><?php echo esc_html( $stats['denied'] ); ?></p>
+					<p class="sdpr-stat-value status-denied"><?php echo esc_html( $stats['denied'] ); ?></p>
 				</div>
 
-				<div class="sdpr-stat-card" style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+				<div class="sdpr-stat-card">
 					<h3><?php esc_html_e( 'Cancelled Orders', 'spectral-dot-reservations' ); ?></h3>
-					<p style="font-size: 32px; margin: 0; color: #7c3aed;"><?php echo esc_html( $stats['order_cancelled'] ); ?></p>
+					<p class="sdpr-stat-value status-order-cancelled"><?php echo esc_html( $stats['order_cancelled'] ); ?></p>
 				</div>
 
-				<div class="sdpr-stat-card" style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+				<div class="sdpr-stat-card">
 					<h3><?php esc_html_e( 'Conversion Rate', 'spectral-dot-reservations' ); ?></h3>
-					<p style="font-size: 32px; margin: 0; color: #0073aa;"><?php echo esc_html( $stats['conversion_rate'] ); ?>%</p>
+					<p class="sdpr-stat-value"><?php echo esc_html( $stats['conversion_rate'] ); ?>%</p>
 				</div>
 			</div>
 
@@ -172,6 +172,8 @@ class SDPR_Analytics {
 			return;
 		}
 
+		echo '<p class="sdpr-table-hint">' . esc_html__( 'Scroll horizontally to see all reservation details.', 'spectral-dot-reservations' ) . '</p>';
+		echo '<div class="sdpr-table-scroll sdpr-table-scroll--analytics" tabindex="0" role="region" aria-label="' . esc_attr__( 'Recent reservation details', 'spectral-dot-reservations' ) . '">';
 		echo '<table class="wp-list-table widefat fixed striped">';
 		echo '<thead><tr><th>' . esc_html__( 'Product', 'spectral-dot-reservations' ) . '</th><th>' . esc_html__( 'Customer', 'spectral-dot-reservations' ) . '</th><th>' . esc_html__( 'Status', 'spectral-dot-reservations' ) . '</th><th>' . esc_html__( 'Created', 'spectral-dot-reservations' ) . '</th><th>' . esc_html__( 'Expires', 'spectral-dot-reservations' ) . '</th></tr></thead>';
 		echo '<tbody>';
@@ -202,7 +204,8 @@ class SDPR_Analytics {
 			// Mirror the reservations admin view: use hyphens for CSS class names.
 			$status_slug    = $status ? str_replace( '_', '-', $status ) : 'unknown';
 			$status_class   = 'status-' . $status_slug;
-			$status_display = $status ? ucwords( str_replace( '_', ' ', $status ) ) : __( 'Unknown', 'spectral-dot-reservations' );
+			$status_labels  = SDPR_Reservation_Status::labels();
+			$status_display = isset( $status_labels[ $status ] ) ? $status_labels[ $status ] : __( 'Unknown', 'spectral-dot-reservations' );
 
 			echo '<tr>';
 			echo '<td>' . esc_html( $product_name ) . '</td>';
@@ -213,6 +216,6 @@ class SDPR_Analytics {
 			echo '</tr>';
 		}
 
-		echo '</tbody></table>';
+		echo '</tbody></table></div>';
 	}
 }

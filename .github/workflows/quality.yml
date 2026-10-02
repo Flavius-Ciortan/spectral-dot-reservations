@@ -24,6 +24,7 @@ jobs:
       - run: find . -type f -name '*.php' -not -path './vendor/*' -print0 | xargs -0 -n1 php -l
       - run: find assets -type f -name '*.js' -print0 | xargs -0 -n1 node --check
       - run: find bin tests -type f -name '*.sh' -print0 | xargs -0 -n1 bash -n
+      - run: node tests/admin-ui-contrast.cjs
       - run: vendor/bin/phpcs
 
   integration:
@@ -85,6 +86,8 @@ jobs:
         run: bash tests/concurrency-stress.sh /tmp/wordpress
       - name: Verify brand and notice isolation
         run: SDPR_REBRAND_TEST=1 wp eval-file tests/rebranding-smoke.php --path=/tmp/wordpress
+      - name: Verify reservation list action state
+        run: SDPR_ADMIN_LIST_TEST=1 wp eval-file tests/admin-list-smoke.php --path=/tmp/wordpress
       - name: Check product identity
         run: node bin/check-identity.cjs
       - name: Run HPOS compatibility matrix

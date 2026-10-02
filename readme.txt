@@ -101,9 +101,9 @@ No. The plugin has no author-operated service, telemetry, tracking, advertisemen
 == Screenshots ==
 
 1. Configure reservation limits, durations, approval workflow, email notifications, and modal appearance.
-2. Offer a clear Reserve action alongside WooCommerce purchasing controls.
-3. Confirm the hold duration in an accessible, keyboard-friendly reservation dialog.
-4. Customers can review deadlines, add reserved items to the cart, or cancel active reservations from My Account.
+2. Offer a Reserve action with a stopwatch icon alongside Add to cart.
+3. Review the hold duration before confirming a reservation in the dialog.
+4. Customers can review active and pending reservations, check deadlines, add active reserved items to the cart, or cancel open reservations from My Account.
 5. Manage and filter reservation status, expiry, customer, and stock-hold actions from the WordPress dashboard.
 6. Review reservation totals, lifecycle outcomes, conversion rate, and recent activity.
 
