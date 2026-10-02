@@ -27,6 +27,7 @@ class SDPR_Admin {
 	private function init() {
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 		add_action( 'admin_init', array( $this, 'init_settings' ) );
+		add_filter( 'option_page_capability_sdpr_options_group', 'sdpr_get_manage_capability' );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
 		add_filter( 'admin_body_class', array( 'SDPR_Admin_View', 'admin_body_class' ) );
 		add_filter( 'custom_menu_order', '__return_true' );

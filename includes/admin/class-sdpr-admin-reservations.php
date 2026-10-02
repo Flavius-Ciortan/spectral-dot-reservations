@@ -56,7 +56,12 @@ class SDPR_Admin_Reservations {
 					'denied'          => __( 'Reservation denied successfully.', 'spectral-dot-reservations' ),
 					'deniedStatus'    => __( 'Denied', 'spectral-dot-reservations' ),
 					'denyFailed'      => __( 'Reservation could not be denied.', 'spectral-dot-reservations' ),
-					'denyReason'      => __( 'Please provide a reason for denying this reservation (optional):', 'spectral-dot-reservations' ),
+					'denyReason'      => __( 'Reason for denial (optional)', 'spectral-dot-reservations' ),
+					'denyTitle'       => __( 'Deny reservation', 'spectral-dot-reservations' ),
+					'confirmDenial'   => __( 'Deny request', 'spectral-dot-reservations' ),
+					'cancelDenial'    => __( 'Keep request', 'spectral-dot-reservations' ),
+					/* translators: 1: customer, 2: product. */
+					'confirmDeny'     => __( 'Deny the reservation for %1$s on %2$s?', 'spectral-dot-reservations' ),
 					'cancel'          => __( 'Cancel', 'spectral-dot-reservations' ),
 					'cancelling'      => __( 'Cancelling...', 'spectral-dot-reservations' ),
 					'cancelled'       => __( 'Reservation cancelled successfully.', 'spectral-dot-reservations' ),
@@ -570,7 +575,7 @@ class SDPR_Admin_Reservations {
 		echo '</td>';
 		echo '<td>' . esc_html( $reserved_date ) . '</td>';
 		echo '<td>' . esc_html( $expires_disp ) . '</td>';
-		echo '<td class="' . esc_attr( $time_class ) . '">' . esc_html( $time_left ) . '</td>';
+		echo '<td><span class="sdpr-time-left ' . esc_attr( $time_class ) . '">' . esc_html( $time_left ) . '</span></td>';
 		echo '<td><div class="sdpr-row-actions">';
 
 		if ( SDPR_Reservation_Status::PENDING === $status ) {

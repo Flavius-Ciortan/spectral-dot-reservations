@@ -263,6 +263,13 @@ label[for="rez_check"] {
 }
 
 /* Action Buttons */
+.sdpr-reservations-table .sdpr-account-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
 .sdpr-reservations-table .woocommerce-button {
     height: 30px;
     min-height: 30px;
@@ -280,7 +287,7 @@ label[for="rez_check"] {
     line-height: normal !important;
     text-decoration: none !important;
     transition: background-color 0.18s ease, box-shadow 0.18s ease, color 0.18s ease !important;
-    margin: 0 8px 0 0 !important;
+    margin: 0 !important;
 }
 
 .sdpr-reservations-table .woocommerce-button:hover {
@@ -296,7 +303,6 @@ label[for="rez_check"] {
 
 .sdpr-reservations-table .woocommerce-button.cancel-reservation {
     background-color: var(--sdpr-error) !important;
-    margin-right: 0 !important;
 }
 
 .sdpr-reservations-table .woocommerce-button.cancel-reservation:hover {
@@ -315,7 +321,6 @@ label[for="rez_check"] {
 
     .sdpr-reservations-table .woocommerce-button {
         width: 100% !important;
-        margin: 4px 0 !important;
     }
 }
 

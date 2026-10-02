@@ -183,6 +183,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</span>
 				</td>
 				<td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-order-actions" data-title="<?php esc_attr_e( 'Actions', 'spectral-dot-reservations' ); ?>">
+					<div class="sdpr-account-actions">
 					<?php if ( $sdpr_is_active ) : ?>
 						<a href="<?php echo esc_url( $sdpr_add_to_cart_url ); ?>" class="woocommerce-button button add-to-cart">
 							<?php esc_html_e( 'Add to Cart', 'spectral-dot-reservations' ); ?>
@@ -195,6 +196,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<?php else : ?>
 						—
 					<?php endif; ?>
+					</div>
 					</td>
 				</tr>
 

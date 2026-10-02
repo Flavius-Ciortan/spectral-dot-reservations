@@ -68,6 +68,8 @@ try {
 	ob_start();
 	$admin->render_page();
 	$before = ob_get_clean();
+	$assert( false !== strpos( $before, '<span class="sdpr-time-left time-left-critical">' ), 'Pending expiry uses a compact badge inside its table cell.' );
+	$assert( ! preg_match( '/<td[^>]*class="[^"]*time-left-(critical|warning)/', $before ), 'Urgency styling never transforms or borders the entire table cell.' );
 	preg_match( '/<strong>Active:<\/strong>\s*(\d+)/', $before, $active_before );
 	preg_match( '/<strong>Pending Approval:<\/strong>\s*(\d+)/', $before, $pending_before );
 	preg_match( '/<strong>Total:<\/strong>\s*(\d+)/', $before, $total_before );
