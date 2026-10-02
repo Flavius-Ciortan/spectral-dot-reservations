@@ -111,6 +111,10 @@ body.sdpr-admin-page #wpcontent {
     padding: 1.5rem;
 }
 
+.sdpr-admin-wrapper .sdpr-admin-content > .notice {
+    margin: 0 0 20px;
+}
+
 .sdpr-admin-wrapper--wide .sdpr-header-content,
 .sdpr-admin-wrapper--wide .sdpr-admin-content {
     max-width: none;

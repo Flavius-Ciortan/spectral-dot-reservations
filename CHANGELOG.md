@@ -61,3 +61,4 @@ Initial public release under the Spectral Dot branding. This is a fresh installa
 - Aligned the plugin settings-save capability with its merchant menu capability so Shop Managers can save settings without access to unrelated WordPress options.
 - Replaced the native denial prompt with an accessible inline reason form, explicit submit/cancel controls and focus restoration.
 - Kept customer reservation actions separated when they wrap or stack, and rendered admin urgency indicators as compact badges rather than styled table cells.
+- Added consistent spacing below settings and reservation-action notices within plugin screens.
