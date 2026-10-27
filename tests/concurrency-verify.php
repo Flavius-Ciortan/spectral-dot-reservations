@@ -17,7 +17,8 @@ $active    = get_posts(
 		'meta_query'     => array(
 			array(
 				'key'   => SDPR_Reservation_Meta::PRODUCT_ID,
-				'value' => (int) $context['product_id'],
+				'value' => empty( $context['variations'] ) ? array( (int) $context['product_id'] ) : $context['variations'],
+				'compare' => 'IN',
 			),
 			array(
 				'key'   => SDPR_Reservation_Meta::STATUS,

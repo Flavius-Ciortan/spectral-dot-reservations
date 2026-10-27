@@ -7,7 +7,7 @@ This checklist describes release gates, not completed test results. Record evide
 - [ ] Display name is Spectral Dot - Product Reservations for WooCommerce.
 - [ ] Directory, bootstrap and text domain use spectral-dot-reservations.
 - [ ] Author display is Spectral Dot; any contact links are verified and intentional.
-- [ ] Header, SDPR_VERSION and readme stable tag agree on 1.0.0 for the initial public release.
+- [ ] Header, SDPR_VERSION and readme stable tag agree on the new release version; never overwrite the published 1.0.0 tag.
 - [ ] GPL-3.0-or-later license and required third-party attribution are intact.
 - [ ] Public code, metadata, assets and translation catalog use the current identity exclusively.
 - [ ] Readme scope accurately describes logged-in customers, simple stock-managed products and one unit per reservation.

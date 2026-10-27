@@ -13,11 +13,15 @@ if ( ! empty( $context['product_id'] ) ) {
 			'fields'         => 'ids',
 			'posts_per_page' => -1,
 			'meta_key'       => SDPR_Reservation_Meta::PRODUCT_ID,
-			'meta_value'     => (int) $context['product_id'],
+			'meta_value'     => empty( $context['variations'] ) ? array( (int) $context['product_id'] ) : $context['variations'],
+			'meta_compare'   => 'IN',
 		)
 	);
 	foreach ( $reservation_ids as $reservation_id ) {
 		wp_delete_post( $reservation_id, true );
+	}
+	foreach ( $context['variations'] ?? array() as $variation_id ) {
+		wp_delete_post( $variation_id, true );
 	}
 	wp_delete_post( (int) $context['product_id'], true );
 }

@@ -72,7 +72,7 @@ class SDPR_Analytics {
 			<?php
 			SDPR_Admin_View::render_header(
 				__( 'Reservation Analytics', 'spectral-dot-reservations' ),
-				__( 'Monitor reservation activity, outcomes and conversion to purchases.', 'spectral-dot-reservations' )
+				__( 'Monitor reservation activity, outcomes and transfers to orders.', 'spectral-dot-reservations' )
 			);
 			?>
 			<div class="sdpr-admin-content">
@@ -119,8 +119,9 @@ class SDPR_Analytics {
 				</div>
 
 				<div class="sdpr-stat-card">
-					<h3><?php esc_html_e( 'Conversion Rate', 'spectral-dot-reservations' ); ?></h3>
+					<h3><?php esc_html_e( 'Order Transfer Rate', 'spectral-dot-reservations' ); ?></h3>
 					<p class="sdpr-stat-value"><?php echo esc_html( $stats['conversion_rate'] ); ?>%</p>
+					<p><?php esc_html_e( 'Transferred holds divided by all retained reservations. This does not confirm payment.', 'spectral-dot-reservations' ); ?></p>
 				</div>
 			</div>
 
@@ -185,7 +186,7 @@ class SDPR_Analytics {
 			$expires_ts = SDPR_Reservation_Meta::get( $reservation->ID, SDPR_Reservation_Meta::EXPIRES_AT );
 
 			$product      = wc_get_product( $product_id );
-			$product_name = $product ? $product->get_name() : __( 'Unknown Product', 'spectral-dot-reservations' );
+			$product_name = $product ? wp_strip_all_tags( SDPR_Reservation_Product::name( $reservation->ID, $product ) ) : __( 'Unknown Product', 'spectral-dot-reservations' );
 
 			// Determine customer display name
 			if ( $reservation->post_author ) {

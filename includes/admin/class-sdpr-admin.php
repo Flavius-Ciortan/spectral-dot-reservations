@@ -580,8 +580,17 @@ class SDPR_Admin {
 						'value' => SDPR_Reservation_Status::ACTIVE,
 					),
 					array(
-						'key'   => SDPR_Reservation_Meta::PRODUCT_ID,
-						'value' => $product_id,
+						'relation' => 'OR',
+						array(
+							'key'   => SDPR_Reservation_Meta::PRODUCT_ID,
+							'value' => $product_id,
+							'type'  => 'NUMERIC',
+						),
+						array(
+							'key'   => SDPR_Reservation_Meta::PARENT_PRODUCT_ID,
+							'value' => $product_id,
+							'type'  => 'NUMERIC',
+						),
 					),
 					array(
 						'key'     => SDPR_Reservation_Meta::EXPIRES_AT,

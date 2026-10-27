@@ -1,6 +1,14 @@
 # Spectral Dot Reservations Extension API
 
-This document describes the public contracts available to compatible add-ons in Spectral Dot Reservations Free 1.0.0. Add-ons should require Free, wait for `sdpr_plugin_loaded`, and use these contracts instead of duplicating reservation or inventory logic.
+This document describes the public contracts available to compatible add-ons in Spectral Dot Reservations Free 1.1.0. Add-ons should require Free, wait for `sdpr_plugin_loaded`, and use these contracts instead of duplicating reservation or inventory logic. Existing 1.0.0 identifiers and interface signatures remain intact.
+
+## Variation Selections (1.1.0)
+
+The built-in lifecycle accepts an optional fourth argument to `request()` and `request_guest()`, and an optional fifth argument to `create()`: an associative array keyed by WooCommerce's `attribute_*` names. Fixed selections can be inferred from the variation; wildcard selections must be complete and valid. A variable parent is never a reservable product identity.
+
+The canonical product ID is the concrete variation ID. `_sdpr_variation_attributes` retains the selected values and `_sdpr_parent_product_id` supports parent-product views/search. Never change these selections on an active hold. Use `SDPR_Reservation_Product` for stock-owner resolution, selection validation, labels and cart links. Shared-stock siblings acquire the same `product_{stock_owner_id}` lock. Customer-facing stock view filters include owned holds; inventory checks must use physical stock in edit context instead.
+
+The original lifecycle interface is unchanged so existing implementations remain loadable. A custom lifecycle implementation supporting variations must explicitly accept and validate the optional selection argument. The built-in implementation should be preferred.
 
 ## Bootstrap
 
@@ -65,7 +73,7 @@ Extends eligibility after Free has checked its global switch, customer identity,
 apply_filters( 'sdpr_product_supports_reservation_inventory', bool $supported, ?WC_Product $product );
 ```
 
-Extends the product types whose managed stock can participate in lifecycle transactions. Free supports simple products. An add-on enabling another type must ensure the returned product owns a concrete WooCommerce stock quantity.
+Extends the product types whose managed stock can participate in lifecycle transactions. Free supports simple products and concrete variations with independent or parent-managed stock. A variable parent is a chooser, not a reservable identity. An add-on enabling another type must correctly resolve its physical stock owner.
 
 ### `sdpr_reservation_quantity`
 

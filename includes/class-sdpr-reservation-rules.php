@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class SDPR_Reservation_Rules {
 	public function supports_inventory( $product ) {
 		$supported = $product instanceof WC_Product
-			&& $product->is_type( 'simple' )
+			&& $product->is_type( array( 'simple', 'variation' ) )
 			&& $product->managing_stock();
 
 		return (bool) apply_filters( 'sdpr_product_supports_reservation_inventory', $supported, $product );
@@ -32,9 +32,34 @@ final class SDPR_Reservation_Rules {
 			&& $this->supports_inventory( $product )
 			&& $product->is_purchasable()
 			&& 'publish' === get_post_status( $product_id )
-			&& (int) $product->get_stock_quantity( 'edit' ) > 0;
+			&& $product->is_in_stock()
+			&& SDPR_Reservation_Product::available_quantity( $product ) > 0;
+		if ( $product instanceof WC_Product_Variation ) {
+			$parent     = wc_get_product( $product->get_parent_id() );
+			$reservable = $reservable && $parent instanceof WC_Product_Variable
+				&& 'publish' === $parent->get_status() && $product->variation_is_active();
+		}
 
 		return (bool) apply_filters( 'sdpr_product_is_reservable', $reservable, $product, $user_id, $guest_email );
+	}
+
+	/** A variable parent is a chooser, never the reservable inventory item itself. */
+	public function can_show_form( $product ) {
+		if ( ! $product instanceof WC_Product ) {
+			return false;
+		}
+		if ( ! $product->is_type( 'variable' ) ) {
+			return $this->is_product_reservable( $product->get_id(), get_current_user_id() );
+		}
+		if ( ! $this->are_reservations_globally_enabled() || ! is_user_logged_in() ) {
+			return false;
+		}
+		foreach ( $product->get_children() as $variation_id ) {
+			if ( $this->is_product_reservable( $variation_id, get_current_user_id() ) ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public function get_quantity( $requested_quantity, $product_id, $user_id ) {

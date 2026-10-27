@@ -1,16 +1,22 @@
 # Spectral Dot Reservations User Guide
 
-This guide applies to Spectral Dot Reservations Free 1.0.0.
+This guide applies to Spectral Dot Reservations Free 1.1.0.
 
 ## Requirements
 
 - WordPress 6.5 or newer.
 - WooCommerce 8.0 or newer.
 - PHP 7.4 or newer.
-- Published simple products with WooCommerce stock management enabled and positive stock.
+- Published simple products or selected variations with positive WooCommerce-managed stock.
 - Logged-in customer accounts.
 
-The Free edition reserves one unit per reservation. Variable, grouped, external, composite, and bundled products are not supported.
+Free reserves one unit per reservation. Variations can manage stock independently or share the variable parent's stock. Grouped, external, composite and bundled products are not supported.
+
+### Variable Products
+
+Enable and price each reservable variation and define its required options. Manage stock either on each variation or on the variable parent. The customer selects all options before selecting **Reserve**; the dialog identifies that selection. The hold, emails and My Account cart link retain the selected options, including wildcard ("Any...") options.
+
+Duplicate blocking is per concrete variation, including all choices of a wildcard variation. The open-reservation quota counts all pending and active records across the customer's products. Siblings sharing stock compete for the same physical inventory; they do not gain independent copies of parent stock.
 
 ## Installation
 
@@ -47,7 +53,7 @@ The modal includes a semantic dialog, keyboard focus containment, Escape-to-clos
 ### Immediate Reservations
 
 1. The customer signs in and opens an eligible product.
-2. The customer selects **Reserve** and confirms the request.
+2. The customer selects any required variation options, selects **Reserve** and confirms the request.
 3. The reservation becomes **Active** and stock decreases by one.
 4. The customer can open **My Account > Reserved products**, cancel the hold, or add it to the cart.
 5. Checkout marks the linked reservation **Purchased** without reducing the held unit a second time.

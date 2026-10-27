@@ -42,6 +42,7 @@ class SDPR_Frontend {
 		// Sold-out products may not render an add-to-cart form; Pro waitlists use this fallback.
 		add_action( 'woocommerce_single_product_summary', array( $this, 'display_reservation_fallback' ), 31 );
 		add_filter( 'render_block_woocommerce/add-to-cart-form', array( $this, 'add_reservation_block_classes' ), 10, 2 );
+		add_filter( 'woocommerce_available_variation', array( $this, 'reservation_variation_data' ), 10, 3 );
 
 		// Render modal markup outside WooCommerce's form.cart to avoid nested <form> issues.
 		add_action( 'wp_footer', array( $this, 'display_reservation_modal' ) );
@@ -64,7 +65,7 @@ class SDPR_Frontend {
 			return;
 		}
 
-		if ( ! $this->reservations->is_product_reservable( $product->get_id() ) ) {
+		if ( ! $this->reservations->can_show_reservation_form( $product ) ) {
 			// Show message for non-logged-in users or when reservations are disabled
 			if ( ! is_user_logged_in() ) {
 				printf( '<p class="sdpr-reserve-unavailable" style="margin-top:8px;">%1$s <a href="%2$s">%3$s</a> %4$s <a href="%5$s">%6$s</a> %7$s</p>', esc_html__( 'Please', 'spectral-dot-reservations' ), esc_url( wp_login_url( get_permalink() ) ), esc_html__( 'log in', 'spectral-dot-reservations' ), esc_html__( 'or', 'spectral-dot-reservations' ), esc_url( wp_registration_url() ), esc_html__( 'create an account', 'spectral-dot-reservations' ), esc_html__( 'to reserve this product.', 'spectral-dot-reservations' ) );
@@ -203,11 +204,17 @@ class SDPR_Frontend {
 			return;
 		}
 
-		if ( ! $this->reservations->is_product_reservable( $product->get_id() ) ) {
+		if ( ! $this->reservations->can_show_reservation_form( $product ) ) {
 			return;
 		}
 
 		$this->did_render_modal = true;
 		include SDPR_PLUGIN_PATH . 'templates/modal-template.php';
+	}
+
+	public function reservation_variation_data( $data, $variable_product, $variation ) {
+		unset( $variable_product );
+		$data['sdpr_reservable'] = $this->reservations->is_product_reservable( $variation->get_id() );
+		return $data;
 	}
 }

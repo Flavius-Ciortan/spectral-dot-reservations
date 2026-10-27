@@ -20,7 +20,8 @@ if ( 'holder' === $role ) {
 }
 
 wp_set_current_user( (int) $context[ $role . '_id' ] );
-$result = SDPR_Plugin::get_instance()->get_service( 'lifecycle' )->request( (int) $context['product_id'], get_current_user_id() );
+$request_product = empty( $context['variations'] ) ? $context['product_id'] : $context['variations'][ 'holder' === $role ? 0 : 1 ];
+$result = SDPR_Plugin::get_instance()->get_service( 'lifecycle' )->request( (int) $request_product, get_current_user_id() );
 $record = array(
 	'success'        => ! is_wp_error( $result ),
 	'error_code'     => is_wp_error( $result ) ? $result->get_error_code() : '',

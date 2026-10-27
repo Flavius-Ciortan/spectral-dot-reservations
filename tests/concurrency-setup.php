@@ -16,6 +16,31 @@ $product->set_regular_price( '10' );
 $product->set_manage_stock( true );
 $product->set_stock_quantity( 1 );
 $product_id = $product->save();
+$variation_ids = array();
+if ( '1' === getenv( 'SDPR_STRESS_VARIATIONS' ) ) {
+	wp_delete_post( $product_id, true );
+	$product = new WC_Product_Variable();
+	$product->set_name( 'Shared inventory race' );
+	$product->set_status( 'publish' );
+	$product->set_manage_stock( true );
+	$product->set_stock_quantity( 1 );
+	$attribute = new WC_Product_Attribute();
+	$attribute->set_name( 'Finish' );
+	$attribute->set_options( array( 'Blue', 'White' ) );
+	$attribute->set_variation( true );
+	$product->set_attributes( array( $attribute ) );
+	$product_id = $product->save();
+	foreach ( array( 'Blue', 'White' ) as $finish ) {
+		$variation = new WC_Product_Variation();
+		$variation->set_parent_id( $product_id );
+		$variation->set_status( 'publish' );
+		$variation->set_regular_price( 10 );
+		$variation->set_attributes( array( 'finish' => $finish ) );
+		$variation->set_manage_stock( false );
+		$variation_ids[] = $variation->save();
+	}
+	WC_Product_Variable::sync( $product_id );
+}
 
 $holder_id = wp_insert_user(
 	array(
@@ -56,6 +81,7 @@ update_option(
 		'holder_id'    => $holder_id,
 		'contender_id' => $contender_id,
 		'options'      => $original_options,
+		'variations'   => $variation_ids,
 	),
 	false
 );
