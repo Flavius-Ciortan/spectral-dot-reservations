@@ -26,7 +26,11 @@ final class SDPR_Cart_Order_Service {
 		$allowance = $this->get_owned_hold_allowance( $product->get_id() );
 		// WooCommerce checks total shared-parent cart quantities against each variation.
 		if ( $product instanceof WC_Product_Variation && 'parent' === $product->get_manage_stock() ) {
-			$allowance += $this->cart_hold_allowance( $product->get_stock_managed_by_id(), $product->get_id() );
+			// Cached variation instances retain a parent-stock snapshot after sibling mutations.
+			// Replace only that snapshot component, preserving earlier stock-view filters.
+			$parent_data = $product->get_parent_data();
+			$stock       = (int) $stock + SDPR_Reservation_Product::stock_quantity( $product ) - (int) ( $parent_data['stock_quantity'] ?? 0 );
+			$allowance  += $this->cart_hold_allowance( $product->get_stock_managed_by_id(), $product->get_id() );
 		}
 		return (int) $stock + $allowance;
 	}

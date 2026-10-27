@@ -20,6 +20,8 @@ Duplicate blocking is per concrete variation, including all choices of a wildcar
 
 ## Installation
 
+When uninstalling, keep WooCommerce active so outstanding holds can be restored. If WooCommerce is inactive and stock holds remain, uninstall is blocked rather than discarding the inventory obligations.
+
 1. Install and activate WooCommerce.
 2. Install Spectral Dot Reservations from WordPress.org, or upload the release ZIP under **Plugins > Add New > Upload Plugin**.
 3. Activate **Spectral Dot Reservations**.

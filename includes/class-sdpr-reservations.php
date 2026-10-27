@@ -161,7 +161,7 @@ class SDPR_Reservations {
 
 		$product_id = isset( $_POST['product_id'] ) ? absint( wp_unslash( $_POST['product_id'] ) ) : 0;
 		$quantity   = isset( $_POST['quantity'] ) ? absint( wp_unslash( $_POST['quantity'] ) ) : 1;
-		$attributes = isset( $_POST['attributes'] ) && is_array( $_POST['attributes'] ) ? wc_clean( wp_unslash( $_POST['attributes'] ) ) : array();
+		$attributes = isset( $_POST['attributes'] ) && is_array( $_POST['attributes'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['attributes'] ) ) : array();
 		if ( ! $product_id ) {
 			wp_send_json_error( __( 'Invalid product ID.', 'spectral-dot-reservations' ), 400 );
 		}

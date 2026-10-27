@@ -185,3 +185,9 @@ jobs:
         run: SDPR_STRESS_VARIATIONS=1 bash tests/concurrency-stress.sh /tmp/wordpress
       - name: Verify artifact competing transitions
         run: bash tests/transition-races.sh /tmp/wordpress
+      - name: Verify published 1.0.0 to candidate upgrade
+        run: |
+          wp plugin install https://downloads.wordpress.org/plugin/spectral-dot-reservations.1.0.0.zip --path=/tmp/wordpress --force --activate
+          SDPR_UPGRADE_TEST=1 SDPR_UPGRADE_PHASE=before wp eval-file tests/upgrade-compatibility.php --path=/tmp/wordpress
+          wp plugin install dist/*.zip --path=/tmp/wordpress --force --activate
+          SDPR_UPGRADE_TEST=1 SDPR_UPGRADE_PHASE=after wp eval-file tests/upgrade-compatibility.php --path=/tmp/wordpress

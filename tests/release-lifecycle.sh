@@ -24,6 +24,7 @@ export SDPR_RELEASE_USER_ID="$user_id"
 export SDPR_RELEASE_RESERVATION_ID="$reservation_id"
 
 cleanup() {
+	wp plugin activate woocommerce --path="$wp_path" >/dev/null 2>&1 || true
 	wp plugin activate spectral-dot-reservations --path="$wp_path" >/dev/null 2>&1 || true
 	wp post delete "$reservation_id" "$product_id" --force --path="$wp_path" >/dev/null 2>&1 || true
 	wp user delete "$user_id" --yes --path="$wp_path" >/dev/null 2>&1 || true
@@ -32,6 +33,14 @@ trap cleanup EXIT
 
 wp plugin deactivate spectral-dot-reservations --path="$wp_path" >/dev/null
 wp eval-file "$root/tests/release-lifecycle-deactivated.php" --path="$wp_path"
+wp plugin deactivate woocommerce --path="$wp_path" >/dev/null
+if wp plugin uninstall spectral-dot-reservations --skip-delete --path="$wp_path" >/dev/null 2>&1; then
+	echo 'FAIL: Uninstall without WooCommerce must not discard outstanding inventory obligations.' >&2
+	exit 1
+fi
+wp plugin activate woocommerce --path="$wp_path" >/dev/null
+wp eval-file "$root/tests/release-lifecycle-deactivated.php" --path="$wp_path"
+echo 'PASS: Uninstall without WooCommerce is blocked without deleting the held reservation or changing stock.'
 wp plugin activate spectral-dot-reservations --path="$wp_path" >/dev/null
 wp eval-file "$root/tests/release-lifecycle-reactivated.php" --path="$wp_path"
 wp plugin deactivate spectral-dot-reservations --path="$wp_path" >/dev/null

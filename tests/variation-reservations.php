@@ -96,6 +96,7 @@ try {
 		$id = $res['reservation_id'];
 		sdpr_v_assert( 4 === SDPR_Reservation_Product::stock_quantity( $product ), $label . 'reservation decreases physical stock once.' );
 		sdpr_v_assert( ( $shared ? 4 : 5 ) === SDPR_Reservation_Product::stock_quantity( $second ), $label . 'sibling stock uses its proper resource.' );
+		sdpr_v_assert( ( $shared ? 4 : 5 ) === (int) wc_get_product( $second )->get_stock_quantity(), $label . 'an unreserved sibling does not borrow the hold in its stock view.' );
 		sdpr_v_assert( is_wp_error( sdpr_v_request( $first ) ), $label . 'duplicate variation hold blocked.' );
 		$limited_options = get_option( 'sdpr_options' );
 		$limited_options['max_reservations'] = 1;
@@ -108,6 +109,20 @@ try {
 		$url = SDPR_Reservation_Product::cart_url( $id, $product );
 		sdpr_v_assert( false !== strpos( $url, 'variation_id=' . $first ) && false !== strpos( $url, 'attribute_finish=Midnight' ), $label . 'customer/email cart link preserves variation and options.' );
 		sdpr_v_assert( false !== strpos( wp_strip_all_tags( SDPR_Reservation_Product::name( $id, $product ) ), 'Midnight' ), $label . 'display name includes the actual options.' );
+		$mail_options = get_option( 'sdpr_options' );
+		$mail_options['enable_email_notifications'] = 1;
+		update_option( 'sdpr_options', $mail_options );
+		$messages = array();
+		$capture_mail = static function ( $sent, $args ) use ( &$messages ) {
+			$messages[] = $args;
+			return true;
+		};
+		add_filter( 'pre_wp_mail', $capture_mail, 10, 2 );
+		do_action( 'sdpr_reservation_created', $id, 'demo@example.test' );
+		remove_filter( 'pre_wp_mail', $capture_mail, 10 );
+		$mail_options['enable_email_notifications'] = 0;
+		update_option( 'sdpr_options', $mail_options );
+		sdpr_v_assert( 1 === count( $messages ) && false !== strpos( $messages[0]['subject'], 'Midnight' ) && false !== strpos( $messages[0]['message'], 'variation_id=' . $first ) && false !== strpos( $messages[0]['message'], 'attribute_finish=Midnight' ), $label . 'one notification includes the selected finish and exact variation cart link.' );
 		$stock_owner = SDPR_Reservation_Product::stock_owner_id( $product );
 		wc_update_product_stock( $stock_owner, 0, 'set' );
 		sdpr_v_assert( 1 === (int) wc_get_product( $first )->get_stock_quantity(), $label . 'owner can purchase the held final unit.' );
@@ -144,6 +159,10 @@ try {
 		sdpr_v_assert( ! is_wp_error( $pending ) && 5 === SDPR_Reservation_Product::stock_quantity( $first ), $label . 'pending approval does not hold stock.' );
 		if ( ! is_wp_error( $pending ) ) {
 			$id = $pending['reservation_id'];
+			$deadline = SDPR_Reservation_Meta::get( $id, SDPR_Reservation_Meta::EXPIRES_AT );
+			SDPR_Reservation_Meta::update( $id, SDPR_Reservation_Meta::EXPIRES_AT, time() - 1 );
+			sdpr_v_assert( is_wp_error( $sdpr_v_lifecycle->approve( $id ) ) && 5 === SDPR_Reservation_Product::stock_quantity( $first ), $label . 'an overdue request cannot be approved before cron processes it.' );
+			SDPR_Reservation_Meta::update( $id, SDPR_Reservation_Meta::EXPIRES_AT, $deadline );
 			sdpr_v_assert( true === $sdpr_v_lifecycle->approve( $id ) && 4 === SDPR_Reservation_Product::stock_quantity( $first ), $label . 'approval holds the stock owner once.' );
 			SDPR_Reservation_Meta::update( $id, SDPR_Reservation_Meta::EXPIRES_AT, time() - 1 );
 			$sdpr_v_plugin->reservations->expire_old_reservations();

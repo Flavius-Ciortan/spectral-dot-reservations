@@ -136,8 +136,8 @@ Fulfilled reservations divided by all currently retained reservations in counted
 == Screenshots ==
 
 1. Configure reservation limits, durations, approval workflow, email notifications, and modal appearance.
-2. Offer a Reserve action with a stopwatch icon alongside Add to cart.
-3. Review the hold duration before confirming a reservation in the dialog.
+2. Choose an available variation and use Reserve alongside Add to cart. The example store uses the separately installed Storefront theme.
+3. Review the selected finish and hold duration before confirming a reservation in the dialog.
 4. Customers can review active and pending reservations, check deadlines, add active reserved items to the cart, or cancel open reservations from My Account.
 5. Manage and filter reservation status, expiry, customer, and stock-hold actions from the WordPress dashboard.
 6. Review reservation totals, lifecycle outcomes, order transfer rate and recent activity. A transfer to an order does not independently confirm payment.
@@ -152,6 +152,7 @@ Fulfilled reservations divided by all currently retained reservations in counted
 * Validate physical stock independently of customer-facing hold allowances.
 * Expand variation, shared-stock, concurrency, cart and order regression coverage.
 * Translate remaining admin action errors and clarify order-transfer analytics.
+* Preserve outstanding holds when uninstall is attempted without WooCommerce active.
 * Refresh setup guidance, Free limits, privacy information and directory presentation.
 
 = 1.0.0 =
