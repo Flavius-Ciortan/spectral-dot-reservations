@@ -73,7 +73,11 @@ final class SDPR_Reservation_Product {
 		$attributes = self::attributes( $reservation_id );
 		if ( $product instanceof WC_Product_Variation && $attributes ) {
 			$parent = wc_get_product( $product->get_parent_id() );
-			return ( $parent ? $parent->get_name() : $product->get_name() ) . ' - ' . wc_get_formatted_variation( $attributes, true, true );
+			// Format the saved selection with WooCommerce's proper attribute labels without
+			// mutating a cached product object or replacing wildcard values in the catalog.
+			$selected = clone $product;
+			$selected->set_attributes( $attributes );
+			return ( $parent ? $parent->get_name() : $product->get_name() ) . ' - ' . wc_get_formatted_variation( $selected, true, true );
 		}
 		return $product->get_name();
 	}

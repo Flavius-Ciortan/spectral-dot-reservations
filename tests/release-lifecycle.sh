@@ -13,6 +13,7 @@ setup="$(SDPR_ALLOW_DESTRUCTIVE_RELEASE_TEST=1 wp eval-file "$root/tests/release
 product_id="$(printf '%s\n' "$setup" | sed -n 's/^PRODUCT_ID=//p')"
 user_id="$(printf '%s\n' "$setup" | sed -n 's/^USER_ID=//p')"
 reservation_id="$(printf '%s\n' "$setup" | sed -n 's/^RESERVATION_ID=//p')"
+variation_id="$(printf '%s\n' "$setup" | sed -n 's/^VARIATION_ID=//p')"
 if [[ ! "$product_id" =~ ^[0-9]+$ || ! "$user_id" =~ ^[0-9]+$ || ! "$reservation_id" =~ ^[0-9]+$ ]]; then
 	echo "Lifecycle setup did not return valid IDs." >&2
 	exit 1
@@ -27,6 +28,9 @@ cleanup() {
 	wp plugin activate woocommerce --path="$wp_path" >/dev/null 2>&1 || true
 	wp plugin activate spectral-dot-reservations --path="$wp_path" >/dev/null 2>&1 || true
 	wp post delete "$reservation_id" "$product_id" --force --path="$wp_path" >/dev/null 2>&1 || true
+	if [[ "$variation_id" =~ ^[1-9][0-9]*$ ]]; then
+		wp post delete "$variation_id" --force --path="$wp_path" >/dev/null 2>&1 || true
+	fi
 	wp user delete "$user_id" --yes --path="$wp_path" >/dev/null 2>&1 || true
 }
 trap cleanup EXIT

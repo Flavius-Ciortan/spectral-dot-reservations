@@ -241,6 +241,30 @@ try {
 	} else {
 		sdpr_v_assert( false, 'Wildcard: valid complete selection accepted.' );
 	}
+
+	list( $parent_id, $ids ) = sdpr_v_fixture( false, true );
+	$variation_id = $ids[0];
+	wc_update_product_stock( $variation_id, 1, 'set' );
+	$res = sdpr_v_request( $variation_id, $midnight );
+	if ( ! is_wp_error( $res ) ) {
+		$id = $res['reservation_id'];
+		$key = WC()->cart->add_to_cart( $parent_id, 1, $variation_id, $pearl );
+		$sdpr_v_plugin->get_service( 'cart_order' )->sync_cart_reservations( WC()->cart );
+		sdpr_v_assert( $key && is_wp_error( WC()->cart->check_cart_item_stock() ), 'Wildcard independent stock: classic cart cannot borrow the held final unit for other options.' );
+		$errors = new WP_Error();
+		do_action( 'woocommerce_store_api_cart_errors', $errors, WC()->cart );
+		sdpr_v_assert( $errors->has_errors() && 0 === SDPR_Reservation_Product::stock_quantity( $variation_id ), 'Wildcard independent stock: Store API rejects uncovered options even without an order stock hold.' );
+		WC()->cart->empty_cart();
+		$key = WC()->cart->add_to_cart( $parent_id, 1, $variation_id, $midnight );
+		$sdpr_v_plugin->get_service( 'cart_order' )->sync_cart_reservations( WC()->cart );
+		$errors = new WP_Error();
+		do_action( 'woocommerce_store_api_cart_errors', $errors, WC()->cart );
+		sdpr_v_assert( $key && ! $errors->has_errors() && true === WC()->cart->check_cart_item_stock(), 'Wildcard independent stock: matching held options pass both checkout validation paths.' );
+		WC()->cart->empty_cart();
+		$sdpr_v_lifecycle->cancel( $id );
+	} else {
+		sdpr_v_assert( false, 'Wildcard independent stock: last-unit hold fixture created.' );
+	}
 } catch ( Throwable $error ) {
 	sdpr_v_assert( false, 'Unexpected exception: ' . $error->getMessage() );
 } finally {

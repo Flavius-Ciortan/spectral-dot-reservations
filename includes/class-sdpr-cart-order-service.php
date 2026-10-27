@@ -86,16 +86,30 @@ final class SDPR_Cart_Order_Service {
 		}
 	}
 
-	/** Check physical shared stock plus only the valid holds present in this cart. */
-	public function shared_cart_stock_is_insufficient( $insufficient, $product, $values ) {
+	/** Check physical stock plus only the valid selections actually held in this cart. */
+	public function cart_stock_is_insufficient( $insufficient, $product, $values ) {
 		unset( $values );
-		if ( ! is_user_logged_in() || ! $product instanceof WC_Product_Variation || 'parent' !== $product->get_manage_stock() || ! WC()->cart ) {
+		if ( ! is_user_logged_in() || ! $product instanceof WC_Product || ! $product->managing_stock() || $product->backorders_allowed() || ! WC()->cart ) {
 			return $insufficient;
 		}
-		$owner_id   = $product->get_stock_managed_by_id();
+		$owner_id  = $product->get_stock_managed_by_id();
+		$allowance = $this->cart_hold_allowance( $owner_id );
+		if ( ! $allowance && ! $this->get_owned_hold_allowance( $product->get_id() ) ) {
+			return $insufficient;
+		}
 		$quantities = WC()->cart->get_cart_item_quantities();
 		$order_id   = WC()->session ? absint( WC()->session->get( 'order_awaiting_payment', WC()->session->get( 'store_api_draft_order', 0 ) ) ) : 0;
-		return SDPR_Reservation_Product::stock_quantity( $product ) + $this->cart_hold_allowance( $owner_id ) < ( $quantities[ $owner_id ] ?? 0 ) + wc_get_held_stock_quantity( $product, $order_id );
+		return SDPR_Reservation_Product::stock_quantity( $product ) + $allowance < ( $quantities[ $owner_id ] ?? 0 ) + wc_get_held_stock_quantity( $product, $order_id );
+	}
+
+	/** Blocks validate stock independently of WC_Cart; use their native error hook too. */
+	public function validate_store_api_cart( $errors, $cart ) {
+		foreach ( $cart->get_cart() as $values ) {
+			if ( $this->cart_stock_is_insufficient( false, $values['data'] ?? null, $values ) ) {
+				$errors->add( 'sdpr_insufficient_cart_stock', __( 'Your cart needs more stock than is available for its selected products and options.', 'spectral-dot-reservations' ) );
+				return;
+			}
+		}
 	}
 
 	private function cart_hold_allowance( $owner_id, $exclude_product_id = 0 ) {

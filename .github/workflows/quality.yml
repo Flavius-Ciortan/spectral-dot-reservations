@@ -171,6 +171,11 @@ jobs:
         env:
           SDPR_ALLOW_DESTRUCTIVE_RELEASE_TEST: '1'
         run: bash tests/release-lifecycle.sh /tmp/wordpress
+      - name: Verify shared-stock variation release lifecycle
+        env:
+          SDPR_ALLOW_DESTRUCTIVE_RELEASE_TEST: '1'
+          SDPR_RELEASE_VARIATION: '1'
+        run: bash tests/release-lifecycle.sh /tmp/wordpress
       - name: Verify artifact HPOS matrix
         run: bash tests/hpos-matrix.sh /tmp/wordpress
       - name: Verify artifact carts, refunds, privacy and search

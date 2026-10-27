@@ -65,7 +65,8 @@ class SDPR_Reservations {
 		add_filter( 'woocommerce_product_variation_get_stock_quantity', array( $this, 'include_owned_hold_in_stock' ), 20, 2 );
 		add_filter( 'woocommerce_product_variation_get_stock_status', array( $this, 'include_owned_hold_in_stock_status' ), 20, 2 );
 		add_filter( 'woocommerce_product_is_in_stock', array( $this, 'include_owned_hold_in_availability' ), 20, 2 );
-		add_filter( 'woocommerce_cart_item_required_stock_is_not_enough', array( $this->cart_order, 'shared_cart_stock_is_insufficient' ), 20, 3 );
+		add_filter( 'woocommerce_cart_item_required_stock_is_not_enough', array( $this->cart_order, 'cart_stock_is_insufficient' ), 20, 3 );
+		add_action( 'woocommerce_store_api_cart_errors', array( $this->cart_order, 'validate_store_api_cart' ), 10, 2 );
 		add_filter( 'woocommerce_add_cart_item_data', array( $this, 'attach_reservation_to_cart_item' ), 10, 4 );
 		add_action( 'woocommerce_cart_loaded_from_session', array( $this, 'sync_cart_reservations' ) );
 		add_action( 'woocommerce_before_calculate_totals', array( $this, 'sync_cart_reservations' ), 5 );

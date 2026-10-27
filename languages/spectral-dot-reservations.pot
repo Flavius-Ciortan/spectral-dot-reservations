@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-28T01:16:45+02:00\n"
+"POT-Creation-Date: 2026-10-28T01:27:08+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: spectral-dot-reservations\n"
@@ -147,7 +147,7 @@ msgstr ""
 #: includes/admin/class-sdpr-admin-reservations.php:67
 #: includes/admin/class-sdpr-admin-reservations.php:259
 #: includes/admin/class-sdpr-admin.php:689
-#: includes/class-sdpr-reservations.php:374
+#: includes/class-sdpr-reservations.php:375
 msgid "Reservation cancelled successfully."
 msgstr ""
 
@@ -414,8 +414,8 @@ msgstr ""
 #: includes/admin/class-sdpr-admin.php:45
 #: includes/admin/class-sdpr-admin.php:66
 #: includes/admin/class-sdpr-admin.php:67
-#: includes/class-sdpr-reservations.php:118
-#: includes/class-sdpr-reservations.php:291
+#: includes/class-sdpr-reservations.php:119
+#: includes/class-sdpr-reservations.php:292
 msgid "Reservations"
 msgstr ""
 
@@ -675,11 +675,15 @@ msgstr ""
 msgid "Unknown Product"
 msgstr ""
 
-#: includes/class-sdpr-cart-order-service.php:160
+#: includes/class-sdpr-cart-order-service.php:109
+msgid "Your cart needs more stock than is available for its selected products and options."
+msgstr ""
+
+#: includes/class-sdpr-cart-order-service.php:178
 msgid "A reservation could not be transferred to the order."
 msgstr ""
 
-#: includes/class-sdpr-cart-order-service.php:174
+#: includes/class-sdpr-cart-order-service.php:192
 msgid "The order options do not match the reserved variation."
 msgstr ""
 
@@ -1004,37 +1008,37 @@ msgstr ""
 msgid "Order cancelled"
 msgstr ""
 
-#: includes/class-sdpr-reservations.php:159
+#: includes/class-sdpr-reservations.php:160
 msgid "You must be logged in to reserve products."
 msgstr ""
 
-#: includes/class-sdpr-reservations.php:166
+#: includes/class-sdpr-reservations.php:167
 msgid "Invalid product ID."
 msgstr ""
 
-#: includes/class-sdpr-reservations.php:175
+#: includes/class-sdpr-reservations.php:176
 msgid "Reservation request submitted for approval."
 msgstr ""
 
-#: includes/class-sdpr-reservations.php:175
+#: includes/class-sdpr-reservations.php:176
 msgid "Reservation created successfully."
 msgstr ""
 
-#: includes/class-sdpr-reservations.php:264
-#: includes/class-sdpr-reservations.php:269
-#: includes/class-sdpr-reservations.php:278
+#: includes/class-sdpr-reservations.php:265
+#: includes/class-sdpr-reservations.php:270
+#: includes/class-sdpr-reservations.php:279
 msgid "Reserved products"
 msgstr ""
 
-#: includes/class-sdpr-reservations.php:310
+#: includes/class-sdpr-reservations.php:311
 msgid "Please log in to see your reservations."
 msgstr ""
 
-#: includes/class-sdpr-reservations.php:336
+#: includes/class-sdpr-reservations.php:337
 msgid "You have no reservations."
 msgstr ""
 
-#: includes/class-sdpr-reservations.php:376
+#: includes/class-sdpr-reservations.php:377
 msgid "This reservation can no longer be cancelled."
 msgstr ""
 

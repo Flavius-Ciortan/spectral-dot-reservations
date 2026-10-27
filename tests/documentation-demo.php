@@ -14,6 +14,13 @@ $product = new WC_Product_Variable();
 $product->set_name( 'Studio Wireless Headphones' );
 $product->set_sku( 'STUDIO-WH01' );
 $product->set_status( 'publish' );
+$category = term_exists( 'Audio', 'product_cat' );
+if ( ! $category ) {
+	$category = wp_insert_term( 'Audio', 'product_cat' );
+}
+if ( ! is_wp_error( $category ) ) {
+	$product->set_category_ids( array( (int) $category['term_id'] ) );
+}
 $product->set_description( '<p>Find your focus with a comfortable over-ear design, soft cushions and a refined matte finish. Choose the color that suits your space.</p><ul><li>Comfortable, adjustable fit</li><li>Wireless listening with a wired option</li><li>Two understated finishes</li></ul>' );
 $product->set_short_description( '<p>A quieter moment, a clearer sound. Comfortable wireless headphones for everyday listening, available in Midnight and Pearl.</p>' );
 $product->set_manage_stock( true );
