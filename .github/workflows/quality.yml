@@ -91,6 +91,8 @@ jobs:
         run: SDPR_REVIEW_TEST=1 wp eval-file tests/review-coverage.php --path=/tmp/wordpress
       - name: Verify independent and shared-stock variation reservations
         run: SDPR_VARIATION_TEST=1 wp eval-file tests/variation-reservations.php --path=/tmp/wordpress
+      - name: Verify real Store API checkout requests
+        run: bash tests/store-api-checkout.sh /tmp/wordpress
       - name: Verify bounded reads and identity semantics
         run: SDPR_QUERY_TEST=1 wp eval-file tests/query-efficiency.php --path=/tmp/wordpress
       - name: Run concurrent last-unit stress test
@@ -182,6 +184,8 @@ jobs:
         run: SDPR_REVIEW_TEST=1 wp eval-file tests/review-coverage.php --path=/tmp/wordpress
       - name: Verify artifact variation reservations
         run: SDPR_VARIATION_TEST=1 wp eval-file tests/variation-reservations.php --path=/tmp/wordpress
+      - name: Verify artifact Store API checkout requests
+        run: bash tests/store-api-checkout.sh /tmp/wordpress
       - name: Verify artifact bounded reads and identity semantics
         run: SDPR_QUERY_TEST=1 wp eval-file tests/query-efficiency.php --path=/tmp/wordpress
       - name: Run artifact concurrency test

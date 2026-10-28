@@ -12,6 +12,7 @@ All notable changes to Spectral Dot Reservations are documented here. The projec
 - Include variation records in parent-product searches and active-reservation lists.
 - Translate remaining admin action errors and clarify the local order-transfer metric.
 - Block uninstall while WooCommerce is inactive if stock holds still need restoration.
+- Scope frontend styles to plugin components and protect heading, badge and deadline contrast across themes.
 - Expand variation and shared-stock concurrency regressions and CI coverage.
 
 ## 1.0.0

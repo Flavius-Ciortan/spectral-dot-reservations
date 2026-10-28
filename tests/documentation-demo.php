@@ -57,7 +57,7 @@ if ( ! is_wp_error( $image_id ) ) {
 	$product->save();
 }
 WC_Product_Variable::sync( $product_id );
-wp_update_user( array( 'ID' => $context['user_id'], 'display_name' => 'Demo Customer' ) );
+wp_update_user( array( 'ID' => $context['user_id'], 'display_name' => 'Demo Customer', 'user_email' => 'customer@example.test' ) );
 update_user_meta( $context['user_id'], 'show_admin_bar_front', 'false' );
 update_option( 'sdpr_documentation_demo', array( 'product' => $product_id, 'variations' => $variation_ids, 'image' => is_wp_error( $image_id ) ? 0 : $image_id ), false );
 WP_CLI::success( 'Demo product: ' . get_permalink( $product_id ) );

@@ -140,7 +140,7 @@ Fulfilled reservations divided by all currently retained reservations in counted
 3. Review the selected finish and hold duration before confirming a reservation in the dialog.
 4. Customers can review active and pending reservations, check deadlines, add active reserved items to the cart, or cancel open reservations from My Account.
 5. Manage and filter reservation status, expiry, customer, and stock-hold actions from the WordPress dashboard.
-6. Review reservation totals, lifecycle outcomes, order transfer rate and recent activity. A transfer to an order does not independently confirm payment.
+6. Review reservation totals, lifecycle outcomes and order transfer rate. A transfer to an order does not independently confirm payment.
 
 == Changelog ==
 

@@ -25,6 +25,7 @@ fi
 wp eval "define('SDPR_INTEGRATION_TEST', true); require '$root/tests/integration-smoke.php';" --path="$wp_path"
 SDPR_REVIEW_TEST=1 wp eval-file "$root/tests/review-coverage.php" --path="$wp_path"
 SDPR_VARIATION_TEST=1 wp eval-file "$root/tests/variation-reservations.php" --path="$wp_path"
+bash "$root/tests/store-api-checkout.sh" "$wp_path"
 
 set_mode disable
 disabled="$(wp eval "echo Automattic\\WooCommerce\\Utilities\\OrderUtil::custom_orders_table_usage_is_enabled() ? 'yes' : 'no';" --path="$wp_path")"
@@ -35,5 +36,6 @@ fi
 wp eval "define('SDPR_INTEGRATION_TEST', true); require '$root/tests/integration-smoke.php';" --path="$wp_path"
 SDPR_REVIEW_TEST=1 wp eval-file "$root/tests/review-coverage.php" --path="$wp_path"
 SDPR_VARIATION_TEST=1 wp eval-file "$root/tests/variation-reservations.php" --path="$wp_path"
+bash "$root/tests/store-api-checkout.sh" "$wp_path"
 
 echo "PASS: Integration suite completed with HPOS enabled and disabled."

@@ -3,7 +3,7 @@
  * My Account - Reservations
  *
  * @package SDPR_Plugin
- * @version 1.0.0
+ * @version 1.1.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

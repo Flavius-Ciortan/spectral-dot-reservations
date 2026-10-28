@@ -43,6 +43,31 @@ check('Input boundary on white', tokens['--sdpr-border-ui'], tokens['--sdpr-whit
 check('Input boundary on page background', tokens['--sdpr-border-ui'], '#e2e8f0', 3);
 
 const frontendCss = fs.readFileSync(path.join(__dirname, '../assets/css/style.css'), 'utf8');
+assert.match(frontendCss, /\.sdpr-reservation-notice\s*\{\s*margin:/, 'Inline notices must retain their scoped declaration block.');
+const accountTokens = Object.fromEntries(Array.from(frontendCss.matchAll(/(--sdpr-[\w-]+):\s*([^;]+);/g), match => [match[1], match[2].trim()]));
+for (const role of ['primary', 'primary-dark']) {
+    check(`Customer header ${role} stop`, '#ffffff', accountTokens[`--sdpr-${role}`]);
+}
+for (const role of ['success', 'warning', 'error']) {
+    check(`Customer ${role} deadline text`, accountTokens[`--sdpr-${role}`], '#ffffff');
+}
+for (const [role, foreground, tint, alpha] of [
+    ['active', accountTokens['--sdpr-primary'], [47, 137, 249], 0.12],
+    ['pending', accountTokens['--sdpr-warning'], [245, 158, 11], 0.12],
+    ['fulfilled', accountTokens['--sdpr-success'], [0, 163, 42], 0.12],
+    ['denied', '#991b1b', [153, 27, 27], 0.10],
+    ['cancelled', accountTokens['--sdpr-error'], [214, 54, 56], 0.10],
+    ['expired', accountTokens['--sdpr-warning'], [255, 140, 0], 0.10],
+    ['unknown', '#475569', [148, 163, 184], 0.12]
+]) {
+    for (const base of ['#ffffff', '#f8fafc']) {
+        const channels = rgb(base).map((channel, index) => Math.round(channel * (1 - alpha) + tint[index] * alpha));
+        const background = '#' + channels.map(channel => channel.toString(16).padStart(2, '0')).join('');
+        check(`Customer ${role} badge on ${base}`, foreground, background);
+    }
+}
+assert.match(frontendCss, /\.sdpr-reservations-header h2\s*\{[^}]*color:\s*#ffffff/);
+assert.doesNotMatch(frontendCss, /^input\[type="checkbox"\]/m, 'Plugin styles must not resize every WooCommerce checkbox.');
 const frontendTokens = Object.fromEntries(Array.from(frontendCss.matchAll(/(--sdpr-button-[\w-]+):\s*([^;]+);/g), match => [match[1], match[2].trim()]));
 for (const role of ['primary', 'primary-hover', 'error', 'error-hover']) {
     assert.ok(Object.hasOwn(frontendTokens, `--sdpr-button-${role}`), `My Account must define ${role}.`);
