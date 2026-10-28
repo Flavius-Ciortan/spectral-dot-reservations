@@ -22,7 +22,7 @@ The 1.1.0 gallery was captured on 2026-10-27/28 from the local WooCommerce demon
 
 Images are genuine browser captures. Only rectangular cropping was applied: no interface controls were hidden, reconstructed or painted into the screenshots. WordPress toolbars, the admin sidebar, site navigation, test-site title and footer are excluded. Screenshot 6 intentionally frames the analytics header and summary cards, not the recent-record table. Screenshots 3 and 4 show states captured before the demonstration hold was transferred to an order or expired.
 
-The gallery shows selected-option labels, updated customer action spacing, compact urgency badges, the current brand header and readable account heading/status colors. It illustrates the product rather than certifying complete accessibility or every browser interaction. Automated checkout tests, visual observations and any remaining headed-browser limitations are recorded separately in the private update report.
+The gallery shows selected-option labels, updated customer action spacing, compact urgency badges, the current brand header and readable account heading/status colors. Screenshot 2 was refreshed after correcting the product buttons' inline baseline alignment; both buttons share the same top and bottom edges on desktop and wrap with a gap on narrow screens. It illustrates the product rather than certifying complete accessibility or every browser interaction. Automated checkout tests, visual observations and any remaining headed-browser limitations are recorded separately in the private update report.
 
 ## Gallery
 

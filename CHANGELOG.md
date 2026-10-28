@@ -13,6 +13,7 @@ All notable changes to Spectral Dot Reservations are documented here. The projec
 - Translate remaining admin action errors and clarify the local order-transfer metric.
 - Block uninstall while WooCommerce is inactive if stock holds still need restoration.
 - Scope frontend styles to plugin components and protect heading, badge and deadline contrast across themes.
+- Align the Reserve and Add to cart buttons by their top edges rather than mismatched inline baselines.
 - Expand variation and shared-stock concurrency regressions and CI coverage.
 
 ## 1.0.0

@@ -293,6 +293,7 @@
 .woocommerce div.product form.cart button.single_add_to_cart_button {
     margin-bottom: 10px;
     margin-right: 10px;
+    vertical-align: top;
 }
 
 .woocommerce div.product #sdpr_reserve_product {
@@ -300,6 +301,7 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
+    vertical-align: top;
 }
 
 .woocommerce div.product #sdpr_reserve_product .sdpr-reserve-icon {
