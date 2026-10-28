@@ -77,6 +77,7 @@ try {
 	$response = $call( 'handle_approve_reservation', 'sdpr_admin_approve', $id, $filters );
 	$assert( ! empty( $response['success'] ) && 'Reservation approved successfully.' === $response['data']['message'], 'Approval returns its translated success message.' );
 	$content = $response['data']['content'];
+	$assert( false !== strpos( $content, '1 reservation</span>' ) && false === strpos( $content, '1 reservations</span>' ), 'One matching reservation uses the translated singular result count.' );
 	preg_match( '/<strong>Active:<\/strong>\s*(\d+)/', $content, $active_after );
 	preg_match( '/<strong>Pending Approval:<\/strong>\s*(\d+)/', $content, $pending_after );
 	$assert( (int) $active_after[1] === (int) $active_before[1] + 1 && (int) $pending_after[1] === (int) $pending_before[1] - 1, 'The refreshed summary updates both Active and Pending counts.' );

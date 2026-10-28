@@ -155,7 +155,7 @@ class SDPR_Admin_Reservations {
 				</div>
 
 				<div class="alignright">
-					<span class="displaying-num"><?php /* translators: %d: number of reservations. */ printf( esc_html__( '%d reservations', 'spectral-dot-reservations' ), esc_html( number_format_i18n( $query->found_posts ) ) ); ?></span>
+					<span class="displaying-num"><?php /* translators: %d: number of reservations. */ printf( esc_html( _n( '%d reservation', '%d reservations', $query->found_posts, 'spectral-dot-reservations' ) ), esc_html( number_format_i18n( $query->found_posts ) ) ); ?></span>
 				</div>
 			</div>
 
