@@ -3,7 +3,7 @@
  * My Account - Reservations
  *
  * @package SDPR_Plugin
- * @version 1.0.0
+ * @version 1.1.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -120,7 +120,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				$sdpr_urgency_class = 'expired';
 			}
 
-			$sdpr_add_to_cart_url = add_query_arg( 'quantity', $sdpr_quantity, $sdpr_product->add_to_cart_url() );
+			$sdpr_add_to_cart_url = SDPR_Reservation_Product::cart_url( $sdpr_reservation->ID, $sdpr_product );
 			$sdpr_cancel_nonce    = wp_create_nonce( 'sdpr_cancel_res_' . $sdpr_reservation->ID );
 
 			$sdpr_status_label = SDPR_Reservation_Status::label( $sdpr_status );
@@ -158,7 +158,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<tr class="woocommerce-orders-table__row woocommerce-orders-table__row--status-<?php echo esc_attr( $sdpr_status ? $sdpr_status : 'unknown' ); ?> order">
 				<td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-order-product" data-title="<?php esc_attr_e( 'Product', 'spectral-dot-reservations' ); ?>">
 					<a href="<?php echo esc_url( get_permalink( $sdpr_product_id ) ); ?>" class="woocommerce-LoopProduct-link">
-						<?php echo esc_html( $sdpr_product->get_name() ); ?>
+						<?php echo esc_html( wp_strip_all_tags( SDPR_Reservation_Product::name( $sdpr_reservation->ID, $sdpr_product ) ) ); ?>
 					</a>
 					<span class="sdpr-reservation-quantity"><?php echo esc_html( sprintf( '×%d', $sdpr_quantity ) ); ?></span>
 				</td>

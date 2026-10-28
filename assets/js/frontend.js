@@ -6,6 +6,22 @@ jQuery(document).ready(function($) {
 	var $title = $('#sdpr-reservation-dialog-title');
 	var confirmationTitle = $title.text();
 	var confirmationButtonText = $modal.find('button[type="submit"]').text();
+	var selectedAttributes = {};
+	var $reserveButton = $('#sdpr_reserve_product');
+	var $variationForm = $reserveButton.closest('form.variations_form');
+	var variationReservable = false;
+
+	$variationForm.on('show_variation', function(event, variation) {
+		variationReservable = !!(variation && variation.sdpr_reservable && variation.variation_is_active && variation.is_purchasable);
+		$reserveButton.prop('disabled', !variationReservable);
+	}).on('hide_variation reset_data woocommerce_variation_select_change', function() {
+		variationReservable = false;
+		$reserveButton.prop('disabled', true);
+	});
+	// A preselected variation can resolve before this script's ready callback.
+	if ($variationForm.length) {
+		$variationForm.trigger('check_variations');
+	}
 
 	function responseMessage(response, fallback) {
 		return response && typeof response.data === 'string' && response.data ? response.data : fallback;
@@ -61,11 +77,18 @@ jQuery(document).ready(function($) {
         var productId = $(this).data('productid');
 		if ($(this).data('product-type') === 'variable') {
 			productId = parseInt($(this).closest('form.variations_form').find('input.variation_id').val(), 10) || 0;
-			if (!productId) {
+			if (!productId || !variationReservable) {
 				window.alert(sdprFrontend.i18n.selectVariation);
 				return;
 			}
 		}
+		selectedAttributes = {};
+		var selectionLabels = [];
+		$variationForm.find('select[name^="attribute_"]').each(function() {
+			selectedAttributes[this.name] = $(this).val();
+			selectionLabels.push($(this).find('option:selected').text());
+		});
+		$modal.find('.sdpr-selected-variation').text(selectionLabels.join(' / ')).prop('hidden', !selectionLabels.length);
         modalOpener = this;
 
 		if (sdprFrontend.is_logged_in == 0 && sdprFrontend.allow_guest == 0) {
@@ -136,6 +159,7 @@ jQuery(document).ready(function($) {
 		ajaxData.action = ajaxData.action || 'sdpr_reserve';
 		ajaxData.product_id = formData.get('product_id');
 		ajaxData.quantity = formData.get('quantity') || 1;
+		ajaxData.attributes = selectedAttributes;
 		ajaxData.security = sdprFrontend.nonce;
 
 		var $submitBtn = $form.find('button[type="submit"]');

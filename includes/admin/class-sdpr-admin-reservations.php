@@ -155,7 +155,7 @@ class SDPR_Admin_Reservations {
 				</div>
 
 				<div class="alignright">
-					<span class="displaying-num"><?php /* translators: %d: number of reservations. */ printf( esc_html__( '%d reservations', 'spectral-dot-reservations' ), esc_html( number_format_i18n( $query->found_posts ) ) ); ?></span>
+					<span class="displaying-num"><?php /* translators: %d: number of reservations. */ printf( esc_html( _n( '%d reservation', '%d reservations', $query->found_posts, 'spectral-dot-reservations' ) ), esc_html( number_format_i18n( $query->found_posts ) ) ); ?></span>
 				</div>
 			</div>
 
@@ -230,19 +230,19 @@ class SDPR_Admin_Reservations {
 
 	public function handle_admin_cancel_reservation() {
 		if ( ! current_user_can( sdpr_get_manage_capability() ) ) {
-			wp_send_json_error( 'Insufficient permissions.' );
+			wp_send_json_error( __( 'Insufficient permissions.', 'spectral-dot-reservations' ) );
 		}
 
 		check_ajax_referer( 'sdpr_admin_cancel', 'nonce' );
 
 		$reservation_id = isset( $_POST['reservation_id'] ) ? absint( wp_unslash( $_POST['reservation_id'] ) ) : 0;
 		if ( ! $reservation_id || 'sdpr_reservation' !== get_post_type( $reservation_id ) ) {
-			wp_send_json_error( 'Invalid reservation ID.' );
+			wp_send_json_error( __( 'Invalid reservation ID.', 'spectral-dot-reservations' ) );
 		}
 
 		$status = SDPR_Reservation_Meta::get( $reservation_id, SDPR_Reservation_Meta::STATUS );
 		if ( SDPR_Reservation_Status::ACTIVE !== $status ) {
-			wp_send_json_error( 'Reservation is not active.' );
+			wp_send_json_error( __( 'Reservation is not active.', 'spectral-dot-reservations' ) );
 		}
 
 		$result = $this->get_reservations_handler()->cancel_reservation( $reservation_id );
@@ -250,7 +250,7 @@ class SDPR_Admin_Reservations {
 			wp_send_json_error( $result->get_error_message() );
 		}
 		if ( ! $result ) {
-			wp_send_json_error( 'Reservation changed before it could be cancelled.' );
+			wp_send_json_error( __( 'Reservation changed before it could be cancelled.', 'spectral-dot-reservations' ) );
 		}
 
 		SDPR_Reservation_Meta::update( $reservation_id, SDPR_Reservation_Meta::CANCELLED_BY_ADMIN, time() );
@@ -261,19 +261,19 @@ class SDPR_Admin_Reservations {
 
 	public function handle_admin_delete_reservation() {
 		if ( ! current_user_can( sdpr_get_manage_capability() ) ) {
-			wp_send_json_error( 'Insufficient permissions.' );
+			wp_send_json_error( __( 'Insufficient permissions.', 'spectral-dot-reservations' ) );
 		}
 
 		check_ajax_referer( 'sdpr_admin_delete', 'nonce' );
 
 		$reservation_id = isset( $_POST['reservation_id'] ) ? absint( wp_unslash( $_POST['reservation_id'] ) ) : 0;
 		if ( ! $reservation_id || 'sdpr_reservation' !== get_post_type( $reservation_id ) ) {
-			wp_send_json_error( 'Invalid reservation ID.' );
+			wp_send_json_error( __( 'Invalid reservation ID.', 'spectral-dot-reservations' ) );
 		}
 
 		$status = SDPR_Reservation_Meta::get( $reservation_id, SDPR_Reservation_Meta::STATUS );
-		if ( SDPR_Reservation_Status::ACTIVE === $status ) {
-			wp_send_json_error( 'Cannot delete active reservations. Cancel them first.' );
+		if ( in_array( $status, array_merge( SDPR_Reservation_Status::open(), array( SDPR_Reservation_Status::INITIALIZING ) ), true ) ) {
+			wp_send_json_error( __( 'Close the reservation before deleting it.', 'spectral-dot-reservations' ) );
 		}
 
 		$result = wp_delete_post( $reservation_id, true );
@@ -281,24 +281,24 @@ class SDPR_Admin_Reservations {
 			$this->send_action_success( __( 'Reservation deleted successfully.', 'spectral-dot-reservations' ) );
 		}
 
-		wp_send_json_error( 'Failed to delete reservation.' );
+		wp_send_json_error( __( 'Failed to delete reservation.', 'spectral-dot-reservations' ) );
 	}
 
 	public function handle_approve_reservation() {
 		if ( ! current_user_can( sdpr_get_manage_capability() ) ) {
-			wp_send_json_error( 'Insufficient permissions.' );
+			wp_send_json_error( __( 'Insufficient permissions.', 'spectral-dot-reservations' ) );
 		}
 
 		check_ajax_referer( 'sdpr_admin_approve', 'nonce' );
 
 		$reservation_id = isset( $_POST['reservation_id'] ) ? absint( wp_unslash( $_POST['reservation_id'] ) ) : 0;
 		if ( ! $reservation_id ) {
-			wp_send_json_error( 'Invalid reservation ID.' );
+			wp_send_json_error( __( 'Invalid reservation ID.', 'spectral-dot-reservations' ) );
 		}
 
 		$post = get_post( $reservation_id );
 		if ( ! $post || 'sdpr_reservation' !== $post->post_type ) {
-			wp_send_json_error( 'Invalid reservation.' );
+			wp_send_json_error( __( 'Invalid reservation.', 'spectral-dot-reservations' ) );
 		}
 
 		$result = $this->get_reservations_handler()->approve_reservation( $reservation_id );
@@ -309,12 +309,12 @@ class SDPR_Admin_Reservations {
 			$this->send_action_success( __( 'Reservation approved successfully.', 'spectral-dot-reservations' ) );
 		}
 
-		wp_send_json_error( 'Failed to approve reservation.' );
+		wp_send_json_error( __( 'Failed to approve reservation.', 'spectral-dot-reservations' ) );
 	}
 
 	public function handle_deny_reservation() {
 		if ( ! current_user_can( sdpr_get_manage_capability() ) ) {
-			wp_send_json_error( 'Insufficient permissions.' );
+			wp_send_json_error( __( 'Insufficient permissions.', 'spectral-dot-reservations' ) );
 		}
 
 		check_ajax_referer( 'sdpr_admin_deny', 'nonce' );
@@ -323,12 +323,12 @@ class SDPR_Admin_Reservations {
 		$reason         = isset( $_POST['reason'] ) ? sanitize_text_field( wp_unslash( $_POST['reason'] ) ) : '';
 
 		if ( ! $reservation_id ) {
-			wp_send_json_error( 'Invalid reservation ID.' );
+			wp_send_json_error( __( 'Invalid reservation ID.', 'spectral-dot-reservations' ) );
 		}
 
 		$post = get_post( $reservation_id );
 		if ( ! $post || 'sdpr_reservation' !== $post->post_type ) {
-			wp_send_json_error( 'Invalid reservation.' );
+			wp_send_json_error( __( 'Invalid reservation.', 'spectral-dot-reservations' ) );
 		}
 
 		$result = $this->get_reservations_handler()->deny_reservation( $reservation_id, $reason );
@@ -339,7 +339,7 @@ class SDPR_Admin_Reservations {
 			$this->send_action_success( __( 'Reservation denied successfully.', 'spectral-dot-reservations' ) );
 		}
 
-		wp_send_json_error( 'Failed to deny reservation.' );
+		wp_send_json_error( __( 'Failed to deny reservation.', 'spectral-dot-reservations' ) );
 	}
 
 	private function get_filtered_reservations( $status_filter = 'all', $search_query = '', $search_type = 'email', $page = 1 ) {
@@ -368,7 +368,7 @@ class SDPR_Admin_Reservations {
 				case 'product':
 					$product_ids = get_posts(
 						array(
-							'post_type'      => 'product',
+							'post_type'      => array( 'product', 'product_variation' ),
 							'post_status'    => 'any',
 							'fields'         => 'ids',
 							'posts_per_page' => 100,
@@ -383,9 +383,17 @@ class SDPR_Admin_Reservations {
 					}
 
 					$meta_query[] = array(
-						'key'     => SDPR_Reservation_Meta::PRODUCT_ID,
-						'value'   => $product_ids,
-						'compare' => 'IN',
+						'relation' => 'OR',
+						array(
+							'key'     => SDPR_Reservation_Meta::PRODUCT_ID,
+							'value'   => $product_ids,
+							'compare' => 'IN',
+						),
+						array(
+							'key'     => SDPR_Reservation_Meta::PARENT_PRODUCT_ID,
+							'value'   => $product_ids,
+							'compare' => 'IN',
+						),
 					);
 					break;
 
@@ -395,9 +403,17 @@ class SDPR_Admin_Reservations {
 						break;
 					}
 					$meta_query[] = array(
-						'key'     => SDPR_Reservation_Meta::PRODUCT_ID,
-						'value'   => absint( $search_query ),
-						'compare' => '=',
+						'relation' => 'OR',
+						array(
+							'key'   => SDPR_Reservation_Meta::PRODUCT_ID,
+							'value' => absint( $search_query ),
+							'type'  => 'NUMERIC',
+						),
+						array(
+							'key'   => SDPR_Reservation_Meta::PARENT_PRODUCT_ID,
+							'value' => absint( $search_query ),
+							'type'  => 'NUMERIC',
+						),
 					);
 					break;
 
@@ -463,9 +479,11 @@ class SDPR_Admin_Reservations {
 		$status     = SDPR_Reservation_Meta::get( $reservation->ID, SDPR_Reservation_Meta::STATUS );
 		$quantity   = max( 1, (int) SDPR_Reservation_Meta::get( $reservation->ID, SDPR_Reservation_Meta::QUANTITY ) );
 
-		$product          = wc_get_product( $product_id );
-		$product_name     = $product ? $product->get_name() : 'Unknown Product (ID: ' . $product_id . ')';
-		$product_edit_url = $product ? admin_url( 'post.php?post=' . $product_id . '&action=edit' ) : '#';
+		$product = wc_get_product( $product_id );
+		/* translators: %d: deleted product ID. */
+		$product_name     = $product ? wp_strip_all_tags( SDPR_Reservation_Product::name( $reservation->ID, $product ) ) : sprintf( __( 'Unknown product (ID: %d)', 'spectral-dot-reservations' ), $product_id );
+		$edit_product_id  = $product && $product->get_parent_id() ? $product->get_parent_id() : $product_id;
+		$product_edit_url = $product ? admin_url( 'post.php?post=' . $edit_product_id . '&action=edit' ) : '#';
 
 		if ( $reservation->post_author ) {
 			$user           = get_userdata( $reservation->post_author );

@@ -290,10 +290,9 @@ spectral-dot-reservations/
  * Fires after reservation is created
  *
  * @param int $reservation_id The reservation ID
- * @param int $product_id The product ID
- * @param int $user_id The user ID
+ * @param string $email The reservation email
  */
-do_action( 'sdpr_reservation_created', $reservation_id, $product_id, $user_id );
+do_action( 'sdpr_reservation_created', $reservation_id, $email );
 ```
 
 ### Database Queries
@@ -310,6 +309,18 @@ $wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = $post_id" );
 ```
 
 ## Testing
+
+### Update Regression Suite
+
+Run only against a disposable WordPress installation with WooCommerce and this plugin active:
+
+```bash
+bash tests/verify-update.sh /path/to/disposable-wordpress
+```
+
+This runs lifecycle, cart/refund/privacy/search, selected-variation, stock-owner concurrency, transition-race and HPOS suites. `bash tests/store-api-checkout.sh /path/to/disposable-wordpress` also runs independently: it sends real REST checkout requests with local cash-on-delivery, verifies exact wildcard options and stock transfer/restoration, and rejects uncovered options. Each request runs in a separate PHP process, matching the lifetime of WooCommerce route objects in HTTP requests. These are backend integration tests, not headed-browser or production payment-provider tests.
+
+The scripts create and remove only their disposable fixtures and restore the options they change. The separately gated release-lifecycle suite deliberately deactivates/uninstalls the plugin; never point it at a development or production store containing data to retain.
 
 ### Query Performance
 

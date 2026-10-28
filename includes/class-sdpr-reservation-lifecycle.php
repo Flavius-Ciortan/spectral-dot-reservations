@@ -30,29 +30,29 @@ final class SDPR_Reservation_Lifecycle implements SDPR_Reservation_Lifecycle_Int
 	}
 
 	/** Validate and create a customer reservation inside product and user locks. */
-	public function request( $product_id, $user_id, $requested_quantity = 1 ) {
+	public function request( $product_id, $user_id, $requested_quantity = 1, $attributes = array() ) {
 		$user_id = absint( $user_id );
 		$user    = $user_id ? get_userdata( $user_id ) : false;
 		if ( ! $user ) {
 			return new WP_Error( 'sdpr_invalid_identity', __( 'A valid customer account is required.', 'spectral-dot-reservations' ) );
 		}
-		return $this->request_for_identity( $product_id, $user_id, $user->user_email, $requested_quantity );
+		return $this->request_for_identity( $product_id, $user_id, $user->user_email, $requested_quantity, $attributes );
 	}
 
 	/** Accept a guest only after an extension has independently verified the email identity. */
-	public function request_guest( $product_id, $guest_email, $requested_quantity = 1 ) {
+	public function request_guest( $product_id, $guest_email, $requested_quantity = 1, $attributes = array() ) {
 		$guest_email = sanitize_email( $guest_email );
 		if ( ! $guest_email || ! is_email( $guest_email ) ) {
 			return new WP_Error( 'sdpr_invalid_identity', __( 'A valid verified email address is required.', 'spectral-dot-reservations' ) );
 		}
 		$user = get_user_by( 'email', $guest_email );
 		if ( $user ) {
-			return $this->request( $product_id, $user->ID, $requested_quantity );
+			return $this->request( $product_id, $user->ID, $requested_quantity, $attributes );
 		}
-		return $this->request_for_identity( $product_id, 0, $guest_email, $requested_quantity );
+		return $this->request_for_identity( $product_id, 0, $guest_email, $requested_quantity, $attributes );
 	}
 
-	private function request_for_identity( $product_id, $user_id, $guest_email, $requested_quantity ) {
+	private function request_for_identity( $product_id, $user_id, $guest_email, $requested_quantity, $attributes ) {
 		$product_id         = absint( $product_id );
 		$user_id            = absint( $user_id );
 		$guest_email        = sanitize_email( $guest_email );
@@ -61,9 +61,13 @@ final class SDPR_Reservation_Lifecycle implements SDPR_Reservation_Lifecycle_Int
 		if ( ! $product || ! $this->rules->is_product_reservable( $product_id, $user_id, $user_id ? '' : $guest_email ) ) {
 			return new WP_Error( 'sdpr_not_reservable', __( 'Reservations are not available for this product.', 'spectral-dot-reservations' ) );
 		}
+		$attributes = SDPR_Reservation_Product::selection( $product, $attributes );
+		if ( is_wp_error( $attributes ) ) {
+			return $attributes;
+		}
 
 		$identity_lock = $user_id ? 'user_' . $user_id : 'email_' . hash( 'sha256', strtolower( $guest_email ) );
-		$locks         = $this->locks->acquire( array( 'product_' . $product_id, $identity_lock ) );
+		$locks         = $this->locks->acquire( array( SDPR_Reservation_Product::lock_name( $product_id ), $identity_lock ) );
 		if ( is_wp_error( $locks ) ) {
 			return $locks;
 		}
@@ -78,6 +82,11 @@ final class SDPR_Reservation_Lifecycle implements SDPR_Reservation_Lifecycle_Int
 			 * @param int $user_id Customer user ID.
 			 */
 			do_action( 'sdpr_reservation_request_locked', $product_id, $user_id );
+			// Re-read after acquiring the shared stock resource; pre-lock objects may be stale.
+			$product = wc_get_product( $product_id );
+			if ( ! $this->rules->is_product_reservable( $product_id, $user_id, $user_id ? '' : $guest_email ) ) {
+				return new WP_Error( 'sdpr_no_stock', __( 'There is not enough stock available for this reservation.', 'spectral-dot-reservations' ) );
+			}
 
 			$requires_approval = $this->rules->requires_approval( $product_id, $user_id );
 			$quantity          = $this->rules->get_quantity( $requested_quantity, $product_id, $user_id );
@@ -89,11 +98,11 @@ final class SDPR_Reservation_Lifecycle implements SDPR_Reservation_Lifecycle_Int
 			if ( $this->repository->user_has_open_for_product( $product_id, $user_id, $guest_email ) ) {
 				return new WP_Error( 'sdpr_duplicate', __( 'You already have a pending or active reservation for this product.', 'spectral-dot-reservations' ) );
 			}
-			if ( (int) $product->get_stock_quantity( 'edit' ) < $quantity ) {
+			if ( SDPR_Reservation_Product::available_quantity( $product ) < $quantity ) {
 				return new WP_Error( 'sdpr_no_stock', __( 'There is not enough stock available for this reservation.', 'spectral-dot-reservations' ) );
 			}
 
-			$reservation_id = $this->create( $product_id, $user_id, $guest_email, $quantity );
+			$reservation_id = $this->create( $product_id, $user_id, $guest_email, $quantity, $attributes );
 			if ( ! $reservation_id ) {
 				return new WP_Error( 'sdpr_create_failed', __( 'Could not create reservation.', 'spectral-dot-reservations' ) );
 			}
@@ -107,7 +116,12 @@ final class SDPR_Reservation_Lifecycle implements SDPR_Reservation_Lifecycle_Int
 		}
 	}
 
-	public function create( $product_id, $user_id = 0, $guest_email = '', $quantity = 1 ) {
+	public function create( $product_id, $user_id = 0, $guest_email = '', $quantity = 1, $attributes = array() ) {
+		$product    = wc_get_product( absint( $product_id ) );
+		$attributes = SDPR_Reservation_Product::selection( $product, $attributes );
+		if ( ! $this->rules->supports_inventory( $product ) || is_wp_error( $attributes ) ) {
+			return false;
+		}
 		$product_id        = absint( $product_id );
 		$user_id           = absint( $user_id );
 		$guest_email       = sanitize_email( $guest_email );
@@ -129,8 +143,8 @@ final class SDPR_Reservation_Lifecycle implements SDPR_Reservation_Lifecycle_Int
 			return false;
 		}
 
-		$initial_status     = $requires_approval ? SDPR_Reservation_Status::PENDING : SDPR_Reservation_Status::INITIALIZING;
-		$meta_data          = array(
+		$initial_status = $requires_approval ? SDPR_Reservation_Status::PENDING : SDPR_Reservation_Status::INITIALIZING;
+		$meta_data      = array(
 			SDPR_Reservation_Meta::PRODUCT_ID      => $product_id,
 			SDPR_Reservation_Meta::STATUS          => $initial_status,
 			SDPR_Reservation_Meta::EXPIRES_AT      => $expires_at,
@@ -138,6 +152,10 @@ final class SDPR_Reservation_Lifecycle implements SDPR_Reservation_Lifecycle_Int
 			SDPR_Reservation_Meta::TIMESTAMP_MODEL => 'utc',
 			SDPR_Reservation_Meta::INVENTORY_STATE => SDPR_Inventory_Manager::STATE_NONE,
 		);
+		if ( $attributes ) {
+			$meta_data[ SDPR_Reservation_Meta::VARIATION_ATTRIBUTES ] = $attributes;
+			$meta_data[ SDPR_Reservation_Meta::PARENT_PRODUCT_ID ]    = $product->get_parent_id();
+		}
 		$notification_email = '';
 		if ( $user_id ) {
 			$user = get_userdata( $user_id );
@@ -183,7 +201,7 @@ final class SDPR_Reservation_Lifecycle implements SDPR_Reservation_Lifecycle_Int
 
 		$product_id = (int) SDPR_Reservation_Meta::get( $reservation_id, SDPR_Reservation_Meta::PRODUCT_ID );
 		$user_id    = (int) get_post_field( 'post_author', $reservation_id );
-		$locks      = $this->locks->acquire( array( 'product_' . $product_id, 'user_' . $user_id ) );
+		$locks      = $this->locks->acquire( array( SDPR_Reservation_Product::lock_name( $product_id ), 'user_' . $user_id ) );
 		if ( is_wp_error( $locks ) ) {
 			return $locks;
 		}
@@ -192,15 +210,18 @@ final class SDPR_Reservation_Lifecycle implements SDPR_Reservation_Lifecycle_Int
 			if ( SDPR_Reservation_Status::PENDING !== SDPR_Reservation_Meta::get( $reservation_id, SDPR_Reservation_Meta::STATUS ) ) {
 				return new WP_Error( 'sdpr_not_pending', __( 'Reservation is not pending approval.', 'spectral-dot-reservations' ) );
 			}
+			if ( (int) SDPR_Reservation_Meta::get( $reservation_id, SDPR_Reservation_Meta::EXPIRES_AT ) <= time() ) {
+				return new WP_Error( 'sdpr_request_expired', __( 'This approval request has expired.', 'spectral-dot-reservations' ) );
+			}
 			if ( ! $product_id ) {
 				return new WP_Error( 'sdpr_missing_product', __( 'Reservation is missing product data.', 'spectral-dot-reservations' ) );
 			}
 			$product  = wc_get_product( $product_id );
 			$quantity = max( 1, (int) SDPR_Reservation_Meta::get( $reservation_id, SDPR_Reservation_Meta::QUANTITY ) );
-			if ( ! $product || ! $this->rules->supports_inventory( $product ) ) {
+			if ( ! $product || ! $this->rules->supports_inventory( $product ) || ! $this->rules->is_product_reservable( $product_id, $user_id, $user_id ? '' : SDPR_Reservation_Meta::get( $reservation_id, SDPR_Reservation_Meta::EMAIL ) ) || is_wp_error( SDPR_Reservation_Product::selection( $product, SDPR_Reservation_Product::attributes( $reservation_id ) ) ) ) {
 				return new WP_Error( 'sdpr_stock_unmanaged', __( 'Product stock is not managed.', 'spectral-dot-reservations' ) );
 			}
-			if ( (int) $product->get_stock_quantity( 'edit' ) < $quantity ) {
+			if ( SDPR_Reservation_Product::available_quantity( $product ) < $quantity ) {
 				return new WP_Error( 'sdpr_no_stock', __( 'There is not enough stock available to approve this reservation.', 'spectral-dot-reservations' ) );
 			}
 			$expires_at = time() + ( $this->rules->get_duration_hours( 'active', $product_id, $user_id ) * HOUR_IN_SECONDS );
@@ -235,7 +256,7 @@ final class SDPR_Reservation_Lifecycle implements SDPR_Reservation_Lifecycle_Int
 
 		$product_id = (int) SDPR_Reservation_Meta::get( $reservation_id, SDPR_Reservation_Meta::PRODUCT_ID );
 		$user_id    = (int) get_post_field( 'post_author', $reservation_id );
-		$locks      = $this->locks->acquire( array( 'product_' . $product_id, 'user_' . $user_id ) );
+		$locks      = $this->locks->acquire( array( SDPR_Reservation_Product::lock_name( $product_id ), 'user_' . $user_id ) );
 		if ( is_wp_error( $locks ) ) {
 			return $locks;
 		}
@@ -277,7 +298,7 @@ final class SDPR_Reservation_Lifecycle implements SDPR_Reservation_Lifecycle_Int
 
 		$product_id = (int) SDPR_Reservation_Meta::get( $reservation_id, SDPR_Reservation_Meta::PRODUCT_ID );
 		$user_id    = (int) get_post_field( 'post_author', $reservation_id );
-		$locks      = $this->locks->acquire( array( 'product_' . $product_id, 'user_' . $user_id ) );
+		$locks      = $this->locks->acquire( array( SDPR_Reservation_Product::lock_name( $product_id ), 'user_' . $user_id ) );
 		if ( is_wp_error( $locks ) ) {
 			return $locks;
 		}
@@ -316,7 +337,7 @@ final class SDPR_Reservation_Lifecycle implements SDPR_Reservation_Lifecycle_Int
 
 		$product_id = (int) SDPR_Reservation_Meta::get( $reservation_id, SDPR_Reservation_Meta::PRODUCT_ID );
 		$user_id    = (int) get_post_field( 'post_author', $reservation_id );
-		$locks      = $this->locks->acquire( array( 'product_' . $product_id, 'user_' . $user_id ) );
+		$locks      = $this->locks->acquire( array( SDPR_Reservation_Product::lock_name( $product_id ), 'user_' . $user_id ) );
 		if ( is_wp_error( $locks ) ) {
 			return $locks;
 		}

@@ -1,6 +1,6 @@
 # Spectral Dot Reservations
 
-Spectral Dot Reservations is a WooCommerce extension that lets logged-in customers reserve eligible simple products for a limited time before purchasing them.
+Spectral Dot Reservations is a WooCommerce extension that lets logged-in customers reserve eligible simple products or selected variations for a limited time before purchase.
 
 ## Free Features
 
@@ -13,7 +13,7 @@ Spectral Dot Reservations is a WooCommerce extension that lets logged-in custome
 - Privacy export/erase integration, Shop Manager access, HPOS support, and Cart/Checkout Blocks support.
 - Stable extension hooks and service access for compatible add-ons.
 
-The supported Free scope is logged-in customers, one unit per reservation, simple products, and WooCommerce-managed stock.
+Free supports logged-in customers, one unit per reservation, simple products and selected variations with independent or parent-managed WooCommerce stock. Required variation selections are retained through cart and order transfer.
 
 ## Requirements
 
@@ -27,7 +27,7 @@ The supported Free scope is logged-in customers, one unit per reservation, simpl
 2. Upload the release ZIP through **Plugins > Add New > Upload Plugin**, or install the WordPress.org release.
 3. Activate **Spectral Dot Reservations**.
 4. Open **Reservations > Settings** and enable reservations. The Reservations menu sits directly below Products in the WordPress sidebar.
-5. Ensure each reservable product is a published simple product with WooCommerce stock management enabled and positive stock.
+5. Prepare a published, purchasable simple or variable product with positive managed stock. Enable and price each variation; manage its stock independently or on its variable parent.
 
 SMTP is optional. The plugin uses the standard WordPress mail pipeline, so each merchant can choose whether their hosting mail service is sufficient or an SMTP provider/plugin is needed.
 

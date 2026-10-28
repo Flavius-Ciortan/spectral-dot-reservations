@@ -82,6 +82,7 @@ if ( $sdpr_enable_popup_customization ) {
 
 			<div id="sdpr-reservation-result" class="sdpr-reservation-notice" role="status" aria-live="polite" aria-atomic="true" style="display: none;"></div>
 			<div class="sdpr-reservation-prompt">
+				<p class="sdpr-selected-variation" hidden></p>
 				<?php do_action( 'sdpr_reservation_form_fields', $sdpr_product ); ?>
 
 				<p id="sdpr-reservation-dialog-description">

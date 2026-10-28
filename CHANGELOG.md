@@ -2,7 +2,22 @@
 
 All notable changes to Spectral Dot Reservations are documented here. The project follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and semantic versioning.
 
-## 1.0.0 (Unreleased)
+## 1.1.0 (Unreleased)
+
+- Add selected-variation reservations with independent or parent-managed stock.
+- Retain variation selections in reservation tables, emails, cart links and order validation.
+- Coordinate sibling requests using the physical stock owner's lock.
+- Validate physical stock independently of customer-facing allowances and scope allowance caches by customer.
+- Revalidate pending approval deadlines and variation options before approval.
+- Include variation records in parent-product searches and active-reservation lists.
+- Translate remaining admin action errors and clarify the local order-transfer metric.
+- Block uninstall while WooCommerce is inactive if stock holds still need restoration.
+- Scope frontend styles to plugin components and protect heading, badge and deadline contrast across themes.
+- Align the Reserve and Add to cart buttons by their top edges rather than mismatched inline baselines.
+- Use translated singular/plural reservation counts in the merchant list.
+- Expand variation and shared-stock concurrency regressions and CI coverage.
+
+## 1.0.0
 
 - Align merchant and customer action buttons with a brighter, contrast-tested palette.
 - Restore only outstanding order stock after partial or full refund restocking.

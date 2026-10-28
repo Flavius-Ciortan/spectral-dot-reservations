@@ -50,6 +50,10 @@ final class SDPR_Privacy_Service {
 						'value' => (int) SDPR_Reservation_Meta::get( $reservation_id, SDPR_Reservation_Meta::PRODUCT_ID ),
 					),
 					array(
+						'name'  => __( 'Selected product options', 'spectral-dot-reservations' ),
+						'value' => wp_strip_all_tags( wc_get_formatted_variation( SDPR_Reservation_Product::attributes( $reservation_id ), true, true ) ),
+					),
+					array(
 						'name'  => __( 'Quantity', 'spectral-dot-reservations' ),
 						'value' => max( 1, (int) SDPR_Reservation_Meta::get( $reservation_id, SDPR_Reservation_Meta::QUANTITY ) ),
 					),

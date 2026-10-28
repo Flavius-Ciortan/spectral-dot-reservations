@@ -303,9 +303,9 @@ class SDPR_Admin {
 		?>
 		<div class="sdpr-setting-field">
 			<div class="sdpr-setting-control">
-				<input type="number" id="sdpr_max_reservations" name="sdpr_options[max_reservations]" value="<?php echo esc_attr( $value ); ?>" class="sdpr-small-input" />
+					<input type="number" id="sdpr_max_reservations" min="1" max="100" name="sdpr_options[max_reservations]" value="<?php echo esc_attr( $value ); ?>" class="sdpr-small-input" />
 			</div>
-			<p class="description"><?php esc_html_e( 'Limit how many active reservations a user can have at once.', 'spectral-dot-reservations' ); ?></p>
+			<p class="description"><?php esc_html_e( 'Limit the total pending requests and active reservations a customer can have at once.', 'spectral-dot-reservations' ); ?></p>
 		</div>
 		<?php
 	}
@@ -320,7 +320,7 @@ class SDPR_Admin {
 		<div class="sdpr-setting-field">
 			<div class="sdpr-setting-control">
 				<div class="sdpr-input-right-align">
-					<input type="number" id="sdpr_reservation_duration" name="sdpr_options[reservation_duration]" value="<?php echo esc_attr( $value ); ?>" class="sdpr-small-input" />
+					<input type="number" id="sdpr_reservation_duration" min="1" max="168" name="sdpr_options[reservation_duration]" value="<?php echo esc_attr( $value ); ?>" class="sdpr-small-input" />
 				</div>
 			</div>
 			<p class="description"><?php esc_html_e( 'How long reservations last (1-168 hours, default: 24).', 'spectral-dot-reservations' ); ?></p>
@@ -550,6 +550,7 @@ class SDPR_Admin {
 		} else {
 			echo '<table class="widefat striped" style="margin-top: 10px;">';
 			echo '<thead><tr>';
+			echo '<th>' . esc_html__( 'Reserved product', 'spectral-dot-reservations' ) . '</th>';
 			echo '<th>' . esc_html__( 'Customer', 'spectral-dot-reservations' ) . '</th>';
 			echo '<th>' . esc_html__( 'Expires', 'spectral-dot-reservations' ) . '</th>';
 			echo '<th>' . esc_html__( 'Action', 'spectral-dot-reservations' ) . '</th>';
@@ -580,8 +581,17 @@ class SDPR_Admin {
 						'value' => SDPR_Reservation_Status::ACTIVE,
 					),
 					array(
-						'key'   => SDPR_Reservation_Meta::PRODUCT_ID,
-						'value' => $product_id,
+						'relation' => 'OR',
+						array(
+							'key'   => SDPR_Reservation_Meta::PRODUCT_ID,
+							'value' => $product_id,
+							'type'  => 'NUMERIC',
+						),
+						array(
+							'key'   => SDPR_Reservation_Meta::PARENT_PRODUCT_ID,
+							'value' => $product_id,
+							'type'  => 'NUMERIC',
+						),
 					),
 					array(
 						'key'     => SDPR_Reservation_Meta::EXPIRES_AT,
@@ -621,6 +631,8 @@ class SDPR_Admin {
 		$expires_disp = $expires_ts ? wp_date( 'M j, Y @ H:i', $expires_ts ) : '—';
 
 		echo '<tr>';
+		$product = wc_get_product( (int) SDPR_Reservation_Meta::get( $reservation->ID, SDPR_Reservation_Meta::PRODUCT_ID ) );
+		echo '<td>' . esc_html( $product ? wp_strip_all_tags( SDPR_Reservation_Product::name( $reservation->ID, $product ) ) : __( 'Unknown product', 'spectral-dot-reservations' ) ) . '</td>';
 		echo '<td>' . esc_html( $customer ) . '</td>';
 		echo '<td>' . esc_html( $expires_disp ) . '</td>';
 		echo '<td>';

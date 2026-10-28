@@ -197,7 +197,10 @@ final class SDPR_Inventory_Manager {
 
 			if ( $stock_operation ) {
 				$new_stock = wc_update_product_stock( $product, $quantity, $stock_operation );
-				if ( null === $new_stock || ( 'decrease' === $stock_operation && (int) $new_stock < 0 ) ) {
+				// WooCommerce's return value uses view filters, which include customer hold allowances.
+				// Transaction safety must use physical stock, never that customer-facing value.
+				$held_for_orders = (int) wc_get_held_stock_quantity( $product, absint( $meta_updates[ SDPR_Reservation_Meta::ORDER_ID ] ?? 0 ) );
+				if ( false === $new_stock || null === $new_stock || ( 'decrease' === $stock_operation && SDPR_Reservation_Product::stock_quantity( $product ) < $held_for_orders ) ) {
 					throw new RuntimeException( __( 'Product stock changed during the reservation transition.', 'spectral-dot-reservations' ) );
 				}
 			}
@@ -222,6 +225,19 @@ final class SDPR_Inventory_Manager {
 			if ( $product instanceof WC_Product ) {
 				clean_post_cache( $product->get_id() );
 				wc_delete_product_transients( $product->get_id() );
+				$owner_id = SDPR_Reservation_Product::stock_owner_id( $product );
+				if ( $owner_id !== $product->get_id() ) {
+					clean_post_cache( $owner_id );
+					wc_delete_product_transients( $owner_id );
+					$owner = wc_get_product( $owner_id );
+					if ( $owner ) {
+						$owner->get_data_store()->read( $owner );
+					}
+				}
+				// Reset in-memory data too; a rollback does not undo mutations to WC objects.
+				// Transient invalidation can load a child before its parent's cache was cleared.
+				clean_post_cache( $product->get_id() );
+				$product->get_data_store()->read( $product );
 			}
 			return new WP_Error( 'sdpr_inventory_transition_failed', $error->getMessage() );
 		}

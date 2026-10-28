@@ -1,54 +1,4 @@
-/* Global reset */
-/* body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f7fa;
-    padding: 40px;
-    display: flex;
-    justify-content: center;
-} */
-
-/* Card container */
-/* #container {
-    background-color: #ffffff;
-    padding: 30px 40px;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 420px;
-    box-sizing: border-box;
-}
-
-#container h3 {
-    text-align: center;
-    font-size: 22px;
-    color: #333;
-    margin-bottom: 20px;
-}
-
-.form_woo p {
-    font-size: 15px;
-    color: #555;
-    margin-bottom: 10px;
-} */
-
-.checkbox_group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-}
-
-input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    accent-color: #0073aa; /* WooCommerce Blue */
-}
-
-label[for="rez_check"] {
-    font-size: 15px;
-    color: #333;
-}
-
+/* Frontend styles are scoped to reservation components. */
 .sdpr-reservation-notice {
     margin: 0;
     padding: 10px 12px;
@@ -72,15 +22,15 @@ label[for="rez_check"] {
 
 /* My Account Reservations */
 .sdpr-reservations-container {
-    --sdpr-primary: #2F89F9;
-    --sdpr-primary-dark: #266DED;
+    --sdpr-primary: #2463db;
+    --sdpr-primary-dark: #1749aa;
     --sdpr-secondary: #EAF4FF;
     --sdpr-text-dark: #0b1b3a;
     --sdpr-text-light: #2b4a7a;
     --sdpr-border-ui: rgba(11, 27, 58, 0.16);
-    --sdpr-success: #10b981;
-    --sdpr-warning: #f59e0b;
-    --sdpr-error: #ef4444;
+    --sdpr-success: #166534;
+    --sdpr-warning: #92400e;
+    --sdpr-error: #b91c1c;
     --sdpr-button-primary: #2563eb;
     --sdpr-button-primary-hover: #1d4ed8;
     --sdpr-button-error: #dc2626;
@@ -105,15 +55,17 @@ label[for="rez_check"] {
 }
 
 .sdpr-reservations-header h2 {
+    color: #ffffff;
     margin: 0 0 0.25rem 0;
     font-size: 1.25rem;
     font-weight: 700;
 }
 
 .sdpr-reservations-header p {
+    color: inherit;
     margin: 0;
     font-size: 0.95rem;
-    opacity: 0.92;
+    opacity: 1;
     line-height: 1.45;
 }
 
@@ -184,12 +136,12 @@ label[for="rez_check"] {
 }
 
 .sdpr-reservations-container .time-left.pending {
-    color: #f59e0b !important;
+    color: var(--sdpr-warning) !important;
     font-weight: 600;
 }
 
 .sdpr-reservations-container .time-left.fulfilled {
-    color: #00a32a !important;
+    color: var(--sdpr-success) !important;
     font-weight: 600;
 }
 
@@ -199,12 +151,12 @@ label[for="rez_check"] {
 }
 
 .sdpr-reservations-container .time-left.cancelled {
-    color: #d63638 !important;
+    color: var(--sdpr-error) !important;
     font-weight: 600;
 }
 
 .sdpr-reservations-container .time-left.expired {
-    color: #ff8c00 !important;
+    color: var(--sdpr-warning) !important;
     text-decoration: line-through;
 }
 
@@ -227,19 +179,19 @@ label[for="rez_check"] {
 .sdpr-reservations-table .sdpr-status-badge--active {
     border-color: rgba(47, 137, 249, 0.32);
     background: rgba(47, 137, 249, 0.12);
-    color: #2F89F9;
+    color: var(--sdpr-primary);
 }
 
 .sdpr-reservations-table .sdpr-status-badge--pending {
     border-color: rgba(245, 158, 11, 0.34);
     background: rgba(245, 158, 11, 0.12);
-    color: #f59e0b;
+    color: var(--sdpr-warning);
 }
 
 .sdpr-reservations-table .sdpr-status-badge--fulfilled {
     border-color: rgba(0, 163, 42, 0.32);
     background: rgba(0, 163, 42, 0.12);
-    color: #00a32a;
+    color: var(--sdpr-success);
 }
 
 .sdpr-reservations-table .sdpr-status-badge--denied {
@@ -251,13 +203,13 @@ label[for="rez_check"] {
 .sdpr-reservations-table .sdpr-status-badge--cancelled {
     border-color: rgba(214, 54, 56, 0.34);
     background: rgba(214, 54, 56, 0.10);
-    color: #d63638;
+    color: var(--sdpr-error);
 }
 
 .sdpr-reservations-table .sdpr-status-badge--expired {
     border-color: rgba(255, 140, 0, 0.34);
     background: rgba(255, 140, 0, 0.10);
-    color: #ff8c00;
+    color: var(--sdpr-warning);
 }
 
 .sdpr-reservations-table .sdpr-status-badge--unknown {
@@ -341,6 +293,7 @@ label[for="rez_check"] {
 .woocommerce div.product form.cart button.single_add_to_cart_button {
     margin-bottom: 10px;
     margin-right: 10px;
+    vertical-align: top;
 }
 
 .woocommerce div.product #sdpr_reserve_product {
@@ -348,6 +301,7 @@ label[for="rez_check"] {
     align-items: center;
     justify-content: center;
     gap: 8px;
+    vertical-align: top;
 }
 
 .woocommerce div.product #sdpr_reserve_product .sdpr-reserve-icon {

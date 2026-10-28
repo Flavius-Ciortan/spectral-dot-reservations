@@ -2,8 +2,9 @@
 
 /**
  * Plugin Name:       Spectral Dot - Product Reservations for WooCommerce
+ * Plugin URI:        https://spectral-dot.com/
  * Description:       Allows WooCommerce customers to reserve products for a limited time before purchase.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Requires at least: 6.5
  * Requires PHP:      7.4
  * Requires Plugins:  woocommerce
@@ -23,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Define plugin constants
 define( 'SDPR_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'SDPR_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
-define( 'SDPR_VERSION', '1.0.0' );
+define( 'SDPR_VERSION', '1.1.0' );
 
 /** Capability required to configure and operate reservations. */
 function sdpr_get_manage_capability() {
@@ -129,6 +130,7 @@ class SDPR_Plugin {
 		require_once SDPR_PLUGIN_PATH . 'includes/class-sdpr-dependency-notices.php';
 		require_once SDPR_PLUGIN_PATH . 'includes/class-sdpr-reservation-status.php';
 		require_once SDPR_PLUGIN_PATH . 'includes/class-sdpr-reservation-meta.php';
+		require_once SDPR_PLUGIN_PATH . 'includes/class-sdpr-reservation-product.php';
 		require_once SDPR_PLUGIN_PATH . 'includes/class-sdpr-reservation-query.php';
 		require_once SDPR_PLUGIN_PATH . 'includes/interface-sdpr-reservation-repository.php';
 		require_once SDPR_PLUGIN_PATH . 'includes/interface-sdpr-reservation-lifecycle.php';

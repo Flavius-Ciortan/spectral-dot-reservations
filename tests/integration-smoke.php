@@ -24,7 +24,7 @@ function sdpr_assert( $condition, $message ) {
 
 $sdpr_plugin = SDPR_Plugin::get_instance();
 $sdpr_original_options = get_option( 'sdpr_options', false );
-sdpr_assert( '1.0.0' === SDPR_VERSION, 'Runtime version matches the initial public release.' );
+sdpr_assert( '1.1.0' === SDPR_VERSION, 'Runtime version matches the variation-support release.' );
 sdpr_assert( $sdpr_plugin->reservations instanceof SDPR_Reservations, 'Reservation service initialized.' );
 sdpr_assert( $sdpr_plugin->get_service( 'repository' ) instanceof SDPR_Reservation_Repository, 'Reservation repository is registered.' );
 sdpr_assert( $sdpr_plugin->get_service( 'cart_order' ) instanceof SDPR_Cart_Order_Service, 'Cart and order service is registered.' );
@@ -327,11 +327,17 @@ sdpr_assert( true === $sdpr_plugin->reservations->cancel_reservation( $sdpr_pend
 $sdpr_variable = new WC_Product_Variable();
 $sdpr_variable->set_name( 'Variation reservation parent' );
 $sdpr_variable->set_status( 'publish' );
+$sdpr_color = new WC_Product_Attribute();
+$sdpr_color->set_name( 'Color' );
+$sdpr_color->set_options( array( 'Blue' ) );
+$sdpr_color->set_variation( true );
+$sdpr_variable->set_attributes( array( $sdpr_color ) );
 $sdpr_variable_id = $sdpr_variable->save();
 $sdpr_variation = new WC_Product_Variation();
 $sdpr_variation->set_parent_id( $sdpr_variable_id );
 $sdpr_variation->set_status( 'publish' );
 $sdpr_variation->set_regular_price( '10' );
+$sdpr_variation->set_attributes( array( 'color' => 'Blue' ) );
 $sdpr_variation->set_manage_stock( true );
 $sdpr_variation->set_stock_quantity( 4 );
 $sdpr_variation_id = $sdpr_variation->save();
@@ -345,10 +351,12 @@ $sdpr_variation_reservation_id = is_wp_error( $sdpr_variation_result ) ? 0 : $sd
 sdpr_assert( $sdpr_variation_reservation_id && $sdpr_variation_id === (int) SDPR_Reservation_Meta::get( $sdpr_variation_reservation_id, SDPR_Reservation_Meta::PRODUCT_ID ), 'Variation reservation stores the concrete variation identity.' );
 sdpr_assert( 2 === (int) wc_get_product( $sdpr_variation_id )->get_stock_quantity( 'edit' ), 'Variation reservation holds stock from the variation.' );
 $sdpr_variation_order = wc_create_order( array( 'customer_id' => $sdpr_user_id ) );
-$sdpr_variation_item_id = $sdpr_variation_order->add_product( wc_get_product( $sdpr_variation_id ), 2 );
-$sdpr_variation_item = $sdpr_variation_order->get_item( $sdpr_variation_item_id );
+$sdpr_variation_item = new WC_Order_Item_Product();
+$sdpr_variation_item->set_product( wc_get_product( $sdpr_variation_id ) );
+$sdpr_variation_item->set_quantity( 2 );
+$sdpr_variation_item->set_variation( wc_get_product( $sdpr_variation_id )->get_variation_attributes() );
 $sdpr_variation_item->add_meta_data( SDPR_Reservation_Meta::LINKED_RESERVATION, $sdpr_variation_reservation_id, true );
-$sdpr_variation_item->save();
+$sdpr_variation_order->add_item( $sdpr_variation_item );
 $sdpr_variation_order->save();
 $sdpr_plugin->reservations->transfer_holds_to_order( $sdpr_variation_order );
 sdpr_assert( SDPR_Reservation_Status::FULFILLED === SDPR_Reservation_Meta::get( $sdpr_variation_reservation_id, SDPR_Reservation_Meta::STATUS ), 'Variation order transfers the exact linked reservation.' );

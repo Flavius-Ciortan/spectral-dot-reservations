@@ -9,6 +9,31 @@ require_once __DIR__ . '/includes/class-sdpr-reservation-status.php';
 require_once __DIR__ . '/includes/class-sdpr-reservation-meta.php';
 
 function sdpr_uninstall_site_data() {
+	if ( ! function_exists( 'wc_update_product_stock' ) ) {
+		$held = get_posts(
+			array(
+				'post_type'      => 'sdpr_reservation',
+				'post_status'    => 'any',
+				'fields'         => 'ids',
+				'posts_per_page' => 1,
+				'no_found_rows'  => true,
+				'meta_query'     => array(
+					'relation' => 'OR',
+					array(
+						'key'   => SDPR_Reservation_Meta::INVENTORY_STATE,
+						'value' => 'held',
+					),
+					array(
+						'key'   => SDPR_Reservation_Meta::STATUS,
+						'value' => SDPR_Reservation_Status::ACTIVE,
+					),
+				),
+			)
+		);
+		if ( $held ) {
+			wp_die( esc_html__( 'Activate WooCommerce before uninstalling Spectral Dot Reservations so outstanding stock holds can be restored safely.', 'spectral-dot-reservations' ) );
+		}
+	}
 	do {
 		$ids = get_posts(
 			array(
