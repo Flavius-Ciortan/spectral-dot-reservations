@@ -1,5 +1,5 @@
 === Spectral Dot - Product Reservations for WooCommerce ===
-Tags: woocommerce, reservation, product hold, stock management, inventory
+Tags: woocommerce, reservation, stock reservation, stock management, inventory
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
