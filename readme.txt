@@ -4,7 +4,7 @@ Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
 WC requires at least: 8.0
-WC tested up to: 11.1
+WC tested up to: 11.2
 Stable tag: 1.1.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -152,6 +152,7 @@ Fulfilled reservations divided by all currently retained reservations in counted
 * Validate physical stock independently of customer-facing hold allowances.
 * Expand variation, shared-stock, concurrency, cart and order regression coverage.
 * Translate remaining admin action errors and clarify order-transfer analytics.
+* Show the product name above the selected variation in reservation confirmations.
 * Preserve outstanding holds when uninstall is attempted without WooCommerce active.
 * Refresh setup guidance, Free limits, privacy information and directory presentation.
 

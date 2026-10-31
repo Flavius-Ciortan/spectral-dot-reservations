@@ -413,6 +413,21 @@
     gap: 15px;
 }
 
+.sdpr-reservation-product {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.sdpr-reservation-product-name {
+    display: block;
+}
+
+.sdpr-reservation-product .sdpr-selected-variation:not([hidden]) {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.9em;
+}
+
 #sdpr-reservation-dialog-description {
     margin: 0;
 }

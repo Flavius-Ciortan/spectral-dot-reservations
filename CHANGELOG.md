@@ -15,6 +15,7 @@ All notable changes to Spectral Dot Reservations are documented here. The projec
 - Scope frontend styles to plugin components and protect heading, badge and deadline contrast across themes.
 - Align the Reserve and Add to cart buttons by their top edges rather than mismatched inline baselines.
 - Use translated singular/plural reservation counts in the merchant list.
+- Show the product name above the selected variation in reservation confirmations, including the accessible dialog description.
 - Expand variation and shared-stock concurrency regressions and CI coverage.
 
 ## 1.0.0

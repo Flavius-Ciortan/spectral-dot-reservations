@@ -24,6 +24,8 @@ Images are genuine browser captures. Only rectangular cropping was applied: no i
 
 The gallery shows selected-option labels, updated customer action spacing, compact urgency badges, the current brand header and readable account heading/status colors. Screenshot 2 was refreshed after correcting the product buttons' inline baseline alignment; both buttons share the same top and bottom edges on desktop and wrap with a gap on narrow screens. It illustrates the product rather than certifying complete accessibility or every browser interaction. Automated checkout tests, visual observations and any remaining headed-browser limitations are recorded separately in the private update report.
 
+Screenshot 3 was refreshed on 2026-10-31 after adding the missing product name above the selected finish. The confirmation now identifies Studio Wireless Headphones and its Midnight finish, with pending-request and active-hold durations kept separate. Only a rectangular crop of the real browser capture was applied.
+
 ## Gallery
 
 ### 1. Settings

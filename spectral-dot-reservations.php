@@ -9,7 +9,7 @@
  * Requires PHP:      7.4
  * Requires Plugins:  woocommerce
  * WC requires at least: 8.0
- * WC tested up to:   11.1
+ * WC tested up to:   11.2
  * Author:            Spectral Dot
  * Text Domain:       spectral-dot-reservations
  * Domain Path:       /languages

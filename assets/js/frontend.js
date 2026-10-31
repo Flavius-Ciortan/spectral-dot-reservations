@@ -101,7 +101,7 @@ jQuery(document).ready(function($) {
 		$title.text(confirmationTitle);
 		$modal.find('button[type="submit"]').prop('disabled', false).text(confirmationButtonText);
 		$modal.find('.sdpr-reservation-prompt').show();
-		$modal.find('[role="dialog"]').attr('aria-describedby', 'sdpr-reservation-dialog-description');
+		$modal.find('[role="dialog"]').attr('aria-describedby', 'sdpr-reservation-product-summary sdpr-reservation-dialog-description');
         $('#sdpr-reservation-form').find('input[name="product_id"]').val(productId);
         
 		$modal.show().attr('aria-hidden', 'false');
